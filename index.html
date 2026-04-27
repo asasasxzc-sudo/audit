@@ -124,7 +124,6 @@
         .score-val { font-size: 2.2rem; font-weight: 800; display: block; margin: 5px 0; }
         .label { color: #a0aec0; font-size: 0.8rem; font-weight: 700; text-transform: uppercase; }
 
-        /* 底部转化区块优化 */
         .solution-box {
             background: white;
             padding: 35px 25px;
@@ -207,8 +206,7 @@
         </div>
 
         <div class="solution-box" id="dynamicSolution">
-            <h3>🚀 正在分析优化方案...</h3>
-        </div>
+            </div>
     </div>
 </div>
 
@@ -255,11 +253,11 @@
 
             // 2. 动态设置评分颜色
             const pElem = document.getElementById('pScore');
-            const pColor = pScore < 50 ? "#e74c3c" : (pScore < 90 ? "#f39c12" : "#27ae60");
+            const pColor = pScore < 60 ? "#e74c3c" : (pScore >= 90 ? "#27ae60" : "#f39c12");
             pElem.style.color = pColor;
             document.getElementById('cardPerf').style.borderColor = pColor;
 
-            // 3. 核心变现逻辑：根据分数切换文案
+            // 3. 准备营销文案变量
             let adviceTitle = "";
             let adviceText = "";
             
@@ -274,10 +272,10 @@
                 adviceText = "您的网站表现尚可，但在高并发访问下存在瓶颈。通过精准的资源压缩与 CDN 深度优化，可显著提升独立站的询盘转化率。";
             }
 
-            // 4. 更新 UI
+            // 4. 将内容注入到 Solution Box 并显示
             solutionBox.innerHTML = `
-                <h3 style="color: \${pColor};">\${adviceTitle}</h3>
-                <p>\${adviceText}</p>
+                <h3 style="color: ${pColor};">${adviceTitle}</h3>
+                <p>${adviceText}</p>
                 <div class="contact-group">
                     <a href="https://work.weixin.qq.com/kfid/kfcab9eba83e85cde3e" class="contact-btn btn-wechat" target="_blank">获取深度优化方案</a>
                     <a href="https://wa.me/8618066947375" class="contact-btn btn-whatsapp" target="_blank">WhatsApp 咨询</a>
