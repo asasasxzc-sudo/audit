@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>独立站深度诊断 - YMTEA Labs 专业加固版</title>
+    <title>独立站深度诊断 - YMTEA Labs</title>
     <style>
         :root {
             --primary: #27ae60;
@@ -20,130 +20,117 @@
             color: var(--secondary);
             margin: 0; padding: 0;
             line-height: 1.6;
-            overflow-x: hidden;
         }
 
-        .container { max-width: 1200px; margin: 0 auto; padding: 20px; }
+        .container { max-width: 1000px; margin: 0 auto; padding: 20px; }
 
         header {
             text-align: center;
-            padding: 50px 20px;
+            padding: 40px 20px;
             background: #fff;
             border-bottom: 1px solid #eee;
         }
 
-        header h1 { font-size: 1.8rem; margin: 0 0 10px 0; color: var(--secondary); }
-        header p { font-size: 1rem; color: #7f8c8d; }
+        header h1 { font-size: 1.8rem; margin: 0; color: var(--secondary); }
+        header p { font-size: 0.9rem; color: #7f8c8d; margin-top: 8px; }
 
-        /* 搜索区域 */
+        /* 诊断搜索框 */
         .search-section {
             background: white;
             padding: 25px;
             border-radius: 16px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
             display: flex;
             flex-direction: column;
-            gap: 15px;
+            gap: 12px;
             margin: -30px auto 30px;
             position: relative;
             z-index: 10;
         }
 
         @media (min-width: 768px) {
-            .search-section { flex-direction: row; padding: 35px; margin-top: -40px; }
-            header h1 { font-size: 2.5rem; }
+            .search-section { flex-direction: row; padding: 30px; margin-top: -40px; }
         }
 
         input[type="url"] {
             flex: 1;
-            padding: 16px;
+            padding: 14px;
             border: 2px solid #edf2f7;
-            border-radius: 12px;
-            font-size: 16px; /* 解决 iOS 自动放大问题 */
+            border-radius: 10px;
+            font-size: 16px; /* 防止 iOS 缩放 */
             outline: none;
-            transition: all 0.3s ease;
+            transition: 0.3s;
         }
 
-        input[type="url"]:focus { border-color: var(--primary); box-shadow: 0 0 0 4px rgba(39, 174, 96, 0.1); }
+        input[type="url"]:focus { border-color: var(--primary); }
 
         button#auditBtn {
             background: var(--primary);
             color: white;
             border: none;
-            padding: 16px 32px;
-            border-radius: 12px;
+            padding: 14px 28px;
+            border-radius: 10px;
             font-size: 1rem;
             font-weight: bold;
             cursor: pointer;
-            transition: all 0.3s ease;
-            white-space: nowrap;
+            transition: 0.3s;
         }
 
-        button#auditBtn:active { transform: scale(0.98); }
-        button#auditBtn:disabled { background: #cbd5e0; cursor: not-allowed; }
+        button#auditBtn:disabled { background: #cbd5e0; cursor: wait; }
 
-        /* 结果展示 */
-        #reportSection { display: none; margin-top: 20px; animation: fadeInUp 0.6s ease; }
+        /* 结果区域 */
+        #reportSection { display: none; margin-top: 20px; animation: fadeInUp 0.5s ease; }
 
         .report-grid {
             display: grid;
-            grid-template-columns: 1fr;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
             gap: 15px;
         }
 
-        @media (min-width: 480px) { .report-grid { grid-template-columns: repeat(2, 1fr); } }
-        @media (min-width: 1024px) { .report-grid { grid-template-columns: repeat(4, 1fr); } }
-
         .card {
             background: var(--card-bg);
-            padding: 25px;
-            border-radius: 16px;
+            padding: 20px;
+            border-radius: 12px;
             text-align: center;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.02);
+            box-shadow: 0 2px 4px rgba(0,0,0,0.02);
             border-bottom: 4px solid var(--primary);
         }
 
-        .score-val { font-size: 2.5rem; font-weight: 800; margin: 10px 0; display: block; }
-        .label { color: #a0aec0; font-size: 0.85rem; font-weight: 700; text-transform: uppercase; }
+        .score-val { font-size: 2.2rem; font-weight: 800; display: block; margin: 5px 0; }
+        .label { color: #a0aec0; font-size: 0.8rem; font-weight: 700; text-transform: uppercase; }
 
-        /* 底部获客入口 */
+        /* 底部转化 */
         .solution-box {
             background: white;
-            padding: 35px 20px;
+            padding: 30px 20px;
             border-radius: 16px;
-            margin-top: 40px;
+            margin-top: 30px;
             text-align: center;
-            border: 2px dashed #e2e8f0;
+            border: 1px solid #e2e8f0;
         }
 
         .contact-group {
             display: flex;
-            flex-direction: column;
-            gap: 12px;
-            margin-top: 25px;
-        }
-
-        @media (min-width: 768px) {
-            .contact-group { flex-direction: row; justify-content: center; gap: 20px; }
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 20px;
         }
 
         .contact-btn {
-            padding: 14px 24px;
+            padding: 12px 20px;
             border-radius: 50px;
             text-decoration: none;
             font-weight: bold;
             color: white;
-            font-size: 0.95rem;
-            transition: 0.3s;
-            display: block;
+            font-size: 0.9rem;
         }
 
         .btn-wechat { background: #07C160; }
         .btn-whatsapp { background: #25D366; }
-        .btn-email { background: #3498db; }
 
         @keyframes fadeInUp {
-            from { opacity: 0; transform: translateY(20px); }
+            from { opacity: 0; transform: translateY(15px); }
             to { opacity: 1; transform: translateY(0); }
         }
     </style>
@@ -153,13 +140,13 @@
 <header>
     <div class="container">
         <h1>独立站深度诊断</h1>
-        <p>YMTEA 专业技术支持 - 助力 B2B 品牌出海</p>
+        <p>基于 Google PageSpeed 引擎 · YMTEA 技术支持</p>
     </div>
 </header>
 
 <div class="container">
     <div class="search-section">
-        <input type="url" id="siteUrl" placeholder="请输入网址，例如 https://www.apple.com" required>
+        <input type="url" id="siteUrl" placeholder="输入网址，如 www.google.com" required>
         <button id="auditBtn" onclick="runCheck()">立即分析</button>
     </div>
 
@@ -174,22 +161,21 @@
                 <span id="sScore" class="score-val">--</span>
             </div>
             <div class="card">
-                <div class="label">LCP 耗时</div>
-                <span id="lcp" class="score-val" style="font-size: 1.8rem;">--</span>
+                <div class="label">LCP (加载速度)</div>
+                <span id="lcp" class="score-val" style="font-size: 1.5rem;">--</span>
             </div>
             <div class="card">
                 <div class="label">主线程占用</div>
-                <span id="mt" class="score-val" style="font-size: 1.8rem;">--</span>
+                <span id="mt" class="score-val" style="font-size: 1.5rem;">--</span>
             </div>
         </div>
 
         <div class="solution-box">
-            <h2>🚀 获取专家级优化方案</h2>
-            <p>数据指标不理想？联系 YMTEA 技术团队，为您提供代码级调优建议。</p>
+            <h3>🚀 需要更深度的优化方案？</h3>
+            <p>如果您的评分低于 90 分，建议联系技术专家进行代码级压缩与服务器优化。</p>
             <div class="contact-group">
-                <a href="https://work.weixin.qq.com/kfid/kfcab9eba83e85cde3e" class="contact-btn btn-wechat" target="_blank">微信在线咨询</a>
-                <a href="https://wa.me/8618066947375" class="contact-btn btn-whatsapp" target="_blank">WhatsApp 联系</a>
-                <a href="mailto:ym@ymtea.club" class="contact-btn btn-email">邮件咨询</a>
+                <a href="https://work.weixin.qq.com/kfid/kfcab9eba83e85cde3e" class="contact-btn btn-wechat" target="_blank">微信咨询</a>
+                <a href="https://wa.me/8618066947375" class="contact-btn btn-whatsapp" target="_blank">WhatsApp</a>
             </div>
         </div>
     </div>
@@ -201,74 +187,53 @@
         const btn = document.getElementById('auditBtn');
         const report = document.getElementById('reportSection');
         
-        // 1. 基础校验
-        if(!urlInput.value || !urlInput.value.startsWith('http')) {
-            alert('请输入完整的网址 (包含 http:// 或 https://)');
-            return;
+        let targetUrl = urlInput.value.trim();
+        if(!targetUrl) return alert('请输入有效网址');
+
+        // 自动补充 https://
+        if (!targetUrl.startsWith('http')) {
+            targetUrl = 'https://' + targetUrl;
         }
-        
-        // 2. 状态切换
-        btn.innerText = '正在调取 Google 数据 (约20-40秒)...';
+
+        btn.innerText = '正在调取海外数据...';
         btn.disabled = true;
         report.style.display = 'none';
 
-        // --- 【修改后的配置】 ---
-// 1. 这里的域名改为你刚绑定的自定义域（例如 api.ymtea.club）
-const workerUrl = "https://pi.ymtea.club"; 
-const finalRequestUrl = `${workerUrl}?url=${encodeURIComponent(urlInput.value)}`;
-        
-        // --- 【关键修改点 2】：确保暗号与 Worker 中的 SECRET_TOKEN 一致 ---
+        // --- 配置对齐 ---
+        const workerUrl = "https://pi.ymtea.club"; // 确保使用你的 pi 域名
         const SECRET_TOKEN = "YmTea_Labs_2026_Secure";
 
         try {
-            // 3. 设置超时保护 (60秒)
-            const controller = new AbortController();
-            const timeoutId = setTimeout(() => controller.abort(), 60000);
+            // 拼接 URL 确保格式完美：https://pi.ymtea.club/?url=...
+            const finalRequestUrl = `${workerUrl}/?url=${encodeURIComponent(targetUrl)}`;
 
-            // 4. 发起带暗号的请求
-            const response = await fetch(workerUrl, {
+            const response = await fetch(finalRequestUrl, {
                 method: 'GET',
                 headers: {
                     'X-Auth-Token': SECRET_TOKEN 
-                },
-                signal: controller.signal
+                }
             });
 
-            clearTimeout(timeoutId);
-
-            if (response.status === 403) {
-                throw new Error('权限拒绝：安全暗号校验失败');
-            }
-
-            const data = await response.json();
-
-            if(data.error) {
-                alert('诊断失败: ' + data.error);
-                return;
-            }
-
-            // 5. 渲染数据
-            const ps = Math.round(data.perfScore);
-            const psElem = document.getElementById('pScore');
-            psElem.innerText = ps;
+            if (response.status === 403) throw new Error('安全校验失败 (403)');
             
-            // 根据分数改变颜色：红(<50) 黄(<90) 绿(>=90)
-            psElem.style.color = ps < 50 ? "#e74c3c" : (ps < 90 ? "#f39c12" : "#27ae60");
+            const data = await response.json();
+            if(data.error) throw new Error(data.error);
 
-            document.getElementById('sScore').innerText = Math.round(data.seoScore);
-            document.getElementById('lcp').innerText = data.lcp;
-            document.getElementById('mt').innerText = data.mainThread;
+            // 渲染数据
+            document.getElementById('pScore').innerText = Math.round(data.perfScore || 0);
+            document.getElementById('sScore').innerText = Math.round(data.seoScore || 0);
+            document.getElementById('lcp').innerText = data.lcp || "N/A";
+            document.getElementById('mt').innerText = data.mainThread || "N/A";
 
-            // 6. 展示结果并平滑滚动
+            // 动态评分颜色
+            const pElem = document.getElementById('pScore');
+            pElem.style.color = data.perfScore < 50 ? "#e74c3c" : (data.perfScore < 90 ? "#f39c12" : "#27ae60");
+
             report.style.display = 'block';
             window.scrollTo({ top: report.offsetTop - 50, behavior: 'smooth' });
 
         } catch (error) {
-            if (error.name === 'AbortError') {
-                alert('诊断超时：目标网站响应过慢，请重试。');
-            } else {
-                alert('系统异常: ' + error.message);
-            }
+            alert('错误: ' + error.message);
         } finally {
             btn.innerText = '立即分析';
             btn.disabled = false;
