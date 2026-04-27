@@ -212,8 +212,10 @@
         btn.disabled = true;
         report.style.display = 'none';
 
-        // --- 【关键修改点 1】：填写你的 Worker 自动分配域名 ---
-        const workerUrl = `https://audit.asasasxzc.workers.dev/?url=${encodeURIComponent(urlInput.value)}`;
+        // --- 【修改后的配置】 ---
+// 1. 这里的域名改为你刚绑定的自定义域（例如 api.ymtea.club）
+const workerUrl = "https://pi.ymtea.club"; 
+const finalRequestUrl = `${workerUrl}?url=${encodeURIComponent(urlInput.value)}`;
         
         // --- 【关键修改点 2】：确保暗号与 Worker 中的 SECRET_TOKEN 一致 ---
         const SECRET_TOKEN = "YmTea_Labs_2026_Secure";
