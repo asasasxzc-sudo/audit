@@ -10,6 +10,7 @@
             --secondary: #2c3e50;
             --bg: #f4f7f6;
             --card-bg: #ffffff;
+            --link-color: #34495e;
         }
 
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
@@ -26,13 +27,38 @@
 
         header {
             text-align: center;
-            padding: 40px 20px;
+            padding: 40px 20px 20px; /* 底部留空间给导航 */
             background: #fff;
             border-bottom: 1px solid #eee;
         }
 
         header h1 { font-size: 1.8rem; margin: 0; color: var(--secondary); }
-        header p { font-size: 0.9rem; color: #7f8c8d; margin-top: 8px; }
+        header p { font-size: 0.9rem; color: #7f8c8d; margin-top: 8px; margin-bottom: 20px; }
+
+        /* --- 新增：顶部导航样式 --- */
+        .top-nav {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        .top-nav a {
+            text-decoration: none;
+            color: var(--link-color);
+            font-size: 0.9rem;
+            font-weight: 600;
+            padding: 6px 12px;
+            border-radius: 6px;
+            transition: all 0.3s;
+            border: 1px solid transparent;
+        }
+
+        .top-nav a:hover {
+            color: var(--primary);
+            background: #f0fff4;
+            border-color: #d1fae5;
+        }
 
         /* 诊断搜索框 */
         .search-section {
@@ -57,7 +83,7 @@
             padding: 14px;
             border: 2px solid #edf2f7;
             border-radius: 10px;
-            font-size: 16px; /* 防止 iOS 缩放 */
+            font-size: 16px;
             outline: none;
             transition: 0.3s;
         }
@@ -141,6 +167,12 @@
     <div class="container">
         <h1>独立站深度诊断</h1>
         <p>基于 Google PageSpeed 引擎 · YMTEA 技术支持</p>
+        
+        <nav class="top-nav">
+            <a href="https://www.ymtea.club" target="_blank" rel="noopener">Ymtea Shop</a>
+            <a href="https://vip.ymtea.club" target="_blank" rel="noopener">云茗荟</a>
+            <a href="https://www.ymtea.club/bbs" target="_blank" rel="noopener">云茗荟论坛</a>
+        </nav>
     </div>
 </header>
 
@@ -190,7 +222,6 @@
         let targetUrl = urlInput.value.trim();
         if(!targetUrl) return alert('请输入有效网址');
 
-        // 自动补充 https://
         if (!targetUrl.startsWith('http')) {
             targetUrl = 'https://' + targetUrl;
         }
@@ -199,12 +230,10 @@
         btn.disabled = true;
         report.style.display = 'none';
 
-        // --- 配置对齐 ---
-        const workerUrl = "https://pi.ymtea.club"; // 确保使用你的 pi 域名
+        const workerUrl = "https://pi.ymtea.club"; 
         const SECRET_TOKEN = "YmTea_Labs_2026_Secure";
 
         try {
-            // 拼接 URL 确保格式完美：https://pi.ymtea.club/?url=...
             const finalRequestUrl = `${workerUrl}/?url=${encodeURIComponent(targetUrl)}`;
 
             const response = await fetch(finalRequestUrl, {
@@ -219,13 +248,11 @@
             const data = await response.json();
             if(data.error) throw new Error(data.error);
 
-            // 渲染数据
             document.getElementById('pScore').innerText = Math.round(data.perfScore || 0);
             document.getElementById('sScore').innerText = Math.round(data.seoScore || 0);
             document.getElementById('lcp').innerText = data.lcp || "N/A";
             document.getElementById('mt').innerText = data.mainThread || "N/A";
 
-            // 动态评分颜色
             const pElem = document.getElementById('pScore');
             pElem.style.color = data.perfScore < 50 ? "#e74c3c" : (data.perfScore < 90 ? "#f39c12" : "#27ae60");
 
