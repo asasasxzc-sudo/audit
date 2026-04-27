@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Independent Site Auditor</title>
+    <style>
+        body { font-family: sans-serif; background: #f4f7f6; padding: 50px; text-align: center; }
+        .box { background: white; padding: 40px; border-radius: 12px; box-shadow: 0 4px 20px rgba(0,0,0,0.08); max-width: 600px; margin: auto; }
+        input { width: 80%; padding: 12px; border: 1px solid #ddd; border-radius: 4px; margin-bottom: 20px; }
+        button { background: #27ae60; color: white; border: none; padding: 12px 30px; border-radius: 4px; cursor: pointer; font-weight: bold; }
+        .report { margin-top: 30px; display: none; text-align: left; border-top: 1px solid #eee; padding-top: 20px; }
+    </style>
+</head>
+<body>
+    <div class="box">
+        <h1>独立站诊断报告</h1>
+        <input type="url" id="siteUrl" placeholder="https://example.com">
+        <button onclick="check()">开始极速诊断</button>
+        
+        <div id="report" class="report">
+            <p>🚀 性能评分: <b id="pScore" style="color:green"></b></p>
+            <p>🔍 SEO 评分: <b id="sScore"></b></p>
+            <p>⏱️ 加载耗时 (LCP): <span id="lcp"></span></p>
+            <p>🧵 主线程占用: <span id="mt"></span></p>
+        </div>
+    </div>
+
+    <script>
+        async function check() {
+            const url = document.getElementById('siteUrl').value;
+            const btn = document.querySelector('button');
+            if(!url) return alert('请输入URL');
+            
+            btn.innerText = '诊断中...';
+            // 换成你部署后的 Worker 地址
+            const workerUrl = `https://audit.asasasxzc.workers.dev/?url=${url}`;
+            
+            try {
+                const res = await fetch(workerUrl);
+                const data = await res.json();
+                
+                document.getElementById('report').style.display = 'block';
+                document.getElementById('pScore').innerText = Math.round(data.perfScore);
+                document.getElementById('sScore').innerText = Math.round(data.seoScore);
+                document.getElementById('lcp').innerText = data.lcp;
+                document.getElementById('mt').innerText = data.mainThread;
+            } catch(e) {
+                alert('诊断失败，请检查网址。');
+            } finally {
+                btn.innerText = '开始极速诊断';
+            }
+        }
+    </script>
+</body>
+</html>
