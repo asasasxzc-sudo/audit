@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>独立站深度诊断 - YMTEA Labs 安全加固版</title>
+    <title>独立站深度诊断 - YMTEA Labs 专业加固版</title>
     <style>
         :root {
             --primary: #27ae60;
@@ -27,7 +27,7 @@
 
         header {
             text-align: center;
-            padding: 40px 20px;
+            padding: 50px 20px;
             background: #fff;
             border-bottom: 1px solid #eee;
         }
@@ -59,7 +59,7 @@
             padding: 16px;
             border: 2px solid #edf2f7;
             border-radius: 12px;
-            font-size: 16px;
+            font-size: 16px; /* 解决 iOS 自动放大问题 */
             outline: none;
             transition: all 0.3s ease;
         }
@@ -76,8 +76,10 @@
             font-weight: bold;
             cursor: pointer;
             transition: all 0.3s ease;
+            white-space: nowrap;
         }
 
+        button#auditBtn:active { transform: scale(0.98); }
         button#auditBtn:disabled { background: #cbd5e0; cursor: not-allowed; }
 
         /* 结果展示 */
@@ -101,10 +103,10 @@
             border-bottom: 4px solid var(--primary);
         }
 
-        .score-val { font-size: 2.5rem; font-weight: 800; margin: 10px 0; display: block; color: var(--primary); }
+        .score-val { font-size: 2.5rem; font-weight: 800; margin: 10px 0; display: block; }
         .label { color: #a0aec0; font-size: 0.85rem; font-weight: 700; text-transform: uppercase; }
 
-        /* 联系方式 */
+        /* 底部获客入口 */
         .solution-box {
             background: white;
             padding: 35px 20px;
@@ -131,8 +133,9 @@
             text-decoration: none;
             font-weight: bold;
             color: white;
+            font-size: 0.95rem;
+            transition: 0.3s;
             display: block;
-            transition: opacity 0.3s;
         }
 
         .btn-wechat { background: #07C160; }
@@ -150,13 +153,13 @@
 <header>
     <div class="container">
         <h1>独立站深度诊断</h1>
-        <p>YMTEA 助力 B2B 品牌出海技术优化</p>
+        <p>YMTEA 专业技术支持 - 助力 B2B 品牌出海</p>
     </div>
 </header>
 
 <div class="container">
     <div class="search-section">
-        <input type="url" id="siteUrl" placeholder="输入您的网址 https://..." required>
+        <input type="url" id="siteUrl" placeholder="请输入网址，例如 https://www.apple.com" required>
         <button id="auditBtn" onclick="runCheck()">立即分析</button>
     </div>
 
@@ -181,12 +184,12 @@
         </div>
 
         <div class="solution-box">
-            <h2>🚀 获取完整优化方案</h2>
-            <p>发现指标异常？联系我们获取代码级修改建议</p>
+            <h2>🚀 获取专家级优化方案</h2>
+            <p>数据指标不理想？联系 YMTEA 技术团队，为您提供代码级调优建议。</p>
             <div class="contact-group">
-                <a href="https://work.weixin.qq.com/kfid/kfcab9eba83e85cde3e" class="contact-btn btn-wechat" target="_blank">微信咨询</a>
-                <a href="https://wa.me/8618066947375" class="contact-btn btn-whatsapp" target="_blank">WhatsApp</a>
-                <a href="mailto:ym@ymtea.club" class="contact-btn btn-email">Email</a>
+                <a href="https://work.weixin.qq.com/kfid/kfcab9eba83e85cde3e" class="contact-btn btn-wechat" target="_blank">微信在线咨询</a>
+                <a href="https://wa.me/8618066947375" class="contact-btn btn-whatsapp" target="_blank">WhatsApp 联系</a>
+                <a href="mailto:ym@ymtea.club" class="contact-btn btn-email">邮件咨询</a>
             </div>
         </div>
     </div>
@@ -198,61 +201,72 @@
         const btn = document.getElementById('auditBtn');
         const report = document.getElementById('reportSection');
         
+        // 1. 基础校验
         if(!urlInput.value || !urlInput.value.startsWith('http')) {
-            alert('请输入完整的网址，包含 https://');
+            alert('请输入完整的网址 (包含 http:// 或 https://)');
             return;
         }
         
-        btn.innerText = '诊断中 (预计20-40s)...';
+        // 2. 状态切换
+        btn.innerText = '正在调取 Google 数据 (约20-40秒)...';
         btn.disabled = true;
         report.style.display = 'none';
 
-        // --- 安全配置 ---
-        // 必须与 Worker 中的 SECRET_TOKEN 一致
-        const SECRET_TOKEN = "YmTea_Labs_2026_Secure"; 
-        // 替换为你真实的 Worker 路由或地址
+        // --- 【关键修改点 1】：填写你的 Worker 自动分配域名 ---
         const workerUrl = `https://audit.asasasxzc.workers.dev/?url=${encodeURIComponent(urlInput.value)}`;
+        
+        // --- 【关键修改点 2】：确保暗号与 Worker 中的 SECRET_TOKEN 一致 ---
+        const SECRET_TOKEN = "YmTea_Labs_2026_Secure";
 
         try {
+            // 3. 设置超时保护 (60秒)
             const controller = new AbortController();
             const timeoutId = setTimeout(() => controller.abort(), 60000);
 
+            // 4. 发起带暗号的请求
             const response = await fetch(workerUrl, {
                 method: 'GET',
                 headers: {
-                    // 发送安全暗号给后端校验
                     'X-Auth-Token': SECRET_TOKEN 
                 },
                 signal: controller.signal
             });
 
+            clearTimeout(timeoutId);
+
             if (response.status === 403) {
-                throw new Error('权限拒绝：域名不匹配或暗号错误');
+                throw new Error('权限拒绝：安全暗号校验失败');
             }
 
             const data = await response.json();
-            clearTimeout(timeoutId);
 
             if(data.error) {
-                alert('诊断异常: ' + data.error);
+                alert('诊断失败: ' + data.error);
                 return;
             }
 
-            // 填充数据逻辑
+            // 5. 渲染数据
             const ps = Math.round(data.perfScore);
             const psElem = document.getElementById('pScore');
             psElem.innerText = ps;
+            
+            // 根据分数改变颜色：红(<50) 黄(<90) 绿(>=90)
             psElem.style.color = ps < 50 ? "#e74c3c" : (ps < 90 ? "#f39c12" : "#27ae60");
 
             document.getElementById('sScore').innerText = Math.round(data.seoScore);
             document.getElementById('lcp').innerText = data.lcp;
             document.getElementById('mt').innerText = data.mainThread;
 
+            // 6. 展示结果并平滑滚动
             report.style.display = 'block';
             window.scrollTo({ top: report.offsetTop - 50, behavior: 'smooth' });
 
         } catch (error) {
-            alert('错误: ' + error.message);
+            if (error.name === 'AbortError') {
+                alert('诊断超时：目标网站响应过慢，请重试。');
+            } else {
+                alert('系统异常: ' + error.message);
+            }
         } finally {
             btn.innerText = '立即分析';
             btn.disabled = false;
