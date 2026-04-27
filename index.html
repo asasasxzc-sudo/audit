@@ -1,55 +1,254 @@
 <!DOCTYPE html>
-<html>
+<html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
-    <title>Independent Site Auditor</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>独立站深度诊断 - YMTEA Labs 专业版</title>
     <style>
-        body { font-family: sans-serif; background: #f4f7f6; padding: 50px; text-align: center; }
-        .box { background: white; padding: 40px; border-radius: 12px; box-shadow: 0 4px 20px rgba(0,0,0,0.08); max-width: 600px; margin: auto; }
-        input { width: 80%; padding: 12px; border: 1px solid #ddd; border-radius: 4px; margin-bottom: 20px; }
-        button { background: #27ae60; color: white; border: none; padding: 12px 30px; border-radius: 4px; cursor: pointer; font-weight: bold; }
-        .report { margin-top: 30px; display: none; text-align: left; border-top: 1px solid #eee; padding-top: 20px; }
+        /* 1600px 宽屏专业视觉设计 */
+        :root {
+            --primary: #27ae60;
+            --secondary: #2c3e50;
+            --warning: #f39c12;
+            --danger: #e74c3c;
+            --bg: #f8f9fa;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--bg);
+            color: var(--secondary);
+            margin: 0;
+            padding: 0;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1600px;
+            margin: 0 auto;
+            padding: 40px;
+        }
+
+        header {
+            text-align: center;
+            padding: 60px 0;
+            background: #fff;
+            margin-bottom: 40px;
+            box-shadow: 0 2px 15px rgba(0,0,0,0.05);
+        }
+
+        h1 { font-size: 2.8rem; margin-bottom: 10px; color: var(--secondary); }
+        .subtitle { font-size: 1.2rem; color: #7f8c8d; }
+
+        /* 搜索区域 */
+        .search-section {
+            background: white;
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 4px 25px rgba(0,0,0,0.05);
+            display: flex;
+            gap: 15px;
+            margin-bottom: 40px;
+        }
+
+        input[type="url"] {
+            flex: 1;
+            padding: 18px;
+            border: 2px solid #eee;
+            border-radius: 8px;
+            font-size: 1.1rem;
+            outline: none;
+            transition: border-color 0.3s;
+        }
+
+        input[type="url"]:focus { border-color: var(--primary); }
+
+        button#auditBtn {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 0 40px;
+            border-radius: 8px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+
+        button#auditBtn:hover { transform: translateY(-2px); background: #219150; }
+        button#auditBtn:disabled { background: #ccc; cursor: not-allowed; }
+
+        /* 报告展示区域 */
+        #reportSection { display: none; animation: fadeIn 0.5s ease-in; }
+
+        .report-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+
+        .card {
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            border-top: 5px solid var(--primary);
+            text-align: center;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+        }
+
+        .score-val { font-size: 3.5rem; font-weight: 800; margin: 15px 0; }
+        .label { color: #95a5a6; text-transform: uppercase; letter-spacing: 1px; font-weight: bold; }
+
+        /* 解决方案区域 */
+        .solution-box {
+            background: #fff;
+            padding: 50px;
+            border-radius: 12px;
+            border: 2px dashed #ddd;
+            text-align: center;
+        }
+
+        .contact-group {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin-top: 30px;
+            flex-wrap: wrap;
+        }
+
+        .contact-btn {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 15px 25px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: bold;
+            color: white;
+            transition: opacity 0.3s;
+        }
+
+        .btn-wechat { background: #07C160; }
+        .btn-whatsapp { background: #25D366; }
+        .btn-email { background: #3498db; }
+        .contact-btn:hover { opacity: 0.8; }
+
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+
+        @media (max-width: 768px) {
+            .search-section { flex-direction: column; }
+            .container { padding: 20px; }
+        }
     </style>
 </head>
 <body>
-    <div class="box">
-        <h1>独立站诊断报告</h1>
-        <input type="url" id="siteUrl" placeholder="https://example.com">
-        <button onclick="check()">开始极速诊断</button>
-        
-        <div id="report" class="report">
-            <p>🚀 性能评分: <b id="pScore" style="color:green"></b></p>
-            <p>🔍 SEO 评分: <b id="sScore"></b></p>
-            <p>⏱️ 加载耗时 (LCP): <span id="lcp"></span></p>
-            <p>🧵 主线程占用: <span id="mt"></span></p>
-        </div>
+
+<header>
+    <div class="container">
+        <h1>独立站深度诊断报告站</h1>
+        <p class="subtitle">针对欧美市场 B2B 独立站性能、SEO 及核心体验指标的实时监测</p>
+    </div>
+</header>
+
+<div class="container">
+    <div class="search-section">
+        <input type="url" id="siteUrl" placeholder="输入您的网址，例如：https://www.example.com" required>
+        <button id="auditBtn" onclick="runCheck()">开始诊断</button>
     </div>
 
-    <script>
-        async function check() {
-            const url = document.getElementById('siteUrl').value;
-            const btn = document.querySelector('button');
-            if(!url) return alert('请输入URL');
+    <div id="reportSection">
+        <div class="report-grid">
+            <div class="card">
+                <div class="label">性能评分 (Performance)</div>
+                <div id="pScore" class="score-val">--</div>
+                <p id="pAdvice">正在分析...</p>
+            </div>
+            <div class="card">
+                <div class="label">SEO 评分</div>
+                <div id="sScore" class="score-val">--</div>
+                <p>Google 搜索友好度检测</p>
+            </div>
+            <div class="card" style="border-top-color: var(--warning);">
+                <div class="label">加载耗时 (LCP)</div>
+                <div id="lcp" class="score-val" style="font-size: 2.5rem;">--</div>
+                <p>欧美用户流失核心指标</p>
+            </div>
+            <div class="card" style="border-top-color: var(--secondary);">
+                <div class="label">主线程占用</div>
+                <div id="mt" class="score-val" style="font-size: 2.5rem;">--</div>
+                <p>页面交互流畅度</p>
+            </div>
+        </div>
+
+        <div class="solution-box">
+            <h2>🚀 发现性能瓶颈？获取完整优化方案</h2>
+            <p>我们为您提供精准到页面的代码级修改建议，助力您的 B2B 站点在欧美市场获得更多询盘。</p>
             
-            btn.innerText = '诊断中...';
-            // 换成你部署后的 Worker 地址
-            const workerUrl = `https://audit.asasasxzc.workers.dev/?url=${url}`;
-            
-            try {
-                const res = await fetch(workerUrl);
-                const data = await res.json();
-                
-                document.getElementById('report').style.display = 'block';
-                document.getElementById('pScore').innerText = Math.round(data.perfScore);
-                document.getElementById('sScore').innerText = Math.round(data.seoScore);
-                document.getElementById('lcp').innerText = data.lcp;
-                document.getElementById('mt').innerText = data.mainThread;
-            } catch(e) {
-                alert('诊断失败，请检查网址。');
-            } finally {
-                btn.innerText = '开始极速诊断';
-            }
+            <div class="contact-group">
+                <a href="https://work.weixin.qq.com/kfid/kfcab9eba83e85cde3e" class="contact-btn btn-wechat" target="_blank">
+                    微信咨询 (企业客服)
+                </a>
+                <a href="https://wa.me/8618066947375" class="contact-btn btn-whatsapp" target="_blank">
+                    WhatsApp: +86 18066947375
+                </a>
+                <a href="mailto:ym@ymtea.club" class="contact-btn btn-email">
+                    Email: ym@ymtea.club
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    async function runCheck() {
+        const urlInput = document.getElementById('siteUrl');
+        const btn = document.getElementById('auditBtn');
+        const report = document.getElementById('reportSection');
+        
+        if(!urlInput.value) return alert('请输入完整的网址 (包含 https://)');
+        
+        btn.innerText = '深度扫描中 (可能需要20秒)...';
+        btn.disabled = true;
+        report.style.display = 'none';
+
+        // ！！！重要：请在此处填入你之前测试通过的真实 Worker 网址 ！！！
+        const workerUrl = `https://audit.asasasxzc.workers.dev//?url=${encodeURIComponent(urlInput.value)}`;
+
+        try {
+            const response = await fetch(workerUrl);
+            const data = await response.json();
+
+            if(data.error) throw new Error(data.error);
+
+            // 填充数据
+            const ps = Math.round(data.perfScore);
+            const psElem = document.getElementById('pScore');
+            psElem.innerText = ps;
+            psElem.style.color = ps < 50 ? "#e74c3c" : (ps < 90 ? "#f39c12" : "#27ae60");
+
+            document.getElementById('sScore').innerText = Math.round(data.seoScore);
+            document.getElementById('lcp').innerText = data.lcp;
+            document.getElementById('mt').innerText = data.mainThread;
+
+            // 智能建议提示
+            const advice = document.getElementById('pAdvice');
+            if(ps < 60) advice.innerText = "🚨 性能堪忧，正在流失大量移动端客户。";
+            else if(ps < 90) advice.innerText = "🟡 表现一般，仍有较大的优化空间。";
+            else advice.innerText = "🟢 表现优异，基础扎实。";
+
+            report.style.display = 'block';
+            // 自动滚动到结果
+            window.scrollTo({ top: report.offsetTop - 100, behavior: 'smooth' });
+
+        } catch (error) {
+            alert('诊断异常: ' + error.message);
+        } finally {
+            btn.innerText = '开始诊断';
+            btn.disabled = false;
         }
-    </script>
+    }
+</script>
+
 </body>
 </html>
