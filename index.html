@@ -5,244 +5,147 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>独立站深度诊断 - YMTEA Labs 专业版</title>
     <style>
-        /* 1600px 宽屏专业视觉设计 */
         :root {
             --primary: #27ae60;
             --secondary: #2c3e50;
-            --warning: #f39c12;
-            --danger: #e74c3c;
             --bg: #f8f9fa;
         }
 
         body {
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            font-family: -apple-system, system-ui, sans-serif;
             background-color: var(--bg);
-            color: var(--secondary);
-            margin: 0;
-            padding: 0;
-            line-height: 1.6;
+            margin: 0; padding: 0;
         }
 
-        .container {
-            max-width: 1600px;
-            margin: 0 auto;
-            padding: 40px;
-        }
+        .container { max-width: 1600px; margin: 0 auto; padding: 40px; }
 
         header {
-            text-align: center;
-            padding: 60px 0;
-            background: #fff;
-            margin-bottom: 40px;
-            box-shadow: 0 2px 15px rgba(0,0,0,0.05);
+            text-align: center; padding: 40px 0;
+            background: white; border-bottom: 1px solid #eee;
         }
 
-        h1 { font-size: 2.8rem; margin-bottom: 10px; color: var(--secondary); }
-        .subtitle { font-size: 1.2rem; color: #7f8c8d; }
-
-        /* 搜索区域 */
-        .search-section {
-            background: white;
-            padding: 40px;
-            border-radius: 12px;
-            box-shadow: 0 4px 25px rgba(0,0,0,0.05);
-            display: flex;
-            gap: 15px;
-            margin-bottom: 40px;
+        /* 搜索框 */
+        .search-box {
+            background: white; padding: 30px; border-radius: 12px;
+            display: flex; gap: 15px; margin: 30px 0;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.05);
         }
 
-        input[type="url"] {
-            flex: 1;
-            padding: 18px;
-            border: 2px solid #eee;
-            border-radius: 8px;
-            font-size: 1.1rem;
-            outline: none;
-            transition: border-color 0.3s;
-        }
+        input { flex: 1; padding: 15px; border: 2px solid #eee; border-radius: 8px; font-size: 1rem; }
+        button { background: var(--primary); color: white; border: none; padding: 0 30px; border-radius: 8px; cursor: pointer; font-weight: bold; }
+        button:disabled { background: #ccc; }
 
-        input[type="url"]:focus { border-color: var(--primary); }
-
-        button#auditBtn {
-            background: var(--primary);
-            color: white;
-            border: none;
-            padding: 0 40px;
-            border-radius: 8px;
-            font-size: 1.1rem;
-            font-weight: bold;
-            cursor: pointer;
-            transition: transform 0.2s;
-        }
-
-        button#auditBtn:hover { transform: translateY(-2px); background: #219150; }
-        button#auditBtn:disabled { background: #ccc; cursor: not-allowed; }
-
-        /* 报告展示区域 */
-        #reportSection { display: none; animation: fadeIn 0.5s ease-in; }
-
+        /* 结果卡片 */
         .report-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 30px;
-            margin-bottom: 40px;
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px; margin-bottom: 40px; display: none; /* 默认隐藏 */
         }
 
-        .card {
-            background: white;
-            padding: 30px;
-            border-radius: 12px;
-            border-top: 5px solid var(--primary);
-            text-align: center;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+        .card { background: white; padding: 30px; border-radius: 12px; text-align: center; box-shadow: 0 2px 10px rgba(0,0,0,0.05); }
+        .score { font-size: 3rem; font-weight: bold; margin: 10px 0; color: var(--primary); }
+
+        /* 联系方式（确保永远可见） */
+        .contact-section {
+            background: #fff; padding: 50px; border-radius: 12px;
+            text-align: center; border: 2px dashed #ccc; margin-top: 50px;
         }
 
-        .score-val { font-size: 3.5rem; font-weight: 800; margin: 15px 0; }
-        .label { color: #95a5a6; text-transform: uppercase; letter-spacing: 1px; font-weight: bold; }
-
-        /* 解决方案区域 */
-        .solution-box {
-            background: #fff;
-            padding: 50px;
-            border-radius: 12px;
-            border: 2px dashed #ddd;
-            text-align: center;
+        .contact-grid {
+            display: flex; justify-content: center; gap: 20px; flex-wrap: wrap; margin-top: 30px;
         }
 
-        .contact-group {
-            display: flex;
-            justify-content: center;
-            gap: 30px;
-            margin-top: 30px;
-            flex-wrap: wrap;
+        .btn {
+            padding: 15px 25px; border-radius: 50px; text-decoration: none;
+            color: white; font-weight: bold; display: flex; align-items: center;
         }
 
-        .contact-btn {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            padding: 15px 25px;
-            border-radius: 50px;
-            text-decoration: none;
-            font-weight: bold;
-            color: white;
-            transition: opacity 0.3s;
-        }
-
-        .btn-wechat { background: #07C160; }
-        .btn-whatsapp { background: #25D366; }
-        .btn-email { background: #3498db; }
-        .contact-btn:hover { opacity: 0.8; }
-
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
-
-        @media (max-width: 768px) {
-            .search-section { flex-direction: column; }
-            .container { padding: 20px; }
-        }
+        .wechat { background: #07C160; }
+        .whatsapp { background: #25D366; }
+        .email { background: #3498db; }
     </style>
 </head>
 <body>
 
 <header>
-    <div class="container">
-        <h1>独立站深度诊断报告站</h1>
-        <p class="subtitle">针对欧美市场 B2B 独立站性能、SEO 及核心体验指标的实时监测</p>
-    </div>
+    <h1>独立站深度诊断报告站</h1>
+    <p>YMTEA 专业技术支持 - 助力 B2B 品牌出海</p>
 </header>
 
 <div class="container">
-    <div class="search-section">
-        <input type="url" id="siteUrl" placeholder="输入您的网址，例如：https://www.example.com" required>
+    <div class="search-box">
+        <input type="url" id="siteUrl" placeholder="输入网址，如：https://www.apple.com">
         <button id="auditBtn" onclick="runCheck()">开始诊断</button>
     </div>
 
-    <div id="reportSection">
-        <div class="report-grid">
-            <div class="card">
-                <div class="label">性能评分 (Performance)</div>
-                <div id="pScore" class="score-val">--</div>
-                <p id="pAdvice">正在分析...</p>
-            </div>
-            <div class="card">
-                <div class="label">SEO 评分</div>
-                <div id="sScore" class="score-val">--</div>
-                <p>Google 搜索友好度检测</p>
-            </div>
-            <div class="card" style="border-top-color: var(--warning);">
-                <div class="label">加载耗时 (LCP)</div>
-                <div id="lcp" class="score-val" style="font-size: 2.5rem;">--</div>
-                <p>欧美用户流失核心指标</p>
-            </div>
-            <div class="card" style="border-top-color: var(--secondary);">
-                <div class="label">主线程占用</div>
-                <div id="mt" class="score-val" style="font-size: 2.5rem;">--</div>
-                <p>页面交互流畅度</p>
-            </div>
+    <div id="reportSection" class="report-grid">
+        <div class="card">
+            <div>性能评分</div>
+            <div id="pScore" class="score">--</div>
         </div>
+        <div class="card">
+            <div>SEO 评分</div>
+            <div id="sScore" class="score">--</div>
+        </div>
+        <div class="card">
+            <div>加载耗时 (LCP)</div>
+            <div id="lcp" class="score" style="font-size: 2rem;">--</div>
+        </div>
+        <div class="card">
+            <div>主线程占用</div>
+            <div id="mt" class="score" style="font-size: 2rem;">--</div>
+        </div>
+    </div>
 
-        <div class="solution-box">
-            <h2>🚀 发现性能瓶颈？获取完整优化方案</h2>
-            <p>我们为您提供精准到页面的代码级修改建议，助力您的 B2B 站点在欧美市场获得更多询盘。</p>
-            
-            <div class="contact-group">
-                <a href="https://work.weixin.qq.com/kfid/kfcab9eba83e85cde3e" class="contact-btn btn-wechat" target="_blank">
-                    微信咨询 (企业客服)
-                </a>
-                <a href="https://wa.me/8618066947375" class="contact-btn btn-whatsapp" target="_blank">
-                    WhatsApp: +86 18066947375
-                </a>
-                <a href="mailto:ym@ymtea.club" class="contact-btn btn-email">
-                    Email: ym@ymtea.club
-                </a>
-            </div>
+    <div class="contact-section">
+        <h2>🚀 获取完整优化方案</h2>
+        <p>发现网站评分低？联系我们获取一对一技术调优建议。</p>
+        <div class="contact-grid">
+            <a href="https://work.weixin.qq.com/kfid/kfcab9eba83e85cde3e" class="btn wechat" target="_blank">微信咨询</a>
+            <a href="https://wa.me/8618066947375" class="btn whatsapp" target="_blank">WhatsApp</a>
+            <a href="mailto:ym@ymtea.club" class="btn email">邮件: ym@ymtea.club</a>
         </div>
     </div>
 </div>
 
 <script>
     async function runCheck() {
-        const urlInput = document.getElementById('siteUrl');
+        const url = document.getElementById('siteUrl').value;
         const btn = document.getElementById('auditBtn');
         const report = document.getElementById('reportSection');
-        
-        if(!urlInput.value) return alert('请输入完整的网址 (包含 https://)');
-        
-        btn.innerText = '深度扫描中 (可能需要20秒)...';
-        btn.disabled = true;
-        report.style.display = 'none';
 
-        // ！！！重要：请在此处填入你之前测试通过的真实 Worker 网址 ！！！
-        const workerUrl = `https://audit.ymtea.club/?url=${encodeURIComponent(urlInput.value)}`;
+        if (!url || !url.startsWith('http')) {
+            return alert('请输入完整的网址，必须包含 https://');
+        }
+
+        btn.innerText = '诊断中 (约20秒)...';
+        btn.disabled = true;
+
+        // 替换为你真实的 Worker 地址
+        const workerUrl = `https://audit.ymtea.club/?url=${encodeURIComponent(url)}`;
 
         try {
-            const response = await fetch(workerUrl);
-            const data = await response.json();
+            const res = await fetch(workerUrl);
+            if (!res.ok) throw new Error('Worker 响应错误');
+            
+            const data = await res.json();
+            
+            if (data.error) {
+                alert('诊断异常：' + data.error);
+                return;
+            }
 
-            if(data.error) throw new Error(data.error);
-
-            // 填充数据
-            const ps = Math.round(data.perfScore);
-            const psElem = document.getElementById('pScore');
-            psElem.innerText = ps;
-            psElem.style.color = ps < 50 ? "#e74c3c" : (ps < 90 ? "#f39c12" : "#27ae60");
-
+            // 显示并填充数据
+            report.style.display = 'grid';
+            document.getElementById('pScore').innerText = Math.round(data.perfScore);
             document.getElementById('sScore').innerText = Math.round(data.seoScore);
             document.getElementById('lcp').innerText = data.lcp;
             document.getElementById('mt').innerText = data.mainThread;
 
-            // 智能建议提示
-            const advice = document.getElementById('pAdvice');
-            if(ps < 60) advice.innerText = "🚨 性能堪忧，正在流失大量移动端客户。";
-            else if(ps < 90) advice.innerText = "🟡 表现一般，仍有较大的优化空间。";
-            else advice.innerText = "🟢 表现优异，基础扎实。";
+            window.scrollTo({ top: report.offsetTop - 50, behavior: 'smooth' });
 
-            report.style.display = 'block';
-            // 自动滚动到结果
-            window.scrollTo({ top: report.offsetTop - 100, behavior: 'smooth' });
-
-        } catch (error) {
-            alert('诊断异常: ' + error.message);
+        } catch (e) {
+            console.error(e);
+            alert('诊断异常，请检查 Worker 链接或网络。');
         } finally {
             btn.innerText = '开始诊断';
             btn.disabled = false;
