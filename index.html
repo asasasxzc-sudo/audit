@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>独立站深度诊断 - YMTEA Labs 专业版</title>
+    <title>独立站深度诊断 - YMTEA Labs 安全加固版</title>
     <style>
         :root {
             --primary: #27ae60;
@@ -23,11 +23,7 @@
             overflow-x: hidden;
         }
 
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 20px;
-        }
+        .container { max-width: 1200px; margin: 0 auto; padding: 20px; }
 
         header {
             text-align: center;
@@ -37,9 +33,9 @@
         }
 
         header h1 { font-size: 1.8rem; margin: 0 0 10px 0; color: var(--secondary); }
-        header p { font-size: 1rem; color: #7f8c8d; margin: 0; }
+        header p { font-size: 1rem; color: #7f8c8d; }
 
-        /* 搜索区域响应式 */
+        /* 搜索区域 */
         .search-section {
             background: white;
             padding: 25px;
@@ -63,7 +59,7 @@
             padding: 16px;
             border: 2px solid #edf2f7;
             border-radius: 12px;
-            font-size: 16px; /* 防止iOS自动放大 */
+            font-size: 16px;
             outline: none;
             transition: all 0.3s ease;
         }
@@ -80,13 +76,11 @@
             font-weight: bold;
             cursor: pointer;
             transition: all 0.3s ease;
-            white-space: nowrap;
         }
 
-        button#auditBtn:active { transform: scale(0.98); }
         button#auditBtn:disabled { background: #cbd5e0; cursor: not-allowed; }
 
-        /* 报告网格响应式 */
+        /* 结果展示 */
         #reportSection { display: none; margin-top: 20px; animation: fadeInUp 0.6s ease; }
 
         .report-grid {
@@ -107,10 +101,10 @@
             border-bottom: 4px solid var(--primary);
         }
 
-        .score-val { font-size: 2.5rem; font-weight: 800; margin: 10px 0; display: block; }
+        .score-val { font-size: 2.5rem; font-weight: 800; margin: 10px 0; display: block; color: var(--primary); }
         .label { color: #a0aec0; font-size: 0.85rem; font-weight: 700; text-transform: uppercase; }
 
-        /* 底部联系方式 */
+        /* 联系方式 */
         .solution-box {
             background: white;
             padding: 35px 20px;
@@ -119,8 +113,6 @@
             text-align: center;
             border: 2px dashed #e2e8f0;
         }
-
-        .solution-box h2 { font-size: 1.4rem; margin-bottom: 10px; }
 
         .contact-group {
             display: flex;
@@ -139,9 +131,8 @@
             text-decoration: none;
             font-weight: bold;
             color: white;
-            font-size: 0.95rem;
-            transition: opacity 0.3s ease;
             display: block;
+            transition: opacity 0.3s;
         }
 
         .btn-wechat { background: #07C160; }
@@ -192,7 +183,6 @@
         <div class="solution-box">
             <h2>🚀 获取完整优化方案</h2>
             <p>发现指标异常？联系我们获取代码级修改建议</p>
-            
             <div class="contact-group">
                 <a href="https://work.weixin.qq.com/kfid/kfcab9eba83e85cde3e" class="contact-btn btn-wechat" target="_blank">微信咨询</a>
                 <a href="https://wa.me/8618066947375" class="contact-btn btn-whatsapp" target="_blank">WhatsApp</a>
@@ -217,15 +207,29 @@
         btn.disabled = true;
         report.style.display = 'none';
 
-        // 请务必替换为你真实的 Worker 地址
-        const workerUrl = `https://audit.asasasxzc.workers.dev/?url=${encodeURIComponent(urlInput.value)}`;
+        // --- 安全配置 ---
+        // 必须与 Worker 中的 SECRET_TOKEN 一致
+        const SECRET_TOKEN = "YmTea_Labs_2026_Secure"; 
+        // 替换为你真实的 Worker 路由或地址
+        const workerUrl = `https://audit.ymtea.club/?url=${encodeURIComponent(urlInput.value)}`;
 
         try {
-            // 设置 50 秒超时限制
             const controller = new AbortController();
-            const timeoutId = setTimeout(() => controller.abort(), 50000);
+            const timeoutId = setTimeout(() => controller.abort(), 60000);
 
-            const response = await fetch(workerUrl, { signal: controller.signal });
+            const response = await fetch(workerUrl, {
+                method: 'GET',
+                headers: {
+                    // 发送安全暗号给后端校验
+                    'X-Auth-Token': SECRET_TOKEN 
+                },
+                signal: controller.signal
+            });
+
+            if (response.status === 403) {
+                throw new Error('权限拒绝：域名不匹配或暗号错误');
+            }
+
             const data = await response.json();
             clearTimeout(timeoutId);
 
@@ -234,11 +238,10 @@
                 return;
             }
 
-            // 填充数据
+            // 填充数据逻辑
             const ps = Math.round(data.perfScore);
             const psElem = document.getElementById('pScore');
             psElem.innerText = ps;
-            // 颜色反馈
             psElem.style.color = ps < 50 ? "#e74c3c" : (ps < 90 ? "#f39c12" : "#27ae60");
 
             document.getElementById('sScore').innerText = Math.round(data.seoScore);
@@ -249,11 +252,7 @@
             window.scrollTo({ top: report.offsetTop - 50, behavior: 'smooth' });
 
         } catch (error) {
-            if (error.name === 'AbortError') {
-                alert('诊断超时，Google 响应较慢，请稍后重试。');
-            } else {
-                alert('网络连接异常，请确保 Worker 已正确部署。');
-            }
+            alert('错误: ' + error.message);
         } finally {
             btn.innerText = '立即分析';
             btn.disabled = false;
