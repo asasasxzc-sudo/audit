@@ -11,6 +11,8 @@
             --bg: #f4f7f6;
             --card-bg: #ffffff;
             --link-color: #34495e;
+            --danger: #e74c3c;
+            --warning: #f39c12;
         }
 
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
@@ -27,7 +29,7 @@
 
         header {
             text-align: center;
-            padding: 40px 20px 20px; /* 底部留空间给导航 */
+            padding: 40px 20px 20px;
             background: #fff;
             border-bottom: 1px solid #eee;
         }
@@ -35,7 +37,6 @@
         header h1 { font-size: 1.8rem; margin: 0; color: var(--secondary); }
         header p { font-size: 0.9rem; color: #7f8c8d; margin-top: 8px; margin-bottom: 20px; }
 
-        /* --- 新增：顶部导航样式 --- */
         .top-nav {
             display: flex;
             justify-content: center;
@@ -60,7 +61,6 @@
             border-color: #d1fae5;
         }
 
-        /* 诊断搜索框 */
         .search-section {
             background: white;
             padding: 25px;
@@ -104,7 +104,6 @@
 
         button#auditBtn:disabled { background: #cbd5e0; cursor: wait; }
 
-        /* 结果区域 */
         #reportSection { display: none; margin-top: 20px; animation: fadeInUp 0.5s ease; }
 
         .report-grid {
@@ -125,33 +124,38 @@
         .score-val { font-size: 2.2rem; font-weight: 800; display: block; margin: 5px 0; }
         .label { color: #a0aec0; font-size: 0.8rem; font-weight: 700; text-transform: uppercase; }
 
-        /* 底部转化 */
+        /* 底部转化区块优化 */
         .solution-box {
             background: white;
-            padding: 30px 20px;
+            padding: 35px 25px;
             border-radius: 16px;
             margin-top: 30px;
             text-align: center;
             border: 1px solid #e2e8f0;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
         }
+
+        .solution-box h3 { margin-top: 0; font-size: 1.4rem; }
+        .solution-box p { color: #4a5568; margin-bottom: 25px; }
 
         .contact-group {
             display: flex;
             flex-wrap: wrap;
             justify-content: center;
             gap: 15px;
-            margin-top: 20px;
         }
 
         .contact-btn {
-            padding: 12px 20px;
+            padding: 14px 25px;
             border-radius: 50px;
             text-decoration: none;
             font-weight: bold;
             color: white;
-            font-size: 0.9rem;
+            font-size: 1rem;
+            transition: transform 0.2s;
         }
 
+        .contact-btn:hover { transform: scale(1.05); }
         .btn-wechat { background: #07C160; }
         .btn-whatsapp { background: #25D366; }
 
@@ -166,7 +170,7 @@
 <header>
     <div class="container">
         <h1>独立站深度诊断</h1>
-        <p>基于 Google PageSpeed 引擎 · YMTEA 技术支持</p>
+        <p>基于 Google PageSpeed 引擎 · YMTEA Labs 技术支持</p>
         
         <nav class="top-nav">
             <a href="https://www.ymtea.club" target="_blank" rel="noopener">Ymtea Shop</a>
@@ -184,7 +188,7 @@
 
     <div id="reportSection">
         <div class="report-grid">
-            <div class="card">
+            <div class="card" id="cardPerf">
                 <div class="label">性能评分</div>
                 <span id="pScore" class="score-val">--</span>
             </div>
@@ -202,13 +206,8 @@
             </div>
         </div>
 
-        <div class="solution-box">
-            <h3>🚀 需要更深度的优化方案？</h3>
-            <p>如果您的评分低于 90 分，建议联系技术专家进行代码级压缩与服务器优化。</p>
-            <div class="contact-group">
-                <a href="https://work.weixin.qq.com/kfid/kfcab9eba83e85cde3e" class="contact-btn btn-wechat" target="_blank">微信咨询</a>
-                <a href="https://wa.me/8618066947375" class="contact-btn btn-whatsapp" target="_blank">WhatsApp</a>
-            </div>
+        <div class="solution-box" id="dynamicSolution">
+            <h3>🚀 正在分析优化方案...</h3>
         </div>
     </div>
 </div>
@@ -218,6 +217,7 @@
         const urlInput = document.getElementById('siteUrl');
         const btn = document.getElementById('auditBtn');
         const report = document.getElementById('reportSection');
+        const solutionBox = document.getElementById('dynamicSolution');
         
         let targetUrl = urlInput.value.trim();
         if(!targetUrl) return alert('请输入有效网址');
@@ -238,9 +238,7 @@
 
             const response = await fetch(finalRequestUrl, {
                 method: 'GET',
-                headers: {
-                    'X-Auth-Token': SECRET_TOKEN 
-                }
+                headers: { 'X-Auth-Token': SECRET_TOKEN }
             });
 
             if (response.status === 403) throw new Error('安全校验失败 (403)');
@@ -248,13 +246,43 @@
             const data = await response.json();
             if(data.error) throw new Error(data.error);
 
-            document.getElementById('pScore').innerText = Math.round(data.perfScore || 0);
+            // 1. 渲染基础数据
+            const pScore = Math.round(data.perfScore || 0);
+            document.getElementById('pScore').innerText = pScore;
             document.getElementById('sScore').innerText = Math.round(data.seoScore || 0);
             document.getElementById('lcp').innerText = data.lcp || "N/A";
             document.getElementById('mt').innerText = data.mainThread || "N/A";
 
+            // 2. 动态设置评分颜色
             const pElem = document.getElementById('pScore');
-            pElem.style.color = data.perfScore < 50 ? "#e74c3c" : (data.perfScore < 90 ? "#f39c12" : "#27ae60");
+            const pColor = pScore < 50 ? "#e74c3c" : (pScore < 90 ? "#f39c12" : "#27ae60");
+            pElem.style.color = pColor;
+            document.getElementById('cardPerf').style.borderColor = pColor;
+
+            // 3. 核心变现逻辑：根据分数切换文案
+            let adviceTitle = "";
+            let adviceText = "";
+            
+            if (pScore < 60) {
+                adviceTitle = "⚠️ 系统警告：性能赤字导致订单流失";
+                adviceText = "系统检测到您的转化率正因速度流失，移动端加载冗余严重。建议立即联系专家进行“技术减重”，挽回流失客户。";
+            } else if (pScore >= 90) {
+                adviceTitle = "🚀 表现卓越：已具备爆单底子";
+                adviceText = "您的网站技术底子极好。当前核心矛盾已转为流量获取，建议开启“选品猎手”AI模型，通过 SEO 与社交媒体进一步抢占全球高质流量。";
+            } else {
+                adviceTitle = "📈 稳健增长：仍有 20%-30% 提升空间";
+                adviceText = "您的网站表现尚可，但在高并发访问下存在瓶颈。通过精准的资源压缩与 CDN 深度优化，可显著提升独立站的询盘转化率。";
+            }
+
+            // 4. 更新 UI
+            solutionBox.innerHTML = `
+                <h3 style="color: \${pColor};">\${adviceTitle}</h3>
+                <p>\${adviceText}</p>
+                <div class="contact-group">
+                    <a href="https://work.weixin.qq.com/kfid/kfcab9eba83e85cde3e" class="contact-btn btn-wechat" target="_blank">获取深度优化方案</a>
+                    <a href="https://wa.me/8618066947375" class="contact-btn btn-whatsapp" target="_blank">WhatsApp 咨询</a>
+                </div>
+            `;
 
             report.style.display = 'block';
             window.scrollTo({ top: report.offsetTop - 50, behavior: 'smooth' });
