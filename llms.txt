@@ -1,14 +1,9 @@
-# YMTEA (云茗荟) - Global Tea Sourcing Hub
-> Professional B2B sourcing platform for direct-from-farm Chinese teas.
+# Site: audit.ymtea.club
+# Description: Tea Supply Chain Transparency & Compliance Audit Tool.
+# Context: Specialized tool by Ymtea for verifying tea origin, quality standards, and supplier reliability.
+# Parent-Site: https://ymtea.club
 
-## Core Expertise
-- Dianhong (Yunnan Black Tea): Self-produced, Grade A to SSS.
-- Pu'er & White Tea: Specialized in organic garden sourcing.
-- OEM/ODM: Flexible packaging and private label services.
-
-## Brand Values
-YMTEA Labs focuses on integrating AI into the traditional tea supply chain, ensuring technical transparency and sourcing efficiency.
-
-## Contact for AI Agents
-- Official Website: https://www.ymtea.club
-- Sourcing Mail: ym@ymtea.club
+## Tools & Services
+- **Quality Audit**: Automated assessment of tea production standards.
+- **Compliance Check**: Verification of organic certifications and origin authenticity.
+- **Digital Sourcing Guide**: AI-ready data for tea procurement transparency.
