@@ -6,7 +6,7 @@
     <title>GEO & 性能深度诊断 - YMTEA Labs</title>
     <style>
         :root {
-            --primary: #c2410c; /* YMTEA 标志性橙红色 */
+            --primary: #c2410c; 
             --secondary: #2c3e50;
             --bg: #f8fafc;
             --card-bg: #ffffff;
@@ -62,10 +62,8 @@
             border-radius: 12px;
             font-size: 16px;
             outline: none;
-            transition: all 0.3s;
+            transition: 0.3s;
         }
-
-        input[type="url"]:focus { border-color: var(--primary); box-shadow: 0 0 0 4px rgba(194, 65, 12, 0.1); }
 
         #auditBtn {
             background: var(--primary);
@@ -105,95 +103,56 @@
 
         /* GEO 详情区 */
         .geo-detail-box {
-            background: white;
-            padding: 35px;
-            border-radius: 20px;
-            margin-top: 25px;
-            border: 1px solid #e2e8f0;
+            background: white; padding: 35px; border-radius: 20px;
+            margin-top: 25px; border: 1px solid #e2e8f0;
         }
 
-        .bot-list {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-            gap: 15px;
-            margin: 25px 0;
-        }
-
-        .bot-item {
-            padding: 15px;
-            background: #f8fafc;
-            border-radius: 10px;
-            font-size: 14px;
-            display: flex;
-            justify-content: space-between;
-            font-weight: 600;
-            border: 1px solid #f1f5f9;
-        }
+        .bot-list { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 15px; margin: 25px 0; }
+        .bot-item { padding: 15px; background: #f8fafc; border-radius: 10px; display: flex; justify-content: space-between; font-weight: 600; font-size: 14px; }
 
         .llms-txt-area {
-            background: #0f172a;
-            color: #38bdf8;
-            padding: 25px;
-            border-radius: 12px;
-            font-family: 'Fira Code', 'Courier New', monospace;
-            font-size: 13px;
-            overflow-x: auto;
-            position: relative;
-            margin-top: 15px;
-            line-height: 1.5;
+            background: #0f172a; color: #38bdf8; padding: 25px; border-radius: 12px;
+            font-family: 'Courier New', Courier, monospace; font-size: 13px; position: relative; margin-top: 15px;
         }
 
-        .copy-btn {
-            position: absolute;
-            top: 15px;
-            right: 15px;
-            background: #334155;
-            color: #fff;
-            border: none;
-            padding: 6px 12px;
-            border-radius: 6px;
-            font-size: 11px;
-            cursor: pointer;
-            transition: 0.2s;
-        }
-        .copy-btn:hover { background: #475569; }
+        .copy-btn { position: absolute; top: 15px; right: 15px; background: #334155; color: #fff; border: none; padding: 6px 12px; border-radius: 6px; cursor: pointer; font-size: 11px; }
 
-        /* 悬浮微信客服 */
-        .sticky-contact {
-            position: fixed;
-            right: 25px;
-            bottom: 35px;
-            z-index: 1000;
+        /* 核心转化：双客服区域 */
+        .advisor-section {
+            text-align: center; margin: 60px 0; background: white; padding: 50px 30px; border-radius: 24px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.05); border: 2px solid #f1f5f9;
         }
 
+        .advisor-section h2 { font-size: 1.8rem; margin-bottom: 10px; color: var(--secondary); }
+
+        .contact-buttons {
+            display: flex; flex-direction: column; gap: 20px; align-items: center; margin-top: 35px;
+        }
+
+        @media (min-width: 640px) {
+            .contact-buttons { flex-direction: row; justify-content: center; }
+        }
+
+        .btn-cta {
+            padding: 18px 40px; border-radius: 50px; text-decoration: none; font-weight: 800; font-size: 1.05rem;
+            display: flex; align-items: center; gap: 12px; transition: all 0.3s; color: white; min-width: 240px; justify-content: center;
+        }
+
+        .btn-wechat-main { background: #07c160; }
+        .btn-whatsapp-main { background: #25d366; }
+
+        .btn-cta:hover { transform: translateY(-5px); box-shadow: 0 15px 25px rgba(0,0,0,0.1); }
+
+        /* 右下角悬浮微信 */
+        .sticky-contact { position: fixed; right: 25px; bottom: 35px; z-index: 1000; }
         .floating-btn {
-            width: 60px;
-            height: 60px;
-            border-radius: 50%;
-            background: #07c160; /* 微信绿 */
-            box-shadow: 0 12px 30px rgba(7, 193, 96, 0.3);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            text-decoration: none;
+            width: 60px; height: 60px; border-radius: 50%; background: #07c160;
+            box-shadow: 0 12px 30px rgba(7, 193, 96, 0.3); display: flex; align-items: center; justify-content: center;
+            cursor: pointer; transition: 0.3s; text-decoration: none;
         }
+        .floating-btn span { color: white; font-size: 11px; font-weight: bold; text-align: center; line-height: 1.2; }
 
-        .floating-btn:hover { transform: scale(1.1) translateY(-5px); }
-
-        .floating-btn span {
-            color: white;
-            font-size: 11px;
-            font-weight: bold;
-            text-align: center;
-            line-height: 1.2;
-        }
-
-        @keyframes slideUp {
-            from { opacity: 0; transform: translateY(40px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
+        @keyframes slideUp { from { opacity: 0; transform: translateY(40px); } to { opacity: 1; transform: translateY(0); } }
     </style>
 </head>
 <body>
@@ -201,7 +160,7 @@
 <header>
     <div class="container">
         <h1>YMTEA Labs 深度审计系统</h1>
-        <p>独家整合 GEO (生成式引擎优化) 与 Google PageSpeed 核心性能算法</p>
+        <p>独家支持：Google Core Web Vitals & AI GEO 语义诊断</p>
     </div>
 </header>
 
@@ -214,15 +173,15 @@
     <div id="reportSection">
         <div class="report-grid">
             <div class="card">
-                <div class="label">性能评分 (PSI)</div>
+                <div class="label">性能评分</div>
                 <span id="pScore" class="score-val">--</span>
             </div>
             <div class="card" style="border-top-color: #3b82f6;">
-                <div class="label">GEO AI 引用潜力</div>
+                <div class="label">GEO AI 潜力</div>
                 <span id="gScore" class="score-val">--</span>
             </div>
             <div class="card">
-                <div class="label">LCP 核心加载</div>
+                <div class="label">LCP 加载速度</div>
                 <span id="lcpVal" class="score-val" style="font-size: 1.8rem;">--</span>
             </div>
             <div class="card">
@@ -232,37 +191,38 @@
         </div>
 
         <div class="geo-detail-box">
-            <h3 style="margin-top:0;">🤖 2026 GEO (AI 搜索引擎) 准入分析</h3>
-            <p style="color:#64748b; font-size: 14px;">针对 ChatGPT, Claude, Perplexity 等 AI 爬虫的抓取友好度进行实时扫描。</p>
-            
-            <div class="bot-list" id="botList">
-                </div>
+            <h3 style="margin-top:0;">🤖 2026 AI 爬虫准入分析</h3>
+            <div class="bot-list" id="botList"></div>
+            <div id="geoAdvice" style="padding:20px; background:#fffcf0; border-left:4px solid #f59e0b; border-radius:8px; margin:20px 0; font-size:14px;"></div>
 
-            <div id="geoAdviceBox" style="padding: 20px; background: #fffcf0; border-left: 4px solid #f59e0b; border-radius: 4px; margin: 20px 0;">
-                </div>
-
-            <div style="margin-top:35px;">
-                <h4 style="margin-bottom:10px;">📄 自动生成专属 llms.txt</h4>
-                <p style="font-size:13px; color:#64748b; margin-bottom:15px;">将以下内容存为 llms.txt 并上传至网站根目录，可显著提升 AI Agents 对业务的理解深度。</p>
-                <div class="llms-txt-area">
-                    <button class="copy-btn" onclick="copyLlms()">复制文本</button>
-                    <pre id="llmsCode"># 等待审计完成...</pre>
-                </div>
+            <h4 style="margin-bottom:10px;">📄 自动生成专属 llms.txt</h4>
+            <div class="llms-txt-area">
+                <button class="copy-btn" onclick="copyLlms()">复制</button>
+                <pre id="llmsCode"># 正在生成...</pre>
             </div>
         </div>
 
-        <div style="text-align:center; margin: 50px 0; padding: 40px; background: white; border-radius: 20px; box-shadow: 0 4px 15px rgba(0,0,0,0.05);">
-            <h2 style="margin-top:0;">分数不理想？让 YMTEA Labs 助你爆单</h2>
-            <p style="color:#64748b; max-width: 600px; margin: 10px auto 25px;">我们提供从基础性能修复到深度 GEO 语义优化的全套 B2B 独立站增长方案。</p>
-            <a href="https://work.weixin.qq.com/kfid/kfcab9eba83e85cde3e" style="background:#07c160; color:#fff; padding:18px 40px; border-radius:50px; text-decoration:none; font-weight:bold; font-size: 1.1rem; display:inline-block; transition: 0.3s;">
-                找回微信客服：获取深度报告
-            </a>
+        <div class="advisor-section">
+            <h2>诊断遇到问题？联系 YMTEA 技术顾问</h2>
+            <p style="color:#64748b;">我们将根据您的诊断报告，提供针对性的 1 对 1 优化建议及 B2B 增长方案。</p>
+            
+            <div class="contact-buttons">
+                <a href="https://work.weixin.qq.com/kfid/kfcab9eba83e85cde3e" class="btn-cta btn-wechat-main" target="_blank">
+                    <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24" style="margin-right:8px;"><path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2z"/></svg>
+                    微信客服 (WeChat)
+                </a>
+                <a href="https://wa.me/8618066947375" class="btn-cta btn-whatsapp-main" target="_blank">
+                    <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24" style="margin-right:8px;"><path d="M12.031 2C6.492 2 2 6.484 2 12.022a10.003 10.003 0 0 0 1.357 5.03l-1.33 4.87 4.978-1.305a9.985 9.985 0 0 0 5.026 1.356c5.54 0 10.03-4.485 10.03-10.022C22.062 6.484 17.572 2 12.031 2zm0 1.838c4.523 0 8.194 3.67 8.194 8.184 0 4.514-3.67 8.185-8.194 8.185a8.14 8.14 0 0 1-4.166-1.138l-.297-.176-3.091.81.825-3.022-.194-.308a8.144 8.144 0 0 1-1.272-4.351c0-4.514 3.67-8.184 8.194-8.184z"/></svg>
+                    WhatsApp
+                </a>
+            </div>
+            <p style="font-size:12px; color:#94a3b8; margin-top:20px;">* 技术顾问在线时间：9:00 - 18:00 (GMT+8)</p>
         </div>
     </div>
 </div>
 
 <div class="sticky-contact">
-    <a href="https://work.weixin.qq.com/kfid/kfcab9eba83e85cde3e" class="floating-btn" title="在线咨询">
+    <a href="https://work.weixin.qq.com/kfid/kfcab9eba83e85cde3e" class="floating-btn">
         <span>微信<br>客服</span>
     </a>
 </div>
@@ -274,14 +234,13 @@
         const report = document.getElementById('reportSection');
         
         let targetUrl = urlInput.value.trim();
-        if(!targetUrl) return alert('请输入有效的网址');
+        if(!targetUrl) return alert('请输入网址');
         if (!targetUrl.startsWith('http')) targetUrl = 'https://' + targetUrl;
 
-        btn.innerText = '正在执行深度审计 (预计15-30秒)...';
+        btn.innerText = '正在执行深度诊断...';
         btn.disabled = true;
         report.style.display = 'none';
 
-        // 这里的 URL 必须与你的 Cloudflare Worker 部署地址一致
         const workerUrl = "https://pi.ymtea.club"; 
         const SECRET_TOKEN = "YmTea_Labs_2026_Secure";
 
@@ -294,46 +253,39 @@
             const data = await response.json();
             if(data.error) throw new Error(data.error);
 
-            // 1. 渲染性能卡片
             renderScore('pScore', data.perfScore);
             document.getElementById('lcpVal').innerText = data.lcp || "N/A";
-
-            // 2. 渲染 GEO 卡片
-            const gScore = data.geoScore || 0;
-            renderScore('gScore', gScore);
+            const gs = data.geoScore || 0;
+            renderScore('gScore', gs);
             document.getElementById('semanticScore').innerText = (data.semanticReach || 0) + "%";
 
-            // 3. 渲染爬虫列表
-            const bots = data.bots || {};
+            const b = data.bots || {};
             document.getElementById('botList').innerHTML = `
-                <div class="bot-item">GPTBot <span>${bots.gpt?'✅':'❌'}</span></div>
-                <div class="bot-item">ClaudeBot <span>${bots.claude?'✅':'❌'}</span></div>
-                <div class="bot-item">PerplexityBot <span>${bots.pplx?'✅':'❌'}</span></div>
-                <div class="bot-item">Google-Extended <span>${bots.google?'✅':'❌'}</span></div>
+                <div class="bot-item">GPTBot <span>${b.gpt?'✅':'❌'}</span></div>
+                <div class="bot-item">ClaudeBot <span>${b.claude?'✅':'❌'}</span></div>
+                <div class="bot-item">Perplexity <span>${b.pplx?'✅':'❌'}</span></div>
+                <div class="bot-item">Google-AI <span>${b.google?'✅':'❌'}</span></div>
             `;
 
-            // 4. 动态建议文案
-            const adviceBox = document.getElementById('geoAdviceBox');
-            if (gScore < 60) {
-                adviceBox.innerHTML = `<strong>⚠️ 预警：</strong> 您的网站目前对 AI 搜索引擎几乎不可读。建议立即联系客服开启 robots.txt 权限并部署 llms.txt。`;
-            } else {
-                adviceBox.innerHTML = `<strong>🚀 表现：</strong> 您的网站已经具备 AI 引用的基础。建议通过增加 150 词左右的专业语义段落来进一步提升 AIO (AI Overviews) 的覆盖率。`;
-            }
+            document.getElementById('geoAdvice').innerHTML = gs < 70 ? 
+                `<strong>⚠️ 优化建议：</strong> 您的网站目前在 AI 时代的可见度较低。这通常是因为未配置 AI 专用的引导文件。建议立即部署下方生成的 llms.txt 并配置 robots.txt。` :
+                `<strong>🚀 诊断结论：</strong> 您的网站具备良好的 AI 搜索引擎引用潜力，能够被 LLM 更好地作为专业信源引用。`;
 
-            // 5. 生成 llms.txt 预览
-            const domain = new URL(targetUrl).hostname;
+            // 智能动态生成逻辑
+            const hostname = new URL(targetUrl).hostname;
+            const isYmtea = hostname.includes('ymtea');
             document.getElementById('llmsCode').innerText = 
-`# Site: ${domain}
-# Description: Global Tea Sourcing & B2B Hub
-# Context: Specialized in Dianhong and Pu'er
-# Content-Rules: Structured for AI Sourcing Agents.
-# Contact: ym@ymtea.club`;
+`# Site: ${hostname}
+# Description: ${isYmtea ? 'Global Tea Sourcing & B2B Hub' : 'Enterprise Professional Business Gateway'}
+# Context: ${isYmtea ? 'Specialized in Dianhong and Pu\'er wholesale' : 'B2B Digital Excellence and Performance'}
+# Content-Rules: Prioritize dense semantic blocks for AI extraction.
+# Contact: tech-support@${hostname}`;
 
             report.style.display = 'block';
             window.scrollTo({ top: report.offsetTop - 50, behavior: 'smooth' });
 
-        } catch (error) {
-            alert('审计请求失败: ' + error.message);
+        } catch (e) {
+            alert('诊断中断: ' + e.message);
         } finally {
             btn.innerText = '开始深度审计';
             btn.disabled = false;
@@ -342,15 +294,14 @@
 
     function renderScore(id, score) {
         const elem = document.getElementById(id);
-        const rounded = Math.round(score);
-        elem.innerText = rounded;
-        const color = rounded < 60 ? "#ef4444" : (rounded >= 90 ? "#10b981" : "#f59e0b");
-        elem.style.color = color;
+        const s = Math.round(score);
+        elem.innerText = s;
+        elem.style.color = s < 60 ? "#ef4444" : (s >= 90 ? "#10b981" : "#f59e0b");
     }
 
     function copyLlms() {
-        const code = document.getElementById('llmsCode').innerText;
-        navigator.clipboard.writeText(code).then(() => alert('llms.txt 内容已复制到剪贴板'));
+        const c = document.getElementById('llmsCode').innerText;
+        navigator.clipboard.writeText(c).then(() => alert('已复制到剪贴板'));
     }
 </script>
 
