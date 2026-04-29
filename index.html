@@ -114,10 +114,37 @@
         .bot-list { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 15px; margin: 25px 0; }
         .bot-item { padding: 12px; background: #f8fafc; border-radius: 10px; display: flex; justify-content: space-between; font-weight: 600; font-size: 13px; }
 
-        .llms-txt-area {
-            background: #0f172a; color: #38bdf8; padding: 25px; border-radius: 12px;
-            font-family: 'Courier New', monospace; font-size: 13px; position: relative; margin-top: 15px; white-space: pre-wrap; word-break: break-all;
+       .llms-txt-area {
+            background: #0f172a;
+            color: #38bdf8;
+            padding: 20px;
+            border-radius: 12px;
+            font-family: 'Courier New', monospace;
+            font-size: 13px;
+            position: relative;
+            margin-top: 15px;
+            
+            /* --- 核心修复：防止手机端变形 --- */
+            white-space: pre-wrap;       /* 保持格式的同时允许换行 */
+            word-wrap: break-word;       /* 强制长单词换行 */
+            word-break: break-all;       /* 彻底防止撑破容器 */
+            overflow-x: hidden;          /* 禁止横向滚动条 */
             min-height: 200px;
+            line-height: 1.5;
+            border: 1px solid #1e293b;
+        }
+
+        /* 针对手机端的微调 */
+        @media (max-width: 768px) {
+            .llms-txt-area {
+                font-size: 12px;        /* 手机端字体稍微缩小一点更精致 */
+                padding: 15px;          /* 缩小内边距 */
+            }
+            .copy-btn {
+                top: 10px;
+                right: 10px;
+                padding: 4px 8px;
+            }
         }
 
         .copy-btn { position: absolute; top: 15px; right: 15px; background: #334155; color: #fff; border: none; padding: 6px 12px; border-radius: 6px; cursor: pointer; font-size: 11px; }
