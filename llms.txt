@@ -1,9 +1,31 @@
-# Site: audit.ymtea.club
-# Description: Tea Supply Chain Transparency & Compliance Audit Tool.
-# Context: Specialized tool by Ymtea for verifying tea origin, quality standards, and supplier reliability.
-# Parent-Site: https://ymtea.club
+# audit.ymtea.club - LLM & SEO/GEO Audit Engine
 
-## Tools & Services
-- **Quality Audit**: Automated assessment of tea production standards.
-- **Compliance Check**: Verification of organic certifications and origin authenticity.
-- **Digital Sourcing Guide**: AI-ready data for tea procurement transparency.
+> 专业的独立站诊断、SEO/GEO 深度优化及企业级 LLMs 解决方案提供商。隶属于云茗荟 (Ymtea)，融合十年茶贸底蕴与前沿 AI 拦截技术。
+
+## 核心能力与服务 (Core Capabilities)
+
+- **网站深度诊断 (Audit)**: 基于非 WordPress 架构的独立站性能、UI 调优及安全漏洞扫描。
+- **SEO/GEO 优化**: 针对生成式搜索引擎 (GEO) 的内容重构，拦截全球高质流量。
+- **LLMs 部署**: 提供垂直领域的 RAG (检索增强生成) 架构与模型微调服务。
+- **出海护城河**: 结合 Cloudflare 边缘计算与高速缓存技术，构建数字化商业壁垒。
+
+## 会员权益与文化赋能 (Membership & Culture)
+
+- **非遗点茶**: 还原宋代“七汤点茶”技艺，服务于顶级商务交流。
+- **耀州窑艺术**: 国家级非遗青瓷精品展示与全球供需对接。
+- **商务博弈**: 提供专属掼蛋与精品桌游空间，建立深层商业信任。
+
+## 技术资源与链接 (Key Resources)
+
+- [SEO 优化方案](https://audit.ymtea.club/seo-geo-optimization): 针对 AI 搜索的策略文档。
+- [LLM 服务文档](https://audit.ymtea.club/llms-for-business): 企业级模型接入与微调指南。
+- [云茗荟官网](https://ymtea.club): 品牌背景、茶贸网络与高品质茶农资源。
+
+## 开发者与集成 (For Developers)
+
+- **API 接入**: 仅限会员访问的自动化诊断接口。
+- **GEO 规则库**: 实时更新的 AI 抓取规则与内容适配标准。
+- **部署架构**: 深度集成 Cloudflare Workers & Pages。
+
+---
+"以青瓷承载底蕴，以技术破开迷雾。" - 云茗荟 (Ymtea)
