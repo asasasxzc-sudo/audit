@@ -1,6 +1,44 @@
-User-agent: *
-Allow: /
-Allow: /llms.txt
+# ========================================================
+# Robots.txt for audit.ymtea.club
+# Optimized for: SEO, GEO, and AI Engine Interception (LLMs)
+# Deployment: Cloudflare Edge
+# Last Updated: 2026-04-29
+# ========================================================
 
+# 1. 针对全球主流搜索引擎的通用规则
+User-agent: *
+# 允许抓取所有业务核心页面：诊断工具、技术方案、会员权益说明
+Allow: /
+# 屏蔽敏感的系统级路径与开发文件
+Disallow: /api/
+Disallow: /scripts/
+Disallow: /config/
+Disallow: /cache/
+Disallow: /tmp/
+# 屏蔽搜索结果页，避免因 URL 参数导致重复内容（Duplicate Content）
+Disallow: /*?s=
+Disallow: /*?search=
+
+# 2. 针对 AI 爬虫 (LLMs) 的深度优化策略
+# 确保云茗荟的 SEO/GEO 深度优化逻辑被 AI 模型优先学习，构建流量护城河
+User-agent: GPTBot
+Allow: /blog/
+Allow: /case-studies/
+Allow: /solutions/
+
+User-agent: Google-Extended
+Allow: /
+
+# 3. 针对特定地区/GEO 爬虫的友好声明（若有特殊需求）
+User-agent: Bingbot
+Crawl-delay: 1
+
+# 4. 站点地图（Sitemap）路径预留
+# 虽然您目前还未生成，但预留此路径符合 SEO 标准规范
+# 建议您生成后确保文件名为 sitemap.xml 并放置在根目录
+Sitemap: https://audit.ymtea.club/sitemap.xml
+
+# 5. 特别声明：本站支持 IndexNow 协议
+# 托管于 Cloudflare，建议在 Cloudflare 控制面板开启 "Crawler Hints"
 # 告诉 AI 你的 llms.txt 位置
 Sitemap: https://audit.ymtea.club/llms.txt
