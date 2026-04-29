@@ -1,0 +1,12 @@
+name = "ymtea-labs-api"
+main = "index.js"
+compatibility_date = "2026-04-29"
+
+[vars]
+# 这里的 SECRET_TOKEN 要和 HTML 里的保持一致
+SECRET_TOKEN = "YmTea_Labs_2026_Secure"
+# 如果你有飞书/钉钉机器人地址，可以填在这里（可选）
+# WEBHOOK_URL = "https://open.feishu.cn/open-apis/bot/v2/hook/..."
+
+# 注意：PSI_API_KEY 依然建议通过命令行加密上传
+# 命令：npx wrangler secret put PSI_API_KEY
