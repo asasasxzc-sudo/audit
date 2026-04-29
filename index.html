@@ -80,6 +80,44 @@
 
         #reportSection { display: none; animation: slideUp 0.6s cubic-bezier(0.16, 1, 0.3, 1); }
 
+        /* 快捷导航容器：确保绝对居中 */
+        .quick-links {
+            display: flex;
+            justify-content: center; /* 居中对齐 */
+            gap: 15px;               /* 块之间的间距 */
+            margin: 15px 0 30px;     /* 与上方搜索框和下方报告的间距 */
+        }
+
+        /* Google 风格点击块：扁平、浅灰背景、无图标 */
+        .link-item {
+            display: inline-block;
+            padding: 8px 18px;
+            background-color: #f8f9fa; /* Google 搜索按钮的经典底色 */
+            border: 1px solid #f8f9fa;
+            border-radius: 4px;        /* 稍微一点圆角，更硬朗专业 */
+            text-decoration: none;
+            color: #3c4043;            /* Google 标准文字色 */
+            font-size: 14px;
+            font-family: arial, sans-serif;
+            transition: all 0.2s;
+            user-select: none;
+        }
+
+        /* 悬停效果：增加描边和轻微阴影 */
+        .link-item:hover {
+            border: 1px solid #dadce0;
+            color: #202124;
+            background-color: #f8f9fa;
+            box-shadow: 0 1px 1px rgba(0,0,0,0.1);
+            transform: none; /* 去掉移动效果，保持稳重 */
+        }
+
+        /* 移动端适配：保持一行 */
+        @media (max-width: 480px) {
+            .quick-links { gap: 10px; }
+            .link-item { font-size: 13px; padding: 7px 14px; }
+        }
+        
         .report-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
@@ -190,15 +228,9 @@
         <button id="auditBtn" onclick="runComprehensiveAudit()">开始深度审计</button>
     </div>
 
-    <div class="quick-links">
-    <a href="https://vip.ymtea.club" target="_blank" class="link-item">
-        <span class="link-icon">💎</span>
-        <span>云茗荟 VIP</span>
-    </a>
-    <a href="https://ymtea.club" target="_blank" class="link-item">
-        <span class="link-icon">🍵</span>
-        <span>Ymtea Shop</span>
-    </a>
+   <div class="quick-links">
+    <a href="https://vip.ymtea.club" target="_blank" class="link-item">云茗荟</a>
+    <a href="https://ymtea.club" target="_blank" class="link-item">Ymtea Shop</a>
 </div>
     
     <div id="reportSection">
