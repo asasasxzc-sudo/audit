@@ -80,39 +80,34 @@
 
         #reportSection { display: none; animation: slideUp 0.6s cubic-bezier(0.16, 1, 0.3, 1); }
 
-        /* 快捷导航容器：确保绝对居中 */
         .quick-links {
             display: flex;
-            justify-content: center; /* 居中对齐 */
-            gap: 15px;               /* 块之间的间距 */
-            margin: 15px 0 30px;     /* 与上方搜索框和下方报告的间距 */
+            justify-content: center;
+            gap: 15px;
+            margin: 15px 0 30px;
         }
 
-        /* Google 风格点击块：扁平、浅灰背景、无图标 */
         .link-item {
             display: inline-block;
             padding: 8px 18px;
-            background-color: #f1f3f4; /* Google 搜索按钮的经典底色 */
+            background-color: #f1f3f4;
             border: 1px solid #f1f3f4;
-            border-radius: 4px;        /* 稍微一点圆角，更硬朗专业 */
+            border-radius: 4px;
             text-decoration: none;
-            color: #3c4043;            /* Google 标准文字色 */
+            color: #3c4043;
             font-size: 14px;
             font-family: arial, sans-serif;
             transition: all 0.2s;
             user-select: none;
         }
 
-        /* 悬停效果：增加描边和轻微阴影 */
         .link-item:hover {
             border: 1px solid #dadce0;
             color: #202124;
             background-color: #f1f3f4;
             box-shadow: 0 1px 1px rgba(0,0,0,0.1);
-            transform: none; /* 去掉移动效果，保持稳重 */
         }
 
-        /* 移动端适配：保持一行 */
         @media (max-width: 480px) {
             .quick-links { gap: 10px; }
             .link-item { font-size: 13px; padding: 7px 14px; }
@@ -161,28 +156,17 @@
             font-size: 13px;
             position: relative;
             margin-top: 15px;
-            
-            /* --- 核心修复：防止手机端变形 --- */
-            white-space: pre-wrap;       /* 保持格式的同时允许换行 */
-            word-wrap: break-word;       /* 强制长单词换行 */
-            word-break: break-all;       /* 彻底防止撑破容器 */
-            overflow-x: hidden;          /* 禁止横向滚动条 */
+            white-space: pre-wrap;
+            word-wrap: break-word;
+            word-break: break-all;
+            overflow-x: hidden;
             min-height: 200px;
             line-height: 1.5;
             border: 1px solid #1e293b;
         }
 
-        /* 针对手机端的微调 */
         @media (max-width: 768px) {
-            .llms-txt-area {
-                font-size: 12px;        /* 手机端字体稍微缩小一点更精致 */
-                padding: 15px;          /* 缩小内边距 */
-            }
-            .copy-btn {
-                top: 10px;
-                right: 10px;
-                padding: 4px 8px;
-            }
+            .llms-txt-area { font-size: 12px; padding: 15px; }
         }
 
         .copy-btn { position: absolute; top: 15px; right: 15px; background: #334155; color: #fff; border: none; padding: 6px 12px; border-radius: 6px; cursor: pointer; font-size: 11px; }
@@ -295,13 +279,19 @@
         
         let targetUrl = urlInput.value.trim();
         if(!targetUrl) return alert('请输入网址');
+
+        // 安全加固：前端 URL 预检查
+        const urlPattern = /^(https?:\/\/)?([\da-z.-]+)\.([a-z.]{2,6})([\/\w .-]*)*\/?$/;
+        if(!urlPattern.test(targetUrl)) {
+            return alert('请输入有效的网址格式');
+        }
+
         if (!targetUrl.startsWith('http')) targetUrl = 'https://' + targetUrl;
 
         btn.innerText = '正在执行 AI 深度诊断...';
         btn.disabled = true;
         report.style.display = 'none';
 
-        // 注意：这里的 URL 必须和你 Worker 绑定的域名一致
         const workerUrl = "https://pi.ymtea.club"; 
         const SECRET_TOKEN = "YmTea_Labs_2026_Secure";
 
@@ -314,13 +304,11 @@
             const data = await response.json();
             if(data.error) throw new Error(data.error);
 
-            // 1. 渲染性能卡片
             renderScore('pScore', data.perfScore);
             document.getElementById('lcpVal').innerText = data.lcp || "--";
             document.getElementById('clsVal').innerText = data.cls || "--";
             document.getElementById('ttfbVal').innerText = data.ttfb || "--";
 
-            // 2. 渲染优化机会
             const oppContainer = document.getElementById('oppList');
             if(data.opportunities && data.opportunities.length > 0) {
                 oppContainer.innerHTML = data.opportunities.map(opp => `
@@ -333,7 +321,6 @@
                 oppContainer.innerHTML = `<p style="color:var(--success); font-size:14px;">✅ 该站点表现极佳，未发现重大资源阻碍。</p>`;
             }
 
-            // 3. 渲染 BOT 准入
             const b = data.bots || {};
             document.getElementById('botList').innerHTML = `
                 <div class="bot-item">GPTBot <span>${b.gpt?'✅':'❌'}</span></div>
@@ -344,11 +331,9 @@
 
             document.getElementById('geoAdvice').innerHTML = `<strong>🚀 诊断报告：</strong> 性能评分为 ${Math.round(data.perfScore)}。当前站点已被识别。建议通过下方 llms.txt 文件引导 AI 搜索引擎。`;
 
-            // --- 4. 关键：渲染从后端传来的专业版 llmsText ---
             if (data.llmsText) {
                 document.getElementById('llmsCode').innerText = data.llmsText;
             } else {
-                // 兜底基础显示
                 const hostname = new URL(targetUrl).hostname;
                 document.getElementById('llmsCode').innerText = `# Site: ${hostname}\n# Status: Audit Completed`;
             }
