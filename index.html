@@ -260,12 +260,12 @@
                 <span id="pScore" class="score-val">--</span>
             </div>
             <div class="card">
-                <div class="label">LCP (内容加载)</div>
+                <div class="label">内容加载 (LCP)</div>
                 <span id="lcpVal" class="score-val" style="font-size: 1.8rem;">--</span>
             </div>
             <div class="card">
-                <div class="label">响应延迟 (TTFB)</div>
-                <span id="ttfbVal" class="score-val" style="font-size: 1.8rem;">--</span>
+                <div class="label">AI 兼容评分 (GEO)</div>
+                <span id="geoScore" class="score-val">--</span>
             </div>
         </div>
 
@@ -289,17 +289,18 @@
         <div class="geo-detail-box" style="margin-bottom: 25px; border-top: 6px solid var(--danger);">
             <h3 style="margin-top:0;">⚡ 性能改进机会 (Opportunities)</h3>
             <div id="oppList"></div>
+            <p id="ttfbText" style="font-size: 13px; color: #64748b; margin-top: 15px;"></p>
         </div>
 
         <div class="geo-detail-box">
-            <h3 style="margin-top:0;">🤖 AI 机器人准入情况</h3>
+            <h3 style="margin-top:0;">🤖 真实 AI 机器人准入检测</h3>
             <div class="bot-list" id="botList"></div>
             <div id="geoAdvice" style="padding:18px; background:#fffcf0; border-left:4px solid #f59e0b; border-radius:8px; margin:20px 0; font-size:14px;"></div>
 
-            <h4 style="margin-bottom:10px;">📄 专属 llms.txt 报告 (供 AI 模型读取)</h4>
+            <h4 style="margin-bottom:10px;">📄 行业定制 LLMS.txt 报告</h4>
             <div class="llms-txt-area">
-                <button class="copy-btn" onclick="copyLlms()">复制</button>
-                <pre id="llmsCode">生成中...</pre>
+                <button class="copy-btn" onclick="copyLlms()">复制内容</button>
+                <pre id="llmsCode">报告生成中...</pre>
             </div>
         </div>
 
@@ -340,14 +341,14 @@
         btn.disabled = true;
         report.style.display = 'none';
         progress.style.display = 'block';
-        updateProgress(10, '正在连接诊断节点...');
+        updateProgress(10, '正在连接 YMTEA Labs 全球诊断节点...');
 
         let step = 0;
         const steps = [
-            {p: 25, t: '检查 AI 爬虫准入规则...'},
-            {p: 45, t: '模拟移动端渲染并提取指标...'},
-            {p: 70, t: '分析行业语义画像...'},
-            {p: 90, t: '生成优化建议与 SEO 报告...'}
+            {p: 25, t: '正在检测真实 Robots.txt 机器人准入规则...'},
+            {p: 45, t: '正在调用 Google PSI 渲染移动端核心指标...'},
+            {p: 70, t: '全行业智能识别算法正在建模...'},
+            {p: 90, t: '正在生成行业定制版 llms.txt 报告...'}
         ];
 
         progressTimer = setInterval(() => {
@@ -355,7 +356,7 @@
                 updateProgress(steps[step].p, steps[step].t);
                 step++;
             }
-        }, 7000);
+        }, 6000);
 
         const workerUrl = "https://pi.ymtea.club"; 
         const SECRET_TOKEN = "YmTea_Labs_2026_Secure";
@@ -367,28 +368,31 @@
                 mode: 'cors'
             });
 
-            if(!response.ok) throw new Error('网络请求失败');
+            if(!response.ok) throw new Error(`API 响应异常 (${response.status})`);
             const data = await response.json();
             clearInterval(progressTimer);
-            updateProgress(100, '载入报告...');
+            updateProgress(100, '完成！正在载入报告...');
 
             if(data.error) throw new Error(data.error);
 
-            // 渲染数据
-            const s = data.summary || {};
-            renderScore('pScore', s.perfScore || 0);
+            // 1. 顶部基础评分 (匹配你 Worker 的返回值字段)
+            renderScore('pScore', data.perfScore || 0);
+            renderScore('geoScore', data.geoScore || 0);
             document.getElementById('lcpVal').innerText = data.lcp || "--";
-            document.getElementById('ttfbVal').innerText = data.ttfb || "--";
 
+            // 2. 渲染性能建议
             const oppContainer = document.getElementById('oppList');
             oppContainer.innerHTML = (data.opportunities || []).map(opp => `
                 <div class="opp-item">
                     <span class="opp-title">📍 ${opp.title}</span>
-                    <span class="opp-savings">预计提速: ${opp.savings}ms</span>
+                    <span class="opp-savings">节省: ${opp.savings}ms</span>
                 </div>
-            `).join('') || '✅ 表现极佳。';
+            `).join('') || '<div style="padding:15px">✅ 恭喜！未发现明显的加载瓶颈。</div>';
+            
+            document.getElementById('ttfbText').innerText = `服务器首字节响应时间 (TTFB): ${data.ttfb || '未知'}`;
 
-            const b = s.botStatus || {};
+            // 3. 渲染机器人状态 (Worker 中返回的是 bots 字段)
+            const b = data.bots || {};
             document.getElementById('botList').innerHTML = `
                 <div class="bot-item">GPTBot <span>${b.gpt?'✅':'❌'}</span></div>
                 <div class="bot-item">ClaudeBot <span>${b.claude?'✅':'❌'}</span></div>
@@ -396,19 +400,21 @@
                 <div class="bot-item">Google-AI <span>${b.google?'✅':'❌'}</span></div>
             `;
 
-            document.getElementById('geoAdvice').innerHTML = `<strong>🚀 诊断结果：</strong> 行业识别为 [${s.industry || '通用'}]。建议部署下方报告引导 AI 引擎。`;
-            document.getElementById('llmsCode').innerText = data.optimizationCode?.llmsTxt || "暂无报告";
+            // 4. LLMS 报告
+            document.getElementById('llmsCode').innerText = data.llmsText || "暂无报告内容";
+            document.getElementById('geoAdvice').innerHTML = `<strong>💡 YMTEA Labs 提醒：</strong> 站点性能与 SEO 评分相关联。良好的索引准入环境（✅）将极大助力品牌在 ChatGPT/SearchGPT 中的推荐权重。`;
 
             setTimeout(() => {
                 progress.style.display = 'none';
                 report.style.display = 'block';
                 window.scrollTo({ top: report.offsetTop - 50, behavior: 'smooth' });
-            }, 500);
+            }, 600);
 
         } catch (e) {
             clearInterval(progressTimer);
             progress.style.display = 'none';
             btn.disabled = false;
+            console.error(e);
             alert('诊断中断: ' + e.message);
         } finally {
             btn.disabled = false;
@@ -422,7 +428,8 @@
     }
 
     function copyLlms() {
-        navigator.clipboard.writeText(document.getElementById('llmsCode').innerText).then(() => alert('已复制'));
+        const code = document.getElementById('llmsCode').innerText;
+        navigator.clipboard.writeText(code).then(() => alert('行业报告已复制'));
     }
 </script>
 </body>
