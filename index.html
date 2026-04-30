@@ -37,6 +37,7 @@
         header h1 { font-size: 2.2rem; margin: 0; letter-spacing: -1px; }
         header p { color: #64748b; margin-top: 10px; font-size: 1rem; }
 
+        /* 搜索区域 */
         .search-section {
             background: white;
             padding: 35px;
@@ -45,7 +46,7 @@
             display: flex;
             flex-direction: column;
             gap: 15px;
-            margin: -50px auto 40px;
+            margin: -50px auto 20px;
             position: relative;
             z-index: 10;
         }
@@ -76,42 +77,30 @@
             transition: 0.3s;
         }
 
-        #auditBtn:disabled { background: #94a3b8; cursor: wait; }
-
-        #reportSection { display: none; animation: slideUp 0.6s cubic-bezier(0.16, 1, 0.3, 1); }
-
-        .quick-links {
-            display: flex;
-            justify-content: center;
-            gap: 15px;
-            margin: 15px 0 30px;
+        /* 步进进度条样式 */
+        #progressContainer {
+            display: none;
+            margin: 20px auto;
+            text-align: center;
+            max-width: 600px;
         }
-
-        .link-item {
-            display: inline-block;
-            padding: 8px 18px;
-            background-color: #f1f3f4;
-            border: 1px solid #f1f3f4;
+        .progress-bar-bg {
+            background: #e2e8f0;
+            height: 8px;
             border-radius: 4px;
-            text-decoration: none;
-            color: #3c4043;
-            font-size: 14px;
-            font-family: arial, sans-serif;
-            transition: all 0.2s;
-            user-select: none;
+            overflow: hidden;
+            margin-bottom: 10px;
         }
+        #progressBarFill {
+            background: var(--primary);
+            height: 100%;
+            width: 0%;
+            transition: width 0.4s ease;
+        }
+        #statusText { font-size: 14px; color: var(--primary); font-weight: bold; }
 
-        .link-item:hover {
-            border: 1px solid #dadce0;
-            color: #202124;
-            background-color: #f1f3f4;
-            box-shadow: 0 1px 1px rgba(0,0,0,0.1);
-        }
-
-        @media (max-width: 480px) {
-            .quick-links { gap: 10px; }
-            .link-item { font-size: 13px; padding: 7px 14px; }
-        }
+        /* 报告区域 */
+        #reportSection { display: none; animation: slideUp 0.6s cubic-bezier(0.16, 1, 0.3, 1); }
         
         .report-grid {
             display: grid;
@@ -132,11 +121,34 @@
         .score-val { font-size: 2.2rem; font-weight: 800; display: block; margin: 10px 0; }
         .label { color: #94a3b8; font-size: 0.75rem; font-weight: 800; text-transform: uppercase; letter-spacing: 1.2px; }
 
+        /* 业务宣传区 (SEO+GEO) */
+        .biz-pitch-box {
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+            color: white;
+            padding: 40px;
+            border-radius: 24px;
+            margin: 30px 0;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 30px;
+            align-items: center;
+        }
+        .biz-pitch-text { flex: 2; min-width: 300px; }
+        .biz-pitch-text h2 { margin-top: 0; color: #38bdf8; }
+        .biz-pitch-text ul { list-style: none; padding: 0; margin: 20px 0; }
+        .biz-pitch-text li { margin-bottom: 10px; display: flex; align-items: center; gap: 10px; }
+        .biz-pitch-text li::before { content: "✦"; color: #fbbf24; }
+        .biz-cta-box { flex: 1; min-width: 200px; text-align: center; }
+        .btn-premium {
+            background: #38bdf8; color: #0f172a; padding: 15px 30px; 
+            border-radius: 12px; font-weight: bold; text-decoration: none; display: inline-block;
+        }
+
+        /* 诊断详情 */
         .geo-detail-box {
             background: white; padding: 35px; border-radius: 20px;
             margin-top: 25px; border: 1px solid #e2e8f0;
         }
-
         .opp-item {
             display: flex; justify-content: space-between; align-items: center;
             padding: 15px; border-bottom: 1px solid #f1f5f9;
@@ -147,51 +159,34 @@
         .bot-list { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 15px; margin: 25px 0; }
         .bot-item { padding: 12px; background: #f8fafc; border-radius: 10px; display: flex; justify-content: space-between; font-weight: 600; font-size: 13px; }
 
-       .llms-txt-area {
-            background: #0f172a;
-            color: #38bdf8;
-            padding: 20px;
-            border-radius: 12px;
-            font-family: 'Courier New', monospace;
-            font-size: 13px;
-            position: relative;
-            margin-top: 15px;
-            white-space: pre-wrap;
-            word-wrap: break-word;
-            word-break: break-all;
-            overflow-x: hidden;
-            min-height: 200px;
-            line-height: 1.5;
-            border: 1px solid #1e293b;
+        .llms-txt-area {
+            background: #0f172a; color: #38bdf8; padding: 20px; border-radius: 12px;
+            font-family: monospace; font-size: 13px; position: relative; margin-top: 15px;
+            white-space: pre-wrap; word-break: break-all; min-height: 150px;
         }
+        .copy-btn { position: absolute; top: 15px; right: 15px; background: #334155; color: #fff; border: none; padding: 6px 12px; border-radius: 6px; cursor: pointer; }
 
-        @media (max-width: 768px) {
-            .llms-txt-area { font-size: 12px; padding: 15px; }
-        }
-
-        .copy-btn { position: absolute; top: 15px; right: 15px; background: #334155; color: #fff; border: none; padding: 6px 12px; border-radius: 6px; cursor: pointer; font-size: 11px; }
-
+        /* 页脚联系 */
         .advisor-section {
             text-align: center; margin: 60px 0; background: white; padding: 50px 30px; border-radius: 24px;
             box-shadow: 0 10px 30px rgba(0,0,0,0.05); border: 2px solid #f1f5f9;
         }
-
         .contact-buttons { display: flex; gap: 15px; justify-content: center; flex-wrap: wrap; margin-top: 20px; }
         .btn-cta {
-            padding: 18px 40px; border-radius: 50px; text-decoration: none; font-weight: 800; font-size: 1.05rem;
-            display: flex; align-items: center; gap: 12px; transition: all 0.3s; color: white; min-width: 240px; justify-content: center;
+            padding: 18px 40px; border-radius: 50px; text-decoration: none; font-weight: 800; font-size: 1rem;
+            display: flex; align-items: center; gap: 12px; color: white; min-width: 220px; justify-content: center;
         }
-
         .btn-wechat-main { background: #07c160; }
         .btn-whatsapp-main { background: #25d366; }
-        .btn-cta:hover { transform: translateY(-5px); box-shadow: 0 15px 25px rgba(0,0,0,0.1); }
 
-        .sticky-contact { position: fixed; right: 25px; bottom: 35px; z-index: 1000; }
+        /* 侧边悬浮 */
+        .sticky-contact { position: fixed; right: 20px; bottom: 30px; z-index: 1000; }
         .floating-btn {
-            width: 60px; height: 60px; border-radius: 50%; background: #07c160;
-            box-shadow: 0 12px 30px rgba(7, 193, 96, 0.3); display: flex; align-items: center; justify-content: center;
-            cursor: pointer; transition: 0.3s; text-decoration: none;
+            width: 65px; height: 65px; border-radius: 50%; background: #07c160;
+            box-shadow: 0 12px 30px rgba(7, 193, 96, 0.4); display: flex; align-items: center; justify-content: center;
+            cursor: pointer; text-decoration: none; transition: 0.3s;
         }
+        .floating-btn:hover { transform: scale(1.1); }
         .floating-btn span { color: white; font-size: 11px; font-weight: bold; text-align: center; line-height: 1.2; }
 
         @keyframes slideUp { from { opacity: 0; transform: translateY(40px); } to { opacity: 1; transform: translateY(0); } }
@@ -201,23 +196,27 @@
 
 <header>
     <div class="container">
-        <h1>YMTEA 云茗荟 独立站诊断系统</h1>
-        <p>专业级：Page Speed & AI GEO 语义诊断 (v2.0)</p>
+        <h1>YMTEA Labs 诊断专家</h1>
+        <p>独立站 SEO 审计 & AI 搜索 (GEO) 深度优化建议</p>
     </div>
 </header>
 
 <div class="container">
     <div class="search-section">
-        <input type="url" id="siteUrl" placeholder="输入网址，例如 www.ymtea.club" required>
+        <input type="url" id="siteUrl" placeholder="输入网址，例如 https://www.ymtea.club" required>
         <button id="auditBtn" onclick="runComprehensiveAudit()">开始深度审计</button>
     </div>
 
-   <div class="quick-links">
-    <a href="https://vip.ymtea.club" target="_blank" class="link-item">云茗荟</a>
-    <a href="https://ymtea.club" target="_blank" class="link-item">Ymtea Shop</a>
-</div>
-    
+    <!-- 步进进度条区域 -->
+    <div id="progressContainer">
+        <div class="progress-bar-bg">
+            <div id="progressBarFill"></div>
+        </div>
+        <div id="statusText">准备启动诊断引擎...</div>
+    </div>
+
     <div id="reportSection">
+        <!-- 基础得分 -->
         <div class="report-grid">
             <div class="card">
                 <div class="label">性能评分</div>
@@ -228,39 +227,52 @@
                 <span id="lcpVal" class="score-val" style="font-size: 1.8rem;">--</span>
             </div>
             <div class="card">
-                <div class="label">CLS (视觉稳定)</div>
-                <span id="clsVal" class="score-val" style="font-size: 1.8rem;">--</span>
-            </div>
-            <div class="card">
-                <div class="label">TTFB (响应延迟)</div>
+                <div class="label">响应延迟 (TTFB)</div>
                 <span id="ttfbVal" class="score-val" style="font-size: 1.8rem;">--</span>
             </div>
         </div>
 
-        <div class="geo-detail-box" style="margin-bottom: 25px; border-top: 6px solid var(--danger);">
-            <h3 style="margin-top:0;">⚡ 性能优化建议 (Opportunities)</h3>
-            <div id="oppList">
-                <p style="color:#64748b; font-size: 14px;">正在检索资源...</p>
+        <!-- 核心业务转化引导 -->
+        <div class="biz-pitch-box">
+            <div class="biz-pitch-text">
+                <h2>不仅是 SEO，更是全新的 GEO 优化</h2>
+                <p>传统的搜索引擎优化已不够，未来的流量在 ChatGPT 和 SearchGPT 手里。</p>
+                <ul>
+                    <li><strong>SEO 提升</strong>：让谷歌爬虫更懂你的产品架构</li>
+                    <li><strong>GEO 注入</strong>：让 AI 生成引擎优先推荐你的品牌</li>
+                    <li><strong>非遗文化出海</strong>：专业茶行业、手工艺跨境品牌数字化方案</li>
+                </ul>
             </div>
+            <div class="biz-cta-box">
+                <p style="margin-bottom:15px; font-size:14px;">想要针对性优化方案？</p>
+                <a href="https://wa.me/8618066947375" class="btn-premium" target="_blank">预约技术咨询</a>
+            </div>
+        </div>
+
+        <!-- 详细列表 -->
+        <div class="geo-detail-box" style="margin-bottom: 25px; border-top: 6px solid var(--danger);">
+            <h3 style="margin-top:0;">⚡ 性能改进机会 (Opportunities)</h3>
+            <div id="oppList"></div>
         </div>
 
         <div class="geo-detail-box">
-            <h3 style="margin-top:0;">🤖 AI 爬虫准入与行业画像</h3>
+            <h3 style="margin-top:0;">🤖 AI 机器人准入情况</h3>
             <div class="bot-list" id="botList"></div>
-            <div id="geoAdvice" style="padding:20px; background:#fffcf0; border-left:4px solid #f59e0b; border-radius:8px; margin:20px 0; font-size:14px;"></div>
+            <div id="geoAdvice" style="padding:18px; background:#fffcf0; border-left:4px solid #f59e0b; border-radius:8px; margin:20px 0; font-size:14px;"></div>
 
-            <h4 style="margin-bottom:10px;">📄 自动生成专属 llms.txt (专业版报告)</h4>
+            <h4 style="margin-bottom:10px;">📄 专属 llms.txt 报告 (供 AI 模型读取)</h4>
             <div class="llms-txt-area">
-                <button class="copy-btn" onclick="copyLlms()">复制报告</button>
-                <pre id="llmsCode"># 正在生成 AI 深度摘要...</pre>
+                <button class="copy-btn" onclick="copyLlms()">复制</button>
+                <pre id="llmsCode">生成中...</pre>
             </div>
         </div>
 
+        <!-- 底部联系区 -->
         <div class="advisor-section">
             <h2>诊断遇到问题？联系 YMTEA 技术顾问</h2>
-            <p style="color:#64748b;">我们将基于您的审计结果，提供一对一的性能优化方案。支持多语言外贸站点。 </p>
+            <p style="color:#64748b;">我们将基于您的审计结果，提供一对一的性能优化方案。支持多语言外贸站点。</p>
             <div class="contact-buttons">
-                <a href="https://work.weixin.qq.com/kfid/kfcab9eba83e85cde3e" class="btn-cta btn-wechat-main" target="_blank">微信客服 (WeChat)</a>
+                <a href="https://work.weixin.qq.com/kfid/kfcab9eba83e85cde3e" class="btn-cta btn-wechat-main" target="_blank">微信客服</a>
                 <a href="https://wa.me/8618066947375" class="btn-cta btn-whatsapp-main" target="_blank">WhatsApp</a>
             </div>
         </div>
@@ -272,25 +284,44 @@
 </div>
 
 <script>
+    let progressTimer;
+
+    function updateProgress(percent, text) {
+        document.getElementById('progressBarFill').style.width = percent + '%';
+        document.getElementById('statusText').innerText = text;
+    }
+
     async function runComprehensiveAudit() {
         const urlInput = document.getElementById('siteUrl');
         const btn = document.getElementById('auditBtn');
         const report = document.getElementById('reportSection');
+        const progress = document.getElementById('progressContainer');
         
         let targetUrl = urlInput.value.trim();
         if(!targetUrl) return alert('请输入网址');
-
-        // 安全加固：前端 URL 预检查
-        const urlPattern = /^(https?:\/\/)?([\da-z.-]+)\.([a-z.]{2,6})([\/\w .-]*)*\/?$/;
-        if(!urlPattern.test(targetUrl)) {
-            return alert('请输入有效的网址格式');
-        }
-
         if (!targetUrl.startsWith('http')) targetUrl = 'https://' + targetUrl;
 
-        btn.innerText = '正在执行 AI 深度诊断...';
+        // UI 初始化
         btn.disabled = true;
         report.style.display = 'none';
+        progress.style.display = 'block';
+        updateProgress(10, '正在连接 YMTEA Labs 全球诊断节点...');
+
+        // 步进文案模拟 (因为 PSI 确实慢，通过文案缓解压力)
+        let step = 0;
+        const steps = [
+            {p: 25, t: '正在抓取 Robots.txt 并检查 AI 准入规则...'},
+            {p: 45, t: 'Google Lighthouse 正在渲染页面指标 (LCP/TTFB)...'},
+            {p: 65, t: '正在进行全行业语义识别与画像建模...'},
+            {p: 85, t: '正在生成 GEO 注入脚本与 llms.txt 报告...'}
+        ];
+
+        progressTimer = setInterval(() => {
+            if(step < steps.length) {
+                updateProgress(steps[step].p, steps[step].t);
+                step++;
+            }
+        }, 8000); // 每8秒跳一步
 
         const workerUrl = "https://pi.ymtea.club"; 
         const SECRET_TOKEN = "YmTea_Labs_2026_Secure";
@@ -302,26 +333,27 @@
             });
 
             const data = await response.json();
+            clearInterval(progressTimer);
+            updateProgress(100, '诊断完成！正在载入报告...');
+
             if(data.error) throw new Error(data.error);
 
-            renderScore('pScore', data.perfScore);
+            // 数据渲染
+            renderScore('pScore', data.summary.perfScore);
             document.getElementById('lcpVal').innerText = data.lcp || "--";
-            document.getElementById('clsVal').innerText = data.cls || "--";
             document.getElementById('ttfbVal').innerText = data.ttfb || "--";
 
+            // 建议列表
             const oppContainer = document.getElementById('oppList');
-            if(data.opportunities && data.opportunities.length > 0) {
-                oppContainer.innerHTML = data.opportunities.map(opp => `
-                    <div class="opp-item">
-                        <span class="opp-title">📍 ${opp.title}</span>
-                        <span class="opp-savings">预计提速: ${opp.savings}ms</span>
-                    </div>
-                `).join('');
-            } else {
-                oppContainer.innerHTML = `<p style="color:var(--success); font-size:14px;">✅ 该站点表现极佳，未发现重大资源阻碍。</p>`;
-            }
+            oppContainer.innerHTML = data.opportunities.map(opp => `
+                <div class="opp-item">
+                    <span class="opp-title">📍 ${opp.title}</span>
+                    <span class="opp-savings">预计提速: ${opp.savings}ms</span>
+                </div>
+            `).join('');
 
-            const b = data.bots || {};
+            // 机器人
+            const b = data.summary.botStatus || {};
             document.getElementById('botList').innerHTML = `
                 <div class="bot-item">GPTBot <span>${b.gpt?'✅':'❌'}</span></div>
                 <div class="bot-item">ClaudeBot <span>${b.claude?'✅':'❌'}</span></div>
@@ -329,36 +361,33 @@
                 <div class="bot-item">Google-AI <span>${b.google?'✅':'❌'}</span></div>
             `;
 
-            document.getElementById('geoAdvice').innerHTML = `<strong>🚀 诊断报告：</strong> 性能评分为 ${Math.round(data.perfScore)}。当前站点已被识别。建议通过下方 llms.txt 文件引导 AI 搜索引擎。`;
+            document.getElementById('geoAdvice').innerHTML = `<strong>🚀 Agent 建议：</strong> 识别到行业为 [${data.summary.industry}]。为了优化 GEO 排名，建议将下方 llms.txt 部署至根目录。`;
+            document.getElementById('llmsCode').innerText = data.optimizationCode.llmsTxt;
 
-            if (data.llmsText) {
-                document.getElementById('llmsCode').innerText = data.llmsText;
-            } else {
-                const hostname = new URL(targetUrl).hostname;
-                document.getElementById('llmsCode').innerText = `# Site: ${hostname}\n# Status: Audit Completed`;
-            }
-
-            report.style.display = 'block';
-            window.scrollTo({ top: report.offsetTop - 50, behavior: 'smooth' });
+            // 显示报告
+            setTimeout(() => {
+                progress.style.display = 'none';
+                report.style.display = 'block';
+                window.scrollTo({ top: report.offsetTop - 50, behavior: 'smooth' });
+            }, 800);
 
         } catch (e) {
+            clearInterval(progressTimer);
             alert('诊断中断: ' + e.message);
+            updateProgress(0, '诊断失败，请检查网址后重试');
         } finally {
-            btn.innerText = '开始深度审计';
             btn.disabled = false;
         }
     }
 
     function renderScore(id, score) {
         const elem = document.getElementById(id);
-        const s = Math.round(score);
-        elem.innerText = s;
-        elem.style.color = s < 60 ? "#ef4444" : (s >= 90 ? "#10b981" : "#f59e0b");
+        elem.innerText = score;
+        elem.style.color = score < 60 ? "#ef4444" : (score >= 90 ? "#10b981" : "#f59e0b");
     }
 
     function copyLlms() {
-        const c = document.getElementById('llmsCode').innerText;
-        navigator.clipboard.writeText(c).then(() => alert('专业报告已复制'));
+        navigator.clipboard.writeText(document.getElementById('llmsCode').innerText).then(() => alert('报告已复制'));
     }
 </script>
 </body>
