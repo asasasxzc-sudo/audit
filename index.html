@@ -1,825 +1,418 @@
 <!DOCTYPE html>
-
 <html lang="zh-CN">
-
 <head>
-
     <meta charset="UTF-8">
-
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-
     <title>GEO & 性能深度诊断 - YMTEA Labs</title>
-
     <style>
-
         :root {
-
             --primary: #c2410c; 
-
             --secondary: #2c3e50;
-
             --bg: #f8fafc;
-
             --card-bg: #ffffff;
-
             --success: #10b981;
-
             --warning: #f59e0b;
-
             --danger: #ef4444;
-
             --content-width: 1140px;
-
         }
-
-
 
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
-
         body {
-
             font-family: -apple-system, system-ui, sans-serif;
-
             background-color: var(--bg);
-
             color: var(--secondary);
-
             margin: 0; padding: 0;
-
             line-height: 1.6;
-
             overflow-x: hidden;
-
         }
-
-
 
         .container { max-width: var(--content-width); margin: 0 auto; padding: 15px; }
 
-
-
         header {
-
             text-align: center;
-
             padding: 40px 20px;
-
             background: #fff;
-
             border-bottom: 1px solid #e2e8f0;
-
         }
-
-
 
         header h1 { font-size: 1.8rem; margin: 0; letter-spacing: -1px; }
-
         header p { color: #64748b; margin-top: 10px; font-size: 0.9rem; }
 
-
-
         .search-section {
-
             background: white;
-
             padding: 25px;
-
             border-radius: 20px;
-
             box-shadow: 0 15px 20px -5px rgba(0,0,0,0.1);
-
             display: flex;
-
             flex-direction: column;
-
             gap: 12px;
-
             margin: -30px auto 10px;
-
             position: relative;
-
             z-index: 10;
-
         }
-
-
 
         @media (min-width: 768px) {
-
             .search-section { flex-direction: row; padding: 35px; margin-top: -50px; }
-
             header h1 { font-size: 2.2rem; }
-
         }
-
-
 
         input[type="url"] {
-
             flex: 1;
-
             padding: 16px;
-
             border: 2px solid #e2e8f0;
-
             border-radius: 12px;
-
             font-size: 16px;
-
             outline: none;
-
             transition: 0.3s;
-
         }
-
-
 
         #auditBtn {
-
             background: var(--primary);
-
             color: white;
-
             border: none;
-
             padding: 16px 30px;
-
             border-radius: 12px;
-
             font-size: 1.1rem;
-
             font-weight: 700;
-
             cursor: pointer;
-
             transition: 0.3s;
-
         }
-
-
 
         #auditBtn:disabled { background: #94a3b8; cursor: wait; }
 
-
-
         .quick-links {
-
             display: flex;
-
             justify-content: center;
-
             flex-wrap: wrap;
-
             gap: 10px;
-
             margin: 20px 0 30px;
-
         }
-
-
 
         .link-item {
-
             padding: 8px 15px;
-
             background-color: #fff;
-
             border: 1px solid #e2e8f0;
-
             border-radius: 8px;
-
             text-decoration: none;
-
             color: #475569;
-
             font-size: 13px;
-
         }
-
-
 
         #progressContainer {
-
             display: none;
-
             margin: 20px auto;
-
             text-align: center;
-
             max-width: 600px;
-
         }
-
         .progress-bar-bg { background: #e2e8f0; height: 8px; border-radius: 4px; overflow: hidden; margin-bottom: 10px; }
-
         #progressBarFill { background: var(--primary); height: 100%; width: 0%; transition: width 0.4s ease; }
-
         #statusText { font-size: 13px; color: var(--primary); font-weight: bold; }
 
-
-
         #reportSection { display: none; animation: slideUp 0.6s cubic-bezier(0.16, 1, 0.3, 1); }
-
         
-
         .report-grid {
-
             display: grid;
-
             grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
-
             gap: 15px;
-
             margin-bottom: 25px;
-
         }
-
-
 
         .card {
-
             background: var(--card-bg);
-
             padding: 20px;
-
             border-radius: 16px;
-
             text-align: center;
-
             box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);
-
             border-top: 5px solid var(--primary);
-
         }
 
-
-
-        .score-val { font-size: 1.8rem; font-weight: 800; display: block; margin: 8px 0; }
-
+        .score-val { font-size: 1.8rem; font-weight: 800; display: block; margin: 8px 0; transition: all 1s ease; }
         .label { color: #94a3b8; font-size: 0.7rem; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; }
 
-
-
-        /* 手机端业务介绍修复 */
-
         .biz-pitch-box {
-
             background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
-
-            color: white;
-
-            padding: 25px;
-
-            border-radius: 20px;
-
-            margin: 25px 0;
-
-            display: flex;
-
-            flex-direction: column; 
-
-            gap: 20px;
-
-            word-wrap: break-word;
-
-            overflow: hidden;
-
+            color: white; padding: 25px; border-radius: 20px; margin: 25px 0;
+            display: flex; flex-direction: column; gap: 20px; overflow: hidden;
         }
 
-
-
-        @media (min-width: 768px) {
-
-            .biz-pitch-box { flex-direction: row; padding: 40px; align-items: center; }
-
-        }
-
-
-
-        .biz-pitch-text { flex: 2; min-width: 0; }
+        @media (min-width: 768px) { .biz-pitch-box { flex-direction: row; padding: 40px; align-items: center; } }
 
         .biz-pitch-text h2 { margin: 0 0 15px; color: #38bdf8; font-size: 1.4rem; }
-
         .biz-pitch-text ul { list-style: none; padding: 0; margin: 0; }
-
-        .biz-pitch-text li { 
-
-            margin-bottom: 12px; 
-
-            display: flex; 
-
-            align-items: flex-start; 
-
-            gap: 10px; 
-
-            font-size: 14px; 
-
-            line-height: 1.4;
-
-        }
-
+        .biz-pitch-text li { margin-bottom: 12px; display: flex; align-items: flex-start; gap: 10px; font-size: 14px; }
         .biz-pitch-text li::before { content: "✦"; color: #fbbf24; flex-shrink: 0; }
 
-        
-
-        .biz-cta-box { flex: 1; min-width: 0; text-align: center; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 20px; }
-
-        @media (min-width: 768px) { .biz-cta-box { border-top: none; padding-top: 0; } }
-
-
-
         .btn-premium {
-
             background: #38bdf8; color: #0f172a; padding: 14px 25px; 
-
             border-radius: 10px; font-weight: bold; text-decoration: none; display: inline-block;
-
             transition: 0.3s; font-size: 15px;
-
         }
-
-
 
         .geo-detail-box {
-
             background: white; padding: 25px; border-radius: 20px;
-
             margin-top: 20px; border: 1px solid #e2e8f0; overflow: hidden;
-
         }
-
-
 
         .opp-item {
-
             display: flex; justify-content: space-between; align-items: center;
-
             padding: 12px 0; border-bottom: 1px solid #f1f5f9; gap: 10px;
-
+            animation: fadeInSlide 0.5s ease forwards; opacity: 0;
         }
+
+        @keyframes fadeInSlide { from { opacity: 0; transform: translateX(-10px); } to { opacity: 1; transform: translateX(0); } }
 
         .opp-title { font-weight: 600; font-size: 13px; color: #334155; flex: 1; }
-
-        .opp-savings { background: #fee2e2; color: #ef4444; padding: 3px 8px; border-radius: 6px; font-size: 11px; font-weight: bold; white-space: nowrap; }
-
-
+        .opp-savings { background: #fee2e2; color: #ef4444; padding: 3px 8px; border-radius: 6px; font-size: 11px; font-weight: bold; }
 
         .bot-list { display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 12px; margin: 20px 0; }
-
         .bot-item { padding: 10px; background: #f8fafc; border-radius: 8px; display: flex; justify-content: space-between; font-weight: 600; font-size: 12px; }
 
-
-
-        /* 手机端代码框修复 */
-
         .llms-txt-area {
-
             background: #0f172a; color: #38bdf8; padding: 15px; border-radius: 10px;
-
             font-family: 'Courier New', monospace; font-size: 12px; position: relative; margin-top: 15px;
-
-            white-space: pre-wrap; 
-
-            word-break: break-all; 
-
-            min-height: 120px;
-
-            overflow-x: hidden;
-
+            white-space: pre-wrap; word-break: break-all; min-height: 120px;
         }
-
         .copy-btn { position: absolute; top: 10px; right: 10px; background: #334155; color: #fff; border: none; padding: 5px 10px; border-radius: 6px; cursor: pointer; font-size: 11px; }
 
-
-
         .advisor-section {
-
             text-align: center; margin: 40px 0; background: white; padding: 40px 20px; border-radius: 24px;
-
             box-shadow: 0 10px 25px rgba(0,0,0,0.05); border: 1px solid #f1f5f9;
-
         }
-
         .contact-buttons { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; margin-top: 20px; }
-
-        .btn-cta {
-
-            padding: 15px 25px; border-radius: 50px; text-decoration: none; font-weight: 800; font-size: 0.95rem;
-
-            display: flex; align-items: center; gap: 10px; color: white; min-width: 180px; justify-content: center;
-
-            transition: 0.3s;
-
-        }
-
+        .btn-cta { padding: 15px 25px; border-radius: 50px; text-decoration: none; font-weight: 800; display: flex; align-items: center; gap: 10px; color: white; min-width: 180px; justify-content: center; transition: 0.3s; }
         .btn-wechat-main { background: #07c160; }
-
         .btn-whatsapp-main { background: #25d366; }
 
-
-
         .sticky-contact { position: fixed; right: 15px; bottom: 20px; z-index: 1000; }
-
-        .floating-btn {
-
-            width: 55px; height: 55px; border-radius: 50%; background: #07c160;
-
-            box-shadow: 0 8px 20px rgba(7, 193, 96, 0.3); display: flex; align-items: center; justify-content: center;
-
-            cursor: pointer; text-decoration: none;
-
-        }
-
+        .floating-btn { width: 55px; height: 55px; border-radius: 50%; background: #07c160; box-shadow: 0 8px 20px rgba(7, 193, 96, 0.3); display: flex; align-items: center; justify-content: center; text-decoration: none; }
         .floating-btn span { color: white; font-size: 10px; font-weight: bold; text-align: center; line-height: 1.1; }
 
-
-
         @keyframes slideUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
-
     </style>
-
 </head>
-
 <body>
 
-
-
 <header>
-
     <div class="container">
-
         <h1>YMTEA Labs 诊断专家</h1>
-
         <p>独立站 SEO 审计 & AI 搜索 (GEO) 深度优化方案</p>
-
     </div>
-
 </header>
 
-
-
 <div class="container">
-
     <div class="search-section">
-
         <input type="url" id="siteUrl" placeholder="输入网址，例如 https://www.ymtea.club" required>
-
         <button id="auditBtn" onclick="runComprehensiveAudit()">开始深度审计</button>
-
     </div>
-
-
 
     <div class="quick-links">
-
         <a href="https://vip.ymtea.club" target="_blank" class="link-item">云茗荟 VIP</a>
-
         <a href="https://ymtea.club" target="_blank" class="link-item">Ymtea Shop</a>
-
     </div>
-
-
 
     <div id="progressContainer">
-
         <div class="progress-bar-bg"><div id="progressBarFill"></div></div>
-
         <div id="statusText">准备启动诊断引擎...</div>
-
     </div>
-
-
 
     <div id="reportSection">
-
         <div class="report-grid">
-
             <div class="card"><div class="label">性能评分</div><span id="pScore" class="score-val">--</span></div>
-
             <div class="card"><div class="label">加载速度 (LCP)</div><span id="lcpVal" class="score-val" style="font-size: 1.5rem;">--</span></div>
-
             <div class="card"><div class="label">AI 兼容评分 (GEO)</div><span id="geoScore" class="score-val">--</span></div>
-
         </div>
-
-
 
         <div class="biz-pitch-box">
-
             <div class="biz-pitch-text">
-
                 <h2>不仅是 SEO，更是全新的 GEO 优化</h2>
-
                 <p style="font-size: 14px; margin-bottom: 15px; opacity: 0.9;">传统的搜索引擎优化已不够，未来的流量竞争正在转向 AI 搜索引擎。</p>
-
                 <ul>
-
                     <li><strong>全球 SEO 审计</strong>：深入分析网站架构，消除搜索引擎抓取阻碍。</li>
-
                     <li><strong>AI (GEO) 注入</strong>：优化语义逻辑，让 AI 引擎优先识别并推荐您的品牌。</li>
-
-                    <li><strong>跨境增长方案</strong>：针对全球不同市场，提供行业级出海技术支持。</li>
-
                 </ul>
-
             </div>
-
             <div class="biz-cta-box">
-
-                <p style="margin-bottom:15px; font-size:13px;">想要一对一优化方案？</p>
-
                 <a href="https://work.weixin.qq.com/kfid/kfcab9eba83e85cde3e" class="btn-premium" target="_blank">微信技术咨询</a>
-
             </div>
-
         </div>
 
-
-
+        <!-- 性能改进机会区 -->
         <div class="geo-detail-box" style="border-top: 5px solid var(--danger);">
-
             <h3 style="margin-top:0; font-size: 1.1rem;">⚡ 性能改进机会</h3>
-
             <div id="oppList"></div>
-
             <p id="ttfbText" style="font-size: 12px; color: #64748b; margin-top: 15px;"></p>
 
+            <!-- 🚀 新增：实时链路与资源审计模块 -->
+            <div style="margin-top: 20px; padding-top: 15px; border-top: 1px dashed #e2e8f0;">
+                <h3 style="margin-top:0; font-size: 1.1rem; display: flex; align-items: center; gap: 8px;">
+                    🔍 实时链路与资源审计
+                </h3>
+                <div class="report-grid" style="grid-template-columns: repeat(2, 1fr); margin-top: 15px;">
+                    <div style="text-align: left; padding: 12px; background: #f8fafc; border-radius: 10px; border: 1px solid #edf2f7;">
+                        <div class="label" style="font-size: 0.6rem;">资源总重 (Total Weight)</div>
+                        <span id="totalWeight" style="font-size: 1rem; font-weight: bold; color: #1e293b;">检测中...</span>
+                    </div>
+                    <div style="text-align: left; padding: 12px; background: #f8fafc; border-radius: 10px; border: 1px solid #edf2f7;">
+                        <div class="label" style="font-size: 0.6rem;">SEO 状态 (SEO Tag)</div>
+                        <span id="seoTagStatus" style="font-size: 1rem; font-weight: bold; color: #10b981;">检测中...</span>
+                    </div>
+                </div>
+                <div id="realtimeAnalysis" style="font-size: 13px; color: #475569; margin-top: 12px; padding: 12px; border-radius: 8px; background: #f1f5f9; border-left: 4px solid #3b82f6;">
+                    正在深度解析页面架构与全球加速链路...
+                </div>
+            </div>
         </div>
-
-
 
         <div class="geo-detail-box">
-
             <h3 style="margin-top:0; font-size: 1.1rem;">🤖 真实 AI 机器人准入检测</h3>
-
             <div class="bot-list" id="botList"></div>
-
             <div id="geoAdvice" style="padding:15px; background:#fffcf0; border-left:4px solid #f59e0b; border-radius:8px; margin:15px 0; font-size:13px;"></div>
 
-
-
             <h4 style="margin-bottom:10px;">📄 行业定制 LLMS.txt 报告</h4>
-
             <div class="llms-txt-area">
-
                 <button class="copy-btn" onclick="copyLlms()">复制</button>
-
                 <pre id="llmsCode" style="margin:0;">报告生成中...</pre>
-
             </div>
-
         </div>
-
-
-
-        <!-- 底部联系区：保持微信和 WhatsApp 两个链接 -->
 
         <div class="advisor-section">
-
             <h2 style="font-size: 1.3rem;">联系 YMTEA 技术顾问</h2>
-
-            <p style="color:#64748b; font-size: 14px;">支持多语言外贸站点性能与语义优化咨询。</p>
-
             <div class="contact-buttons">
-
                 <a href="https://work.weixin.qq.com/kfid/kfcab9eba83e85cde3e" class="btn-cta btn-wechat-main" target="_blank">微信客服</a>
-
                 <a href="https://wa.me/8618066947375" class="btn-cta btn-whatsapp-main" target="_blank">WhatsApp</a>
-
             </div>
-
         </div>
-
     </div>
-
 </div>
-
-
 
 <div class="sticky-contact">
-
     <a href="https://work.weixin.qq.com/kfid/kfcab9eba83e85cde3e" class="floating-btn"><span>微信<br>客服</span></a>
-
 </div>
 
-
-
 <script>
-
     let progressTimer;
 
-
-
     function updateProgress(percent, text) {
-
         const fill = document.getElementById('progressBarFill');
-
         if(fill) fill.style.width = percent + '%';
-
         document.getElementById('statusText').innerText = text;
-
     }
 
-
-
     async function runComprehensiveAudit() {
-
         const urlInput = document.getElementById('siteUrl');
-
         const btn = document.getElementById('auditBtn');
-
         const report = document.getElementById('reportSection');
-
         const progress = document.getElementById('progressContainer');
-
         
-
         let targetUrl = urlInput.value.trim();
-
         if(!targetUrl) return alert('请输入网址');
-
         if (!targetUrl.startsWith('http')) targetUrl = 'https://' + targetUrl;
 
-
-
         btn.disabled = true;
-
         report.style.display = 'none';
-
         progress.style.display = 'block';
-
         updateProgress(10, '连接全球诊断节点...');
 
-
-
         let step = 0;
-
         const steps = [
-
             {p: 30, t: '检测 Robots.txt 机器人规则...'},
-
             {p: 55, t: '调取 Google PSI 核心指标...'},
-
             {p: 80, t: '智能语义画像建模中...'}
-
         ];
 
-
-
         progressTimer = setInterval(() => {
-
             if(step < steps.length) {
-
                 updateProgress(steps[step].p, steps[step].t);
-
                 step++;
-
             }
-
-        }, 6000);
-
-
+        }, 5000);
 
         const workerUrl = "https://pi.ymtea.club"; 
-
         const SECRET_TOKEN = "YmTea_Labs_2026_Secure";
 
-
-
         try {
-
             const response = await fetch(`${workerUrl}/?url=${encodeURIComponent(targetUrl)}`, {
-
                 method: 'GET',
-
                 headers: { 'X-Auth-Token': SECRET_TOKEN },
-
                 mode: 'cors'
-
             });
 
-
-
             if(!response.ok) throw new Error(`响应异常 (${response.status})`);
-
             const data = await response.json();
-
             clearInterval(progressTimer);
-
             updateProgress(100, '载入报告...');
-
-
 
             if(data.error) throw new Error(data.error);
 
-
-
+            // 1. 渲染基础分数
             renderScore('pScore', data.perfScore || 0);
-
             renderScore('geoScore', data.geoScore || 0);
-
             document.getElementById('lcpVal').innerText = data.lcp || "--";
 
-
-
+            // 2. 渲染优化机会
             const oppContainer = document.getElementById('oppList');
-
-            oppContainer.innerHTML = (data.opportunities || []).map(opp => `
-
-                <div class="opp-item">
-
+            oppContainer.innerHTML = (data.opportunities || []).map((opp, index) => `
+                <div class="opp-item" style="animation-delay: ${index * 0.1}s">
                     <span class="opp-title">📍 ${opp.title}</span>
-
-                    <span class="opp-savings">-${opp.savings}ms</span>
-
+                    <span class="opp-savings">${opp.savings}</span>
                 </div>
-
             `).join('') || '<div style="padding:10px">✅ 性能表现优秀。</div>';
-
             
+            document.getElementById('ttfbText').innerText = `首字节响应 (TTFB): ${data.ttfb || '--'} (参考值 < 200ms)`;
 
-            document.getElementById('ttfbText').innerText = `首字节响应 (TTFB): ${data.ttfb || '--'}`;
+            // 🚀 3. 渲染新增审计字段
+            document.getElementById('totalWeight').innerText = data.totalSize || "已优化";
+            document.getElementById('seoTagStatus').innerText = (data.seoScore > 85) ? "符合标准" : "待优化";
 
+            // 🚀 4. 动态生成专家分析语
+            const analysisBox = document.getElementById('realtimeAnalysis');
+            if (data.perfScore >= 90) {
+                analysisBox.innerHTML = "🎯 <strong>专家点评：</strong> 站点架构极佳，核心资源已实现按需加载，非常利于 AI 引擎高效抓取。";
+            } else if (data.perfScore >= 60) {
+                analysisBox.innerHTML = "⚖️ <strong>专家点评：</strong> 整体表现尚可，但部分静态资源未开启分级加载，建议优化 CDN 加速策略。";
+            } else {
+                analysisBox.innerHTML = "🚩 <strong>核心风险：</strong> 检测到阻塞级资源，这可能导致 AI 爬虫抓取超时，建议优化脚本执行优先级。";
+            }
 
-
+            // 5. 渲染机器人与报告
             const b = data.bots || {};
-
             document.getElementById('botList').innerHTML = `
-
                 <div class="bot-item">GPTBot <span>${b.gpt?'✅':'❌'}</span></div>
-
                 <div class="bot-item">Claude <span>${b.claude?'✅':'❌'}</span></div>
-
                 <div class="bot-item">PPLX <span>${b.pplx?'✅':'❌'}</span></div>
-
                 <div class="bot-item">GoogleAI <span>${b.google?'✅':'❌'}</span></div>
-
             `;
-
-
-
             document.getElementById('llmsCode').innerText = data.llmsText || "暂无报告";
-
             document.getElementById('geoAdvice').innerHTML = `<strong>💡 诊断提醒：</strong> 站点性能与 SEO 评分正相关。建议保持良好的机器人准入环境，助力 AI 引擎精准索引品牌信息。`;
 
-
-
             setTimeout(() => {
-
                 progress.style.display = 'none';
-
                 report.style.display = 'block';
-
                 window.scrollTo({ top: report.offsetTop - 50, behavior: 'smooth' });
-
             }, 500);
 
-
-
         } catch (e) {
-
             clearInterval(progressTimer);
-
             progress.style.display = 'none';
-
             btn.disabled = false;
-
             alert('诊断中断: ' + e.message);
-
         } finally {
-
             btn.disabled = false;
-
         }
-
     }
-
-
 
     function renderScore(id, score) {
-
         const elem = document.getElementById(id);
-
         if(!elem) return;
-
         elem.innerText = score;
-
         elem.style.color = score < 60 ? "#ef4444" : (score >= 90 ? "#10b981" : "#f59e0b");
-
     }
-
-
 
     function copyLlms() {
-
         const code = document.getElementById('llmsCode').innerText;
-
         navigator.clipboard.writeText(code).then(() => alert('已复制到剪贴板'));
-
     }
-
 </script>
 
 </body>
-
 </html>
