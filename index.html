@@ -123,9 +123,10 @@
         @media (min-width: 768px) { .biz-pitch-box { flex-direction: row; align-items: center; } }
 
         .biz-pitch-text { flex: 2; }
-        .biz-pitch-text h2 { margin: 0 0 15px; color: #38bdf8; }
-        .biz-pitch-text ul { list-style: none; padding: 0; }
-        .biz-pitch-text li { margin-bottom: 12px; display: flex; gap: 10px; font-size: 15px; }
+        .biz-pitch-text h2 { margin: 0 0 15px; color: #38bdf8; font-size: 1.6rem; }
+        .biz-pitch-text ul { list-style: none; padding: 0; margin: 0; }
+        .biz-pitch-text li { margin-bottom: 12px; display: flex; align-items: flex-start; gap: 10px; font-size: 15px; }
+        .biz-pitch-text li::before { content: "✦"; color: #fbbf24; }
 
         .geo-detail-box { background: white; padding: 25px; border-radius: 20px; margin-top: 20px; border: 1px solid #e2e8f0; }
 
@@ -133,22 +134,22 @@
         .opp-title { font-weight: 500; font-size: 14px; color: #334155; }
         .opp-savings { background: #fee2e2; color: #ef4444; padding: 4px 10px; border-radius: 6px; font-size: 12px; font-weight: bold; }
 
-        .bot-list { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 12px; margin: 20px 0; }
+        .bot-list { display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 12px; margin: 20px 0; }
         .bot-item { padding: 12px; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 10px; display: flex; justify-content: space-between; font-size: 13px; font-weight: 600; }
 
         .llms-txt-area { background: #0f172a; color: #38bdf8; padding: 15px; border-radius: 10px; font-family: monospace; font-size: 12px; position: relative; margin-top: 15px; }
         .copy-btn { position: absolute; top: 10px; right: 10px; background: #334155; color: #fff; border: none; padding: 6px 12px; border-radius: 6px; cursor: pointer; }
 
         .advisor-section { text-align: center; margin: 40px 0; background: white; padding: 45px 20px; border-radius: 24px; border: 1px solid #f1f5f9; }
-        .btn-cta { padding: 16px 30px; border-radius: 50px; text-decoration: none; font-weight: 800; display: flex; align-items: center; gap: 10px; color: white; justify-content: center; }
+        .btn-cta { padding: 16px 30px; border-radius: 50px; text-decoration: none; font-weight: 800; display: flex; align-items: center; gap: 10px; color: white; justify-content: center; transition: 0.3s; }
         .btn-wechat-main { background: #07c160; }
         .btn-whatsapp { background: #25d366; }
 
         .sticky-contact { position: fixed; right: 20px; bottom: 30px; z-index: 1000; }
-        .floating-btn { width: 60px; height: 60px; border-radius: 50%; background: #07c160; display: flex; align-items: center; justify-content: center; text-decoration: none; box-shadow: 0 8px 16px rgba(0,0,0,0.1); }
-        .floating-btn span { color: white; font-size: 11px; font-weight: bold; text-align: center; }
+        .floating-btn { width: 65px; height: 65px; border-radius: 50%; background: #07c160; display: flex; align-items: center; justify-content: center; text-decoration: none; box-shadow: 0 8px 16px rgba(0,0,0,0.1); }
+        .floating-btn span { color: white; font-size: 12px; font-weight: bold; text-align: center; }
 
-        @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes slideUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
     </style>
 </head>
 <body>
@@ -196,7 +197,7 @@
         </div>
 
         <div class="loss-warning-box">
-            <h3 style="color: #c53030;">📉 潜在商业损失预测</h3>
+            <h3 style="color: #c53030; margin-top:0;">📉 潜在商业损失预测</h3>
             <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 15px;">
                 <div style="flex: 1; min-width: 200px;">
                     <p style="font-size: 14px; margin: 0;">基于当前性能数据，您的站点面临：</p>
@@ -215,14 +216,14 @@
         <div class="biz-pitch-box">
             <div class="biz-pitch-text">
                 <h2>不仅是 SEO，更是全新的 GEO 优化</h2>
-                <p style="font-size: 14px; opacity: 0.9; margin-bottom: 15px;">点击下方链接了解我们的深度优化策略：</p>
+                <p style="font-size: 15px; margin-bottom: 15px; opacity: 0.95;">传统的搜索引擎优化已不够，未来的流量竞争正在转向 AI 搜索引擎。</p>
                 <ul>
-                    <li><a href="https://www.ymtea.club/seo-services" style="color: #38bdf8; font-weight: bold; text-decoration: underline;">查看全球 SEO 审计详情</a></li>
-                    <li><a href="https://www.ymtea.club/geo-optimization" style="color: #38bdf8; font-weight: bold; text-decoration: underline;">了解 AI (GEO) 注入技术</a></li>
+                    <li><a href="https://www.ymtea.club/seo-services" style="color: #38bdf8; font-weight: bold; text-decoration: underline;">云茗荟VIP智库</a></li>
+                    <li><a href="https://www.ymtea.club/geo-optimization" style="color: #38bdf8; font-weight: bold; text-decoration: underline;">Ymtea Shop全球店</a></li>
                 </ul>
             </div>
             <div style="flex: 1; text-align: center;">
-                <a href="https://work.weixin.qq.com/kfid/kfcab9eba83e85cde3e" class="btn-cta" style="background: #38bdf8; color: #0f172a; font-size: 14px;" target="_blank">获取一对一优化方案</a>
+                <a href="https://work.weixin.qq.com/kfid/kfcab9eba83e85cde3e" class="btn-cta" style="background: #38bdf8; color: #0f172a; font-size: 15px;" target="_blank">获取一对一优化方案</a>
             </div>
         </div>
 
@@ -280,22 +281,22 @@
             });
             const data = await response.json();
 
-            // 1. 评分逻辑
+            // 1. 评分
             const seoScore = data.seo || data.geoScore || 0;
             document.getElementById('geoScore').innerText = seoScore;
             document.getElementById('geoScore').style.color = seoScore > 80 ? '#10b981' : '#f59e0b';
             
-            // 2. 指标数据获取与展示
+            // 2. 指标展示 (带 0/-- 保护)
             const lcpVal = data.lcp ? parseFloat(data.lcp).toFixed(1) : "--";
             renderMetric('lcpVal', lcpVal, 's', 2.5, 4.0, 'lcpStatus');
             
             const weightVal = data.totalByteWeight ? parseInt(data.totalByteWeight) : "--";
             renderMetric('weightVal', weightVal, ' KB', 1500, 3500, 'weightStatus');
             
-            const clsVal = (data.clsStatus || data.cls) !== undefined ? parseFloat(data.clsStatus || data.cls).toFixed(3) : "--";
+            const clsVal = (data.clsStatus || data.cls) !== undefined ? parseFloat(data.clsStatus || data.cls).toFixed(3) : "0";
             renderMetric('clsVal', clsVal, '', 0.1, 0.25, 'clsStatus');
 
-            // 3. 商业损失模拟
+            // 3. 商业影响推算
             let lcpNum = parseFloat(lcpVal) || 0;
             let bounce = "1.2", loss = "0.7", rank = "优秀";
             if (lcpNum > 3.5) { bounce = ((lcpNum - 2) * 20).toFixed(1); loss = ((lcpNum - 2) * 12).toFixed(1); rank = "急需优化"; }
@@ -305,7 +306,7 @@
             document.getElementById('seoRank').innerText = rank;
             document.getElementById('seoRank').style.color = lcpNum > 3.5 ? "#ef4444" : "#10b981";
 
-            // 4. 改进机会
+            // 4. 优化列表
             const oppContainer = document.getElementById('oppList');
             const opps = data.opportunities || [];
             oppContainer.innerHTML = opps.map(opp => `
@@ -317,7 +318,7 @@
 
             document.getElementById('ttfbText').innerText = `响应延迟 (TTFB): ${data.ttfb || '无法获取'}`;
 
-            // 5. 机器人检测 (补齐 GPTBot, ClaudeBot, Perplexity, Google AI)
+            // 5. 机器人
             const bots = data.bots || {};
             document.getElementById('botList').innerHTML = `
                 <div class="bot-item">GPTBot <span>${bots.gpt ? '✅' : '❌'}</span></div>
@@ -326,14 +327,14 @@
                 <div class="bot-item">Google AI <span>${bots.google ? '✅' : '❌'}</span></div>
             `;
 
-            document.getElementById('llmsCode').innerText = data.llmsText || "llms.txt 生成失败";
+            document.getElementById('llmsCode').innerText = data.llmsText || "无法生成 llms.txt";
 
             progress.style.display = 'none';
             report.style.display = 'block';
             window.scrollTo({ top: report.offsetTop - 50, behavior: 'smooth' });
 
         } catch (e) {
-            alert('诊断过程中断: ' + e.message);
+            alert('诊断异常: ' + e.message);
         } finally {
             btn.disabled = false;
         }
@@ -365,7 +366,7 @@
 
     function copyLlms() {
         navigator.clipboard.writeText(document.getElementById('llmsCode').innerText);
-        alert('已复制到剪贴板');
+        alert('已复制');
     }
 </script>
 </body>
