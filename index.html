@@ -23,7 +23,6 @@
             color: var(--secondary);
             margin: 0; padding: 0;
             line-height: 1.6;
-            overflow-x: hidden;
         }
 
         .container { max-width: var(--content-width); margin: 0 auto; padding: 15px; }
@@ -35,8 +34,8 @@
             border-bottom: 1px solid #e2e8f0;
         }
 
-        header h1 { font-size: 1.8rem; margin: 0; letter-spacing: -0.5px; color: var(--secondary); }
-        header p { color: #64748b; margin-top: 10px; font-size: 0.95rem; font-weight: 500; }
+        header h1 { font-size: 1.8rem; margin: 0; color: var(--secondary); }
+        header p { color: #64748b; margin-top: 10px; font-size: 0.95rem; }
 
         .search-section {
             background: white;
@@ -52,10 +51,7 @@
             border: 1px solid rgba(226, 232, 240, 0.8);
         }
 
-        @media (min-width: 768px) {
-            .search-section { flex-direction: row; padding: 35px; margin-top: -60px; }
-            header h1 { font-size: 2.4rem; }
-        }
+        @media (min-width: 768px) { .search-section { flex-direction: row; padding: 35px; margin-top: -60px; } }
 
         input[type="url"] {
             flex: 1;
@@ -64,10 +60,7 @@
             border-radius: 12px;
             font-size: 16px;
             outline: none;
-            transition: 0.3s;
         }
-
-        input[type="url"]:focus { border-color: var(--primary); }
 
         #auditBtn {
             background: var(--primary);
@@ -78,25 +71,16 @@
             font-size: 1.1rem;
             font-weight: 700;
             cursor: pointer;
-            transition: 0.3s;
         }
 
-        #auditBtn:hover { filter: brightness(1.1); transform: translateY(-1px); }
-        #auditBtn:disabled { background: #94a3b8; cursor: wait; }
+        #auditBtn:disabled { background: #94a3b8; }
 
-        #progressContainer {
-            display: none;
-            margin: 20px auto;
-            text-align: center;
-            max-width: 600px;
-        }
+        #progressContainer { display: none; margin: 20px auto; text-align: center; max-width: 600px; }
         .progress-bar-bg { background: #e2e8f0; height: 10px; border-radius: 10px; overflow: hidden; margin-bottom: 10px; }
         #progressBarFill { background: var(--primary); height: 100%; width: 0%; transition: width 0.4s ease; }
-        #statusText { font-size: 13px; color: var(--primary); font-weight: bold; }
 
-        #reportSection { display: none; animation: slideUp 0.6s cubic-bezier(0.16, 1, 0.3, 1); }
+        #reportSection { display: none; animation: slideUp 0.6s ease; }
         
-        /* 核心指标矩阵 */
         .report-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
@@ -117,7 +101,6 @@
         .label { color: #64748b; font-size: 0.75rem; font-weight: 800; text-transform: uppercase; letter-spacing: 1.2px; }
         .metric-status { font-size: 11px; font-weight: bold; }
 
-        /* 商业损失预测盒 */
         .loss-warning-box {
             background: #fff5f5;
             border: 1px solid #feb2b2;
@@ -125,7 +108,6 @@
             border-radius: 20px;
             margin-bottom: 25px;
         }
-        .loss-warning-box h3 { margin-top: 0; color: #c53030; font-size: 1.1rem; display: flex; align-items: center; gap: 8px; }
 
         .biz-pitch-box {
             background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
@@ -134,17 +116,16 @@
             border-radius: 20px;
             margin: 25px 0;
             display: flex;
-            flex-direction: column; 
+            flex-direction: column;
             gap: 20px;
         }
 
         @media (min-width: 768px) { .biz-pitch-box { flex-direction: row; align-items: center; } }
 
         .biz-pitch-text { flex: 2; }
-        .biz-pitch-text h2 { margin: 0 0 15px; color: #38bdf8; font-size: 1.6rem; }
-        .biz-pitch-text ul { list-style: none; padding: 0; margin: 0; }
-        .biz-pitch-text li { margin-bottom: 12px; display: flex; align-items: flex-start; gap: 10px; font-size: 15px; }
-        .biz-pitch-text li::before { content: "✦"; color: #fbbf24; }
+        .biz-pitch-text h2 { margin: 0 0 15px; color: #38bdf8; }
+        .biz-pitch-text ul { list-style: none; padding: 0; }
+        .biz-pitch-text li { margin-bottom: 12px; display: flex; gap: 10px; font-size: 15px; }
 
         .geo-detail-box { background: white; padding: 25px; border-radius: 20px; margin-top: 20px; border: 1px solid #e2e8f0; }
 
@@ -159,14 +140,14 @@
         .copy-btn { position: absolute; top: 10px; right: 10px; background: #334155; color: #fff; border: none; padding: 6px 12px; border-radius: 6px; cursor: pointer; }
 
         .advisor-section { text-align: center; margin: 40px 0; background: white; padding: 45px 20px; border-radius: 24px; border: 1px solid #f1f5f9; }
-        .btn-cta { padding: 16px 30px; border-radius: 50px; text-decoration: none; font-weight: 800; display: flex; align-items: center; gap: 10px; color: white; justify-content: center; transition: 0.3s; }
+        .btn-cta { padding: 16px 30px; border-radius: 50px; text-decoration: none; font-weight: 800; display: flex; align-items: center; gap: 10px; color: white; justify-content: center; }
         .btn-wechat-main { background: #07c160; }
 
         .sticky-contact { position: fixed; right: 20px; bottom: 30px; z-index: 1000; }
-        .floating-btn { width: 65px; height: 65px; border-radius: 50%; background: #07c160; display: flex; align-items: center; justify-content: center; text-decoration: none; box-shadow: 0 8px 16px rgba(0,0,0,0.1); }
-        .floating-btn span { color: white; font-size: 12px; font-weight: bold; text-align: center; }
+        .floating-btn { width: 60px; height: 60px; border-radius: 50%; background: #07c160; display: flex; align-items: center; justify-content: center; text-decoration: none; box-shadow: 0 8px 16px rgba(0,0,0,0.1); }
+        .floating-btn span { color: white; font-size: 11px; font-weight: bold; text-align: center; }
 
-        @keyframes slideUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
     </style>
 </head>
 <body>
@@ -190,7 +171,6 @@
     </div>
 
     <div id="reportSection">
-        <!-- 核心指标看板 -->
         <div class="report-grid">
             <div class="card">
                 <div class="label">SEO & GEO 评分</div>
@@ -203,9 +183,9 @@
                 <div id="lcpStatus" class="metric-status">检测中...</div>
             </div>
             <div class="card">
-                <div class="label">交互延迟 (TBT)</div>
-                <span id="tbtVal" class="score-val">--</span>
-                <div id="tbtStatus" class="metric-status">检测中...</div>
+                <div class="label">页面总重</div>
+                <span id="weightVal" class="score-val">--</span>
+                <div id="weightStatus" class="metric-status">检测中...</div>
             </div>
             <div class="card">
                 <div class="label">视觉稳定性 (CLS)</div>
@@ -214,12 +194,11 @@
             </div>
         </div>
 
-        <!-- 商业损失预测 -->
         <div class="loss-warning-box">
-            <h3>📉 潜在商业损失预测</h3>
+            <h3 style="color: #c53030;">📉 潜在商业损失预测</h3>
             <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 15px;">
                 <div style="flex: 1; min-width: 200px;">
-                    <p style="font-size: 14px; margin: 0; color: #742a2a;">基于当前网页性能，您的站点面临：</p>
+                    <p style="font-size: 14px; margin: 0;">基于当前性能，您的站点面临：</p>
                     <ul style="font-size: 13px; color: #9b2c2c; margin: 10px 0 0 18px; padding: 0;">
                         <li>预计潜在跳出率增加: <strong id="bounceRate">--%</strong></li>
                         <li>移动端转化流失风险: <strong id="convLoss">--%</strong></li>
@@ -235,7 +214,6 @@
         <div class="biz-pitch-box">
             <div class="biz-pitch-text">
                 <h2>不仅是 SEO，更是全新的 GEO 优化</h2>
-                <p style="font-size: 15px; margin-bottom: 15px; opacity: 0.95;">传统的搜索引擎优化已不够，未来的流量竞争正在转向 AI 搜索引擎。</p>
                 <ul>
                     <li><strong>全球 SEO 审计</strong>：深入分析网站架构，消除抓取阻碍。</li>
                     <li><strong>AI (GEO) 注入</strong>：优化语义逻辑，让 AI 引擎优先识别品牌。</li>
@@ -243,18 +221,16 @@
                 </ul>
             </div>
             <div style="flex: 1; text-align: center;">
-                <a href="https://work.weixin.qq.com/kfid/kfcab9eba83e85cde3e" class="btn-cta" style="background: #38bdf8; color: #0f172a; font-size: 15px;" target="_blank">获取一对一优化方案</a>
+                <a href="https://work.weixin.qq.com/kfid/kfcab9eba83e85cde3e" class="btn-cta" style="background: #38bdf8; color: #0f172a; font-size: 14px;" target="_blank">获取一对一优化方案</a>
             </div>
         </div>
 
-        <!-- 性能改进机会 -->
         <div class="geo-detail-box" style="border-top: 5px solid var(--danger);">
             <h3 style="margin-top:0; font-size: 1.1rem;">⚡ 关键性能改进机会 (Optimization)</h3>
             <div id="oppList"></div>
             <p id="ttfbText" style="font-size: 12px; color: #64748b; margin-top: 15px; font-family: monospace;"></p>
         </div>
 
-        <!-- AI 准入 -->
         <div class="geo-detail-box">
             <h3 style="margin-top:0; font-size: 1.1rem;">🤖 真实 AI 机器人准入检测</h3>
             <div class="bot-list" id="botList"></div>
@@ -266,9 +242,8 @@
 
         <div class="advisor-section">
             <h2 style="font-size: 1.5rem;">联系 YMTEA 技术顾问</h2>
-            <div class="contact-buttons" style="display: flex; gap: 15px; justify-content: center; flex-wrap: wrap; margin-top: 20px;">
+            <div style="display: flex; gap: 15px; justify-content: center; flex-wrap: wrap; margin-top: 20px;">
                 <a href="https://work.weixin.qq.com/kfid/kfcab9eba83e85cde3e" class="btn-cta btn-wechat-main" target="_blank">微信客服</a>
-                <a href="https://wa.me/8618066947375" class="btn-cta" style="background:#25d366" target="_blank">WhatsApp</a>
             </div>
         </div>
     </div>
@@ -297,69 +272,66 @@
         const SECRET_TOKEN = "YmTea_Labs_2026_Secure";
 
         try {
-            updateProgress(30, '正在连接 Lighthouse 全球检测节点...');
+            updateProgress(30, '正在调取分布式诊断数据...');
             const response = await fetch(`${workerUrl}/?url=${encodeURIComponent(targetUrl)}`, {
                 headers: { 'X-Auth-Token': SECRET_TOKEN }
             });
             const data = await response.json();
 
-            // 1. 核心评分与状态渲染
-            document.getElementById('geoScore').innerText = data.seo;
-            document.getElementById('geoScore').style.color = data.seo > 80 ? '#10b981' : '#f59e0b';
+            // --- 修复点 1: SEO 评分 (对齐 Worker 中的 seo 字段) ---
+            const seoScore = data.seo || data.geoScore || 0;
+            document.getElementById('geoScore').innerText = seoScore;
+            document.getElementById('geoScore').style.color = seoScore > 80 ? '#10b981' : '#f59e0b';
             
-            // 2. Web Vitals 渲染
-            renderMetric('lcpVal', parseFloat(data.lcp), 's', 2.5, 4.0, 'lcpStatus');
-            renderMetric('tbtVal', parseInt(data.totalByteWeight) || 0, ' KB', 1500, 3000, 'tbtStatus'); // 借用 TBT 卡片展示总体积
-            document.getElementById('tbtVal').previousElementSibling.innerText = "页面总重";
-            
-            renderMetric('clsVal', parseFloat(data.clsStatus) || 0, '', 0.1, 0.25, 'clsStatus');
-
-            // 3. 商业损失逻辑
+            // --- 修复点 2: LCP 与核心指标 ---
             const lcp = parseFloat(data.lcp) || 0;
-            let bounce = "1.2";
-            let loss = "0.8";
-            let rank = "优秀";
-            if (lcp > 3) {
-                bounce = ((lcp - 2.0) * 15).toFixed(1);
-                loss = ((lcp - 2.0) * 9).toFixed(1);
-                rank = "急需优化";
-            } else if (lcp > 1.8) {
-                bounce = "8.5"; loss = "5.2"; rank = "良好";
-            }
+            renderMetric('lcpVal', lcp, 's', 2.5, 4.0, 'lcpStatus');
+            
+            // 页面总重 (对齐 Worker 中的 totalByteWeight)
+            const weight = parseInt(data.totalByteWeight) || 0;
+            renderMetric('weightVal', weight, ' KB', 1500, 3500, 'weightStatus');
+            
+            // CLS
+            const cls = parseFloat(data.clsStatus) || parseFloat(data.cls) || 0;
+            renderMetric('clsVal', cls, '', 0.1, 0.25, 'clsStatus');
+
+            // --- 修复点 3: 商业损失预测 ---
+            let bounce = "1.5", loss = "0.9", rank = "优秀";
+            if (lcp > 3.5) { bounce = ((lcp - 2) * 18).toFixed(1); loss = ((lcp - 2) * 11).toFixed(1); rank = "急需优化"; }
+            else if (lcp > 2.0) { bounce = "12.4"; loss = "7.8"; rank = "良好"; }
             document.getElementById('bounceRate').innerText = bounce + "%";
             document.getElementById('convLoss').innerText = loss + "%";
             document.getElementById('seoRank').innerText = rank;
-            document.getElementById('seoRank').style.color = lcp > 3 ? "#ef4444" : "#10b981";
+            document.getElementById('seoRank').style.color = lcp > 3.5 ? "#ef4444" : "#10b981";
 
-            // 4. 改进机会
+            // --- 修复点 4: 改进机会列表 (对齐 Worker 中的 opportunities 结构) ---
             const oppContainer = document.getElementById('oppList');
-            oppContainer.innerHTML = (data.opportunities || []).map(opp => `
+            const opps = data.opportunities || [];
+            oppContainer.innerHTML = opps.map(opp => `
                 <div class="opp-item">
-                    <span class="opp-title">💡 ${opp.label}</span>
-                    <span class="opp-savings">${opp.displayValue}</span>
+                    <span class="opp-title">💡 ${opp.label || opp.title || '优化建议'}</span>
+                    <span class="opp-savings">${opp.displayValue || (opp.savings + 'ms')}</span>
                 </div>
-            `).join('');
+            `).join('') || '<div style="color:#10b981; font-weight:bold;">✅ 暂无重大性能阻塞</div>';
 
-            document.getElementById('ttfbText').innerText = `响应延迟 (TTFB): ${data.ttfb}`;
+            document.getElementById('ttfbText').innerText = `响应延迟 (TTFB): ${data.ttfb || '检测超时'}`;
 
-            // 5. 机器人
+            // --- 机器人 ---
             const bots = data.bots || {};
             document.getElementById('botList').innerHTML = `
                 <div class="bot-item">GPTBot <span>${bots.gpt ? '✅' : '❌'}</span></div>
                 <div class="bot-item">ClaudeBot <span>${bots.claude ? '✅' : '❌'}</span></div>
-                <div class="bot-item">Perplexity <span>${bots.pplx ? '✅' : '❌'}</span></div>
                 <div class="bot-item">Google AI <span>${bots.google ? '✅' : '❌'}</span></div>
             `;
 
-            document.getElementById('llmsCode').innerText = data.llmsText || "";
+            document.getElementById('llmsCode').innerText = data.llmsText || "无法生成 llms.txt";
 
             progress.style.display = 'none';
             report.style.display = 'block';
             window.scrollTo({ top: report.offsetTop - 50, behavior: 'smooth' });
 
         } catch (e) {
-            console.error(e);
-            alert('诊断失败，请检查网络。');
+            alert('诊断异常: ' + e.message);
         } finally {
             btn.disabled = false;
         }
@@ -370,17 +342,11 @@
         const statusElem = document.getElementById(statusId);
         elem.innerText = val + unit;
         if (val <= good) {
-            elem.style.color = "#10b981";
-            statusElem.innerText = "优异 (PASS)";
-            statusElem.style.color = "#10b981";
+            elem.style.color = "#10b981"; statusElem.innerText = "优异 (PASS)"; statusElem.style.color = "#10b981";
         } else if (val <= poor) {
-            elem.style.color = "#f59e0b";
-            statusElem.innerText = "改善 (AVERAGE)";
-            statusElem.style.color = "#f59e0b";
+            elem.style.color = "#f59e0b"; statusElem.innerText = "改善 (AVERAGE)"; statusElem.style.color = "#f59e0b";
         } else {
-            elem.style.color = "#ef4444";
-            statusElem.innerText = "欠佳 (POOR)";
-            statusElem.style.color = "#ef4444";
+            elem.style.color = "#ef4444"; statusElem.innerText = "欠佳 (POOR)"; statusElem.style.color = "#ef4444";
         }
     }
 
