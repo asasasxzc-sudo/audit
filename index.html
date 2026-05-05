@@ -142,10 +142,10 @@
         .opp-title { font-weight: 500; font-size: 14px; color: #334155; }
         .opp-savings { background: #fee2e2; color: #ef4444; padding: 4px 10px; border-radius: 6px; font-size: 12px; font-weight: bold; }
 
-        .bot-list { display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 12px; margin: 20px 0; }
+        /* 机器人列表布局优化 */
+        .bot-list { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 12px; margin: 20px 0; }
         .bot-item { padding: 12px; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 10px; display: flex; justify-content: space-between; font-size: 13px; font-weight: 600; }
 
-        /* 重点修复：LLMS 自动换行 */
         .llms-txt-area { 
             background: #0f172a; 
             color: #38bdf8; 
@@ -155,16 +155,13 @@
             font-size: 12px; 
             position: relative; 
             margin-top: 15px; 
-            overflow: hidden; /* 防止溢出容器 */
+            overflow: hidden; 
         }
         
         .llms-txt-area pre {
             margin: 0;
-            white-space: pre-wrap;       /* CSS3 版本，支持换行 */
-            white-space: -moz-pre-wrap;  /* Mozilla 支持 */
-            white-space: -pre-wrap;       /* Opera 4-6 支持 */
-            white-space: -o-pre-wrap;     /* Opera 7 支持 */
-            word-wrap: break-word;        /* 单词强制折断 */
+            white-space: pre-wrap;
+            word-wrap: break-word;
             word-break: break-all;
         }
 
@@ -266,7 +263,7 @@
         </div>
 
         <div class="geo-detail-box">
-            <h3 style="margin-top:0; font-size: 1.1rem;">🤖 真实 AI 机器人准入检测</h3>
+            <h3 style="margin-top:0; font-size: 1.1rem;">🤖 全球 AI 机器人准入检测 (含国内主流)</h3>
             <div class="bot-list" id="botList"></div>
             <div class="llms-txt-area">
                 <button class="copy-btn" onclick="copyLlms()">复制</button>
@@ -328,7 +325,7 @@
             const clsVal = (data.cls !== undefined) ? parseFloat(data.cls).toFixed(3) : "0.000";
             renderMetric('clsVal', clsVal, '', 0.1, 0.25, 'clsStatus');
 
-            // 商业损失
+            // 商业影响
             let lcpNum = parseFloat(lcpVal) || 0;
             let bounce = "1.2", loss = "0.7", rank = "优秀";
             if (lcpNum > 3.5) { bounce = ((lcpNum - 2) * 20).toFixed(1); loss = ((lcpNum - 2) * 12).toFixed(1); rank = "急需优化"; }
@@ -349,14 +346,26 @@
 
             document.getElementById('ttfbText').innerText = `响应延迟 (TTFB): ${data.ttfb || '获取中'}`;
 
-            // AI 检测
+            // AI 检测逻辑 (包含国内 AI)
             const bots = data.bots || {};
-            document.getElementById('botList').innerHTML = `
-                <div class="bot-item">GPTBot <span>${bots.gpt ? '✅' : '❌'}</span></div>
-                <div class="bot-item">ClaudeBot <span>${bots.claude ? '✅' : '❌'}</span></div>
-                <div class="bot-item">Perplexity <span>${bots.pplx ? '✅' : '❌'}</span></div>
-                <div class="bot-item">Google AI <span>${bots.google ? '✅' : '❌'}</span></div>
-            `;
+            const botConfig = [
+                { id: 'gpt', name: 'GPTBot (OpenAI)' },
+                { id: 'claude', name: 'ClaudeBot' },
+                { id: 'pplx', name: 'Perplexity' },
+                { id: 'google', name: 'Google AI' },
+                { id: 'doubao', name: '豆包 (ByteDance)' },
+                { id: 'ernie', name: '文心一言 (Baidu)' },
+                { id: 'qwen', name: '通义千问 (Ali)' },
+                { id: 'feishu', name: '飞书/Lark' }
+            ];
+
+            document.getElementById('botList').innerHTML = botConfig.map(bot => `
+                <div class="bot-item">
+                    ${bot.name} 
+                    <span>${bots[bot.id] ? '✅' : '❌'}</span>
+                </div>
+            `).join('');
+
             document.getElementById('llmsCode').innerText = data.llmsText || "暂未检测到 llms.txt";
 
             progress.style.display = 'none';
