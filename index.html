@@ -5,177 +5,31 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>GEO & Lighthouse 性能深度诊断 - YMTEA Labs</title>
     <style>
-        :root {
-            --primary: #c2410c; 
-            --secondary: #1e293b;
-            --bg: #f8fafc;
-            --card-bg: #ffffff;
-            --success: #10b981;
-            --warning: #f59e0b;
-            --danger: #ef4444;
-            --content-width: 1140px;
-        }
-
-        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-            background-color: var(--bg);
-            color: var(--secondary);
-            margin: 0; padding: 0;
-            line-height: 1.6;
-        }
-
-        .container { max-width: var(--content-width); margin: 0 auto; padding: 15px; }
-
-        header {
-            text-align: center;
-            padding: 50px 20px;
-            background: #fff;
-            border-bottom: 1px solid #e2e8f0;
-        }
-
-        header h1 { font-size: 1.8rem; margin: 0; color: var(--secondary); }
-        header p { color: #64748b; margin-top: 10px; font-size: 0.95rem; }
-
-        .search-section {
-            background: white;
-            padding: 25px;
-            border-radius: 20px;
-            box-shadow: 0 20px 25px -5px rgba(0,0,0,0.05);
-            margin: -40px auto 10px;
-            position: relative;
-            z-index: 10;
-            border: 1px solid rgba(226, 232, 240, 0.8);
-        }
-
+        :root { --primary: #c2410c; --secondary: #1e293b; --bg: #f8fafc; --card-bg: #ffffff; --success: #10b981; --warning: #f59e0b; --danger: #ef4444; }
+        body { font-family: -apple-system, sans-serif; background: var(--bg); color: var(--secondary); margin: 0; }
+        .container { max-width: 1140px; margin: 0 auto; padding: 15px; }
+        header { text-align: center; padding: 50px 20px; background: #fff; border-bottom: 1px solid #e2e8f0; }
+        .search-section { background: white; padding: 25px; border-radius: 20px; box-shadow: 0 20px 25px -5px rgba(0,0,0,0.05); margin: -40px auto 10px; position: relative; z-index: 10; border: 1px solid #e2e8f0; }
         .search-controls { display: flex; flex-direction: column; gap: 12px; }
         @media (min-width: 768px) { .search-controls { flex-direction: row; } }
-
-        input[type="url"] {
-            flex: 1;
-            padding: 16px;
-            border: 2px solid #e2e8f0;
-            border-radius: 12px;
-            font-size: 16px;
-            outline: none;
-        }
-
-        #auditBtn {
-            background: var(--primary);
-            color: white;
-            border: none;
-            padding: 16px 30px;
-            border-radius: 12px;
-            font-size: 1.1rem;
-            font-weight: 700;
-            cursor: pointer;
-        }
-
-        .sub-nav {
-            display: flex;
-            justify-content: center;
-            gap: 25px;
-            margin-top: 15px;
-            font-size: 14px;
-        }
-        .sub-nav a {
-            color: #64748b;
-            text-decoration: none;
-            font-weight: 600;
-            transition: 0.2s;
-        }
-        .sub-nav a:hover { color: var(--primary); text-decoration: underline; }
-
-        #progressContainer { display: none; margin: 20px auto; text-align: center; max-width: 600px; }
-        .progress-bar-bg { background: #e2e8f0; height: 10px; border-radius: 10px; overflow: hidden; margin-bottom: 10px; }
+        input[type="url"] { flex: 1; padding: 16px; border: 2px solid #e2e8f0; border-radius: 12px; font-size: 16px; outline: none; }
+        #auditBtn { background: var(--primary); color: white; border: none; padding: 16px 30px; border-radius: 12px; font-size: 1.1rem; font-weight: 700; cursor: pointer; }
+        #progressContainer { display: none; margin: 20px auto; text-align: center; }
+        .progress-bar-bg { background: #e2e8f0; height: 10px; border-radius: 10px; overflow: hidden; }
         #progressBarFill { background: var(--primary); height: 100%; width: 0%; transition: width 0.4s ease; }
-
         #reportSection { display: none; animation: slideUp 0.6s ease; }
-        
-        .report-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-            gap: 15px;
-            margin-bottom: 25px;
-        }
-
-        .card {
-            background: var(--card-bg);
-            padding: 24px;
-            border-radius: 16px;
-            text-align: center;
-            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);
-            border-top: 5px solid var(--primary);
-        }
-
+        .report-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 15px; margin-bottom: 25px; }
+        .card { background: var(--card-bg); padding: 24px; border-radius: 16px; text-align: center; box-shadow: 0 4px 6px rgba(0,0,0,0.05); border-top: 5px solid var(--primary); }
         .score-val { font-size: 2.2rem; font-weight: 800; display: block; margin: 8px 0; }
-        .label { color: #64748b; font-size: 0.75rem; font-weight: 800; text-transform: uppercase; letter-spacing: 1.2px; }
-        .metric-status { font-size: 11px; font-weight: bold; }
-
-        .loss-warning-box {
-            background: #fff5f5;
-            border: 1px solid #feb2b2;
-            padding: 25px;
-            border-radius: 20px;
-            margin-bottom: 25px;
-        }
-
-        .biz-pitch-box {
-            background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
-            color: white;
-            padding: 30px;
-            border-radius: 20px;
-            margin: 25px 0;
-            display: flex;
-            flex-direction: column;
-            gap: 20px;
-        }
-
-        @media (min-width: 768px) { .biz-pitch-box { flex-direction: row; align-items: center; } }
-        .biz-pitch-text { flex: 2; }
-        .biz-pitch-text h2 { margin: 0 0 10px; color: #38bdf8; }
-        .biz-pitch-text p { font-size: 15px; line-height: 1.7; opacity: 0.9; margin: 0; }
-
+        .label { color: #64748b; font-size: 0.75rem; font-weight: 800; text-transform: uppercase; }
         .geo-detail-box { background: white; padding: 25px; border-radius: 20px; margin-top: 20px; border: 1px solid #e2e8f0; }
-
         .opp-item { display: flex; justify-content: space-between; align-items: center; padding: 14px 0; border-bottom: 1px solid #f1f5f9; }
-        .opp-title { font-weight: 500; font-size: 14px; color: #334155; }
         .opp-savings { background: #fee2e2; color: #ef4444; padding: 4px 10px; border-radius: 6px; font-size: 12px; font-weight: bold; }
-
-        .bot-list { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 12px; margin: 20px 0; }
-        .bot-item { padding: 12px; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 10px; display: flex; justify-content: space-between; font-size: 13px; font-weight: 600; }
-
-        .llms-txt-area { 
-            background: #0f172a; 
-            color: #38bdf8; 
-            padding: 15px; 
-            border-radius: 10px; 
-            font-family: 'Courier New', Courier, monospace;
-            font-size: 12px; 
-            position: relative; 
-            margin-top: 15px; 
-            overflow: hidden; 
-        }
-        
-        .llms-txt-area pre {
-            margin: 0;
-            white-space: pre-wrap;
-            word-wrap: break-word;
-            word-break: break-all;
-        }
-
-        .copy-btn { position: absolute; top: 10px; right: 10px; background: #334155; color: #fff; border: none; padding: 6px 12px; border-radius: 6px; cursor: pointer; z-index: 5; }
-
-        .advisor-section { text-align: center; margin: 40px 0; background: white; padding: 45px 20px; border-radius: 24px; border: 1px solid #f1f5f9; }
-        .btn-cta { padding: 16px 30px; border-radius: 50px; text-decoration: none; font-weight: 800; display: flex; align-items: center; gap: 10px; color: white; justify-content: center; }
-        .btn-wechat-main { background: #07c160; }
-        .btn-whatsapp { background: #25d366; }
-
-        .sticky-contact { position: fixed; right: 20px; bottom: 30px; z-index: 1000; }
-        .floating-btn { width: 65px; height: 65px; border-radius: 50%; background: #07c160; display: flex; align-items: center; justify-content: center; text-decoration: none; box-shadow: 0 8px 16px rgba(0,0,0,0.1); }
-        .floating-btn span { color: white; font-size: 12px; font-weight: bold; text-align: center; }
-
-        @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        .bot-list { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px; margin: 20px 0; }
+        .bot-item { padding: 15px; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 10px; display: flex; justify-content: space-between; font-weight: 600; }
+        .advisor-section { text-align: center; margin: 40px 0; background: white; padding: 45px 20px; border-radius: 24px; }
+        .btn-cta { padding: 16px 30px; border-radius: 50px; text-decoration: none; font-weight: 800; display: inline-flex; align-items: center; gap: 10px; color: white; }
+        @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; } }
     </style>
 </head>
 <body>
@@ -190,239 +44,105 @@
 <div class="container">
     <div class="search-section">
         <div class="search-controls">
-            <input type="url" id="siteUrl" placeholder="输入待诊断网址，例如 https://www.ymtea.club" required>
-            <button id="auditBtn" onclick="runComprehensiveAudit()">启动行业级审计</button>
-        </div>
-        <div class="sub-nav">
-            <a href="https://vip.ymtea.club" target="_blank">云茗荟VIP智库</a>
-            <a href="https://www.ymtea.club" target="_blank">Ymtea Shop全球店</a>
+            <input type="url" id="siteUrl" placeholder="输入待诊断网址，例如 https://www.ymtea.club">
+            <button id="auditBtn" onclick="runAudit()">启动行业级审计</button>
         </div>
     </div>
 
     <div id="progressContainer">
         <div class="progress-bar-bg"><div id="progressBarFill"></div></div>
-        <div id="statusText">初始化全网链路诊断...</div>
+        <p id="statusText">正在进行全球链路诊断...</p>
     </div>
 
     <div id="reportSection">
         <div class="report-grid">
-            <div class="card">
-                <div class="label">SEO & GEO 评分</div>
-                <span id="geoScore" class="score-val">--</span>
-                <div style="font-size:11px; color:#94a3b8;">AI 语义可见度</div>
-            </div>
-            <div class="card">
-                <div class="label">首屏加载 (LCP)</div>
-                <span id="lcpVal" class="score-val">--</span>
-                <div id="lcpStatus" class="metric-status">检测中...</div>
-            </div>
-            <div class="card">
-                <div class="label">页面总重</div>
-                <span id="weightVal" class="score-val">--</span>
-                <div id="weightStatus" class="metric-status">检测中...</div>
-            </div>
-            <div class="card">
-                <div class="label">视觉稳定性 (CLS)</div>
-                <span id="clsVal" class="score-val">--</span>
-                <div id="clsStatus" class="metric-status">检测中...</div>
-            </div>
-        </div>
-
-        <div class="loss-warning-box">
-            <h3 style="color: #c53030; margin-top:0;">📉 潜在商业损失预测</h3>
-            <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 15px;">
-                <div style="flex: 1; min-width: 200px;">
-                    <p style="font-size: 14px; margin: 0;">基于当前性能数据，您的站点面临：</p>
-                    <ul style="font-size: 13px; color: #9b2c2c; margin: 10px 0 0 18px; padding: 0;">
-                        <li>预计潜在跳出率增加: <strong id="bounceRate">--%</strong></li>
-                        <li>移动端转化流失风险: <strong id="convLoss">--%</strong></li>
-                    </ul>
-                </div>
-                <div style="background: white; padding: 12px 25px; border-radius: 12px; border: 2px dashed #f56565; text-align: center;">
-                    <div style="font-size: 12px; color: #e53e3e; font-weight: bold;">SEO 优化评级</div>
-                    <div id="seoRank" style="font-size: 20px; font-weight: 900; color: #c53030;">WAITING</div>
-                </div>
-            </div>
-        </div>
-
-        <div class="biz-pitch-box">
-            <div class="biz-pitch-text">
-                <h2>不仅是 SEO，更是全新的 GEO 优化</h2>
-                <p>传统的搜索引擎优化已不够，未来的流量竞争正在转向 AI 搜索引擎。通过 YMTEA 的 GEO 注入技术，让您的品牌在 GPT/Claude 的回复中脱颖而出。</p>
-            </div>
-            <div style="flex: 1; text-align: center;">
-                <a href="https://work.weixin.qq.com/kfid/kfcab9eba83e85cde3e" class="btn-cta" style="background: #38bdf8; color: #0f172a; font-size: 15px;" target="_blank">获取一对一优化方案</a>
-            </div>
+            <div class="card"><div class="label">SEO & GEO 评分</div><span id="geoScore" class="score-val">--</span></div>
+            <div class="card"><div class="label">首屏加载 (LCP)</div><span id="lcpVal" class="score-val">--</span></div>
+            <div class="card"><div class="label">页面总重</div><span id="weightVal" class="score-val">--</span></div>
+            <div class="card"><div class="label">视觉稳定性 (CLS)</div><span id="clsVal" class="score-val">--</span></div>
         </div>
 
         <div class="geo-detail-box" style="border-top: 5px solid var(--danger);">
-            <h3 style="margin-top:0; font-size: 1.1rem;">⚡ 关键性能改进机会 (Optimization)</h3>
+            <h3 style="margin-top:0;">⚡ 关键性能改进机会</h3>
             <div id="oppList"></div>
-            <p id="ttfbText" style="font-size: 12px; color: #64748b; margin-top: 15px; font-family: monospace;"></p>
+            <p id="ttfbText" style="font-size: 12px; color: #64748b; margin-top: 10px; font-family: monospace;"></p>
         </div>
 
         <div class="geo-detail-box">
-            <h3 style="margin-top:0; font-size: 1.1rem;">🤖 全球 AI 机器人准入检测 (含国内主流)</h3>
+            <h3 style="margin-top:0;">🤖 全球主流 AI 机器人准入检测</h3>
             <div class="bot-list" id="botList"></div>
-            <div class="llms-txt-area">
-                <button class="copy-btn" onclick="copyLlms()">复制</button>
-                <pre id="llmsCode">报告生成中...</pre>
-            </div>
         </div>
 
         <div class="advisor-section">
-            <h2 style="font-size: 1.5rem;">联系 YMTEA 技术顾问</h2>
-            <div style="display: flex; gap: 15px; justify-content: center; flex-wrap: wrap; margin-top: 20px;">
-                <a href="https://work.weixin.qq.com/kfid/kfcab9eba83e85cde3e" class="btn-cta btn-wechat-main" target="_blank">微信客服</a>
-                <a href="https://wa.me/8618066947375" class="btn-cta btn-whatsapp" target="_blank">WhatsApp</a>
-            </div>
+            <h2>联系 YMTEA 技术顾问</h2>
+            <a href="https://work.weixin.qq.com/kfid/kfcab9eba83e85cde3e" class="btn-cta" style="background: #07c160;">微信在线咨询</a>
         </div>
     </div>
 </div>
 
-<div class="sticky-contact">
-    <a href="https://work.weixin.qq.com/kfid/kfcab9eba83e85cde3e" class="floating-btn" target="_blank"><span>微信<br>客服</span></a>
-</div>
-
 <script>
-    async function runComprehensiveAudit() {
-        const urlInput = document.getElementById('siteUrl');
+    async function runAudit() {
+        const url = document.getElementById('siteUrl').value;
+        if(!url) return alert('请输入网址');
+        
         const btn = document.getElementById('auditBtn');
         const report = document.getElementById('reportSection');
         const progress = document.getElementById('progressContainer');
         
-        let targetUrl = urlInput.value.trim();
-        if(!targetUrl) return alert('请输入网址');
-        if (!targetUrl.startsWith('http')) targetUrl = 'https://' + targetUrl;
-
         btn.disabled = true;
         report.style.display = 'none';
         progress.style.display = 'block';
 
-        const workerUrl = "https://pi.ymtea.club"; 
-        const SECRET_TOKEN = "YmTea_Labs_2026_Secure";
-
         try {
-            updateProgress(20, '正在连接 YMTEA 诊断节点...');
-            updateProgress(40, '实时抓取 Lighthouse 性能数据 (预计 10-15s)...');
-            
-            const response = await fetch(`${workerUrl}/?url=${encodeURIComponent(targetUrl)}`, {
-                headers: { 'X-Auth-Token': SECRET_TOKEN }
+            updateP(30, '正在绕过缓存抓取最新数据...');
+            const res = await fetch(`https://pi.ymtea.club/?url=${encodeURIComponent(url)}`, {
+                headers: { 'X-Auth-Token': 'YmTea_Labs_2026_Secure' }
             });
-            const data = await response.json();
-
-            if(data.error) throw new Error(data.error);
-
-            updateProgress(90, '正在生成 GEO 合规性报告...');
-
-            // 1. 评分渲染 (对应 Worker 里的 seo 字段)
-            const finalSeoScore = data.seo || 0;
-            document.getElementById('geoScore').innerText = finalSeoScore;
-            document.getElementById('geoScore').style.color = finalSeoScore > 80 ? '#10b981' : '#f59e0b';
+            const data = await res.json();
             
-            // 2. 指标渲染
-            // LCP (Worker 返回的是带单位或纯数字字符串)
-            const lcpRaw = data.lcp ? parseFloat(data.lcp) : 0;
-            renderMetric('lcpVal', lcpRaw.toFixed(1), 's', 2.5, 4.0, 'lcpStatus');
-            
-            // 页面重量 (Worker 返回的是 totalByteWeight)
-            const weightRaw = data.totalByteWeight ? parseInt(data.totalByteWeight) : 0;
-            renderMetric('weightVal', weightRaw, ' KB', 1500, 3500, 'weightStatus');
-            
-            // CLS
-            const clsRaw = (data.cls !== undefined) ? parseFloat(data.cls) : 0;
-            renderMetric('clsVal', clsRaw.toFixed(3), '', 0.1, 0.25, 'clsStatus');
+            updateP(90, '正在解析真实性能指标...');
 
-            // 3. 商业影响预测逻辑
-            let bounce = "1.2", loss = "0.7", rank = "优秀";
-            if (lcpRaw > 3.5) { 
-                bounce = ((lcpRaw - 2) * 20).toFixed(1); 
-                loss = ((lcpRaw - 2) * 12).toFixed(1); 
-                rank = "急需优化"; 
-            } else if (lcpRaw > 1.8) { 
-                bounce = "9.8"; 
-                loss = "6.4"; 
-                rank = "良好"; 
-            }
-            document.getElementById('bounceRate').innerText = bounce + "%";
-            document.getElementById('convLoss').innerText = loss + "%";
-            document.getElementById('seoRank').innerText = rank;
-            document.getElementById('seoRank').style.color = lcpRaw > 3.5 ? "#ef4444" : "#10b981";
+            // 评分与指标渲染
+            document.getElementById('geoScore').innerText = data.seo;
+            document.getElementById('lcpVal').innerText = data.lcp + 's';
+            document.getElementById('weightVal').innerText = data.totalByteWeight + ' KB';
+            document.getElementById('clsVal').innerText = data.cls;
+            document.getElementById('ttfbText').innerText = `后端响应 (TTFB): ${data.ttfb}`;
 
-            // 4. 渲染建议列表 (如果 Worker 没返回 opportunities，显示默认成功)
-            const opps = data.opportunities || [];
-            document.getElementById('oppList').innerHTML = opps.length > 0 ? opps.map(opp => `
-                <div class="opp-item">
-                    <span class="opp-title">💡 ${opp.title}</span>
-                    <span class="opp-savings">预计节省 ${opp.displayValue || 'N/A'}</span>
-                </div>
-            `).join('') : '<div style="color:#10b981; font-weight:bold; padding:10px;">✅ 核心 Web 指标表现极佳，暂无重大改进建议</div>';
-
-            // 5. TTFB 渲染
-            document.getElementById('ttfbText').innerText = `后端响应延迟 (TTFB): ${data.ttfb || 'N/A'}`;
-
-            // 6. AI 机器人状态 (Worker 里的 bots 对象)
-            const bots = data.bots || {};
+            // 机器人渲染 (精简版)
             const botConfig = [
-                { id: 'gpt', name: 'GPTBot' },
+                { id: 'gpt', name: 'GPTBot (OpenAI)' },
                 { id: 'claude', name: 'ClaudeBot' },
-                { id: 'pplx', name: 'Perplexity' },
-                { id: 'google', name: 'Google AI' },
-                { id: 'doubao', name: '豆包' },
-                { id: 'ernie', name: '文心一言' },
-                { id: 'qwen', name: '通义千问' },
-                { id: 'feishu', name: '飞书/Lark' }
+                { id: 'pplx', name: 'Perplexity AI' },
+                { id: 'google', name: 'Google AI' }
             ];
-
             document.getElementById('botList').innerHTML = botConfig.map(bot => `
                 <div class="bot-item">
                     ${bot.name} 
-                    <span style="color: ${bots[bot.id] ? '#10b981' : '#ef4444'}">${bots[bot.id] ? '✅' : '❌'}</span>
+                    <span style="color: ${data.bots[bot.id] ? '#10b981' : '#ef4444'}">
+                        ${data.bots[bot.id] ? '✅ 允许' : '❌ 已封禁'}
+                    </span>
                 </div>
             `).join('');
 
-            // 7. LLMS 文本渲染
-            document.getElementById('llmsCode').innerText = data.llmsText || "无法生成 llms.txt";
+            // 建议渲染
+            const opps = data.opportunities || [];
+            document.getElementById('oppList').innerHTML = opps.length > 0 ? opps.map(o => `
+                <div class="opp-item"><span>💡 ${o.title}</span><span class="opp-savings">节省 ${o.displayValue}</span></div>
+            `).join('') : '<p style="color:#10b981">✅ 核心 Web 指标表现极佳</p>';
 
             progress.style.display = 'none';
             report.style.display = 'block';
-            window.scrollTo({ top: report.offsetTop - 50, behavior: 'smooth' });
-
         } catch (e) {
-            console.error(e);
-            alert('诊断过程中断: ' + e.message);
+            alert('检测失败，请检查网络或 URL');
         } finally {
             btn.disabled = false;
-            updateProgress(0, '');
         }
     }
 
-    function renderMetric(id, val, unit, good, poor, statusId) {
-        const elem = document.getElementById(id);
-        const statusElem = document.getElementById(statusId);
-        if (!val || val === 0) {
-            elem.innerText = "--";
-            statusElem.innerText = "获取失败";
-            return;
-        }
-        elem.innerText = val + unit;
-        if (val <= good) {
-            elem.style.color = "#10b981"; statusElem.innerText = "优异 (PASS)"; statusElem.style.color = "#10b981";
-        } else if (val <= poor) {
-            elem.style.color = "#f59e0b"; statusElem.innerText = "改善 (AVERAGE)"; statusElem.style.color = "#f59e0b";
-        } else {
-            elem.style.color = "#ef4444"; statusElem.innerText = "欠佳 (POOR)"; statusElem.style.color = "#ef4444";
-        }
-    }
-
-    function updateProgress(p, t) {
+    function updateP(p, t) {
         document.getElementById('progressBarFill').style.width = p + '%';
         document.getElementById('statusText').innerText = t;
-    }
-
-    function copyLlms() {
-        navigator.clipboard.writeText(document.getElementById('llmsCode').innerText);
-        alert('报告内容已复制到剪贴板');
     }
 </script>
 </body>
