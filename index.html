@@ -32,7 +32,7 @@
             text-align: center;
             padding: 40px 20px;
             background: #fff;
-            border-bottom: 1px solid #e2e8f0;
+            border-bottom: 1px solid #e2e880;
         }
 
         header h1 { font-size: 1.8rem; margin: 0; letter-spacing: -1px; }
@@ -80,7 +80,6 @@
 
         #auditBtn:disabled { background: #94a3b8; cursor: wait; }
 
-        /* 找回：顶部快捷链接 */
         .quick-links {
             display: flex;
             justify-content: center;
@@ -98,15 +97,33 @@
             font-size: 13px;
         }
 
+        /* 恢复：完整进度条样式与动画 */
         #progressContainer {
             display: none;
-            margin: 20px auto;
+            margin: 30px auto;
             text-align: center;
             max-width: 600px;
         }
-        .progress-bar-bg { background: #e2e8f0; height: 8px; border-radius: 4px; overflow: hidden; margin-bottom: 10px; }
-        #progressBarFill { background: var(--primary); height: 100%; width: 0%; transition: width 0.4s ease; }
-        #statusText { font-size: 13px; color: var(--primary); font-weight: bold; }
+        .progress-bar-bg { 
+            background: #e2e8f0; 
+            height: 12px; 
+            border-radius: 10px; 
+            overflow: hidden; 
+            margin-bottom: 15px;
+            box-shadow: inset 0 2px 4px rgba(0,0,0,0.05);
+        }
+        #progressBarFill { 
+            background: linear-gradient(90deg, #c2410c, #ea580c); 
+            height: 100%; 
+            width: 0%; 
+            transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1); 
+        }
+        #statusText { 
+            font-size: 14px; 
+            color: var(--primary); 
+            font-weight: bold;
+            min-height: 20px;
+        }
 
         #reportSection { display: none; animation: slideUp 0.6s cubic-bezier(0.16, 1, 0.3, 1); }
         
@@ -129,16 +146,14 @@
         .score-val { font-size: 1.8rem; font-weight: 800; display: block; margin: 8px 0; }
         .label { color: #94a3b8; font-size: 0.7rem; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; }
 
-        /* 找回：GEO 核心文案模块 */
         .biz-pitch-box {
             background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
             color: white; padding: 25px; border-radius: 20px; margin: 25px 0;
-            display: flex; flex-direction: column; gap: 20px; overflow: hidden;
+            display: flex; flex-direction: column; gap: 20px;
         }
         @media (min-width: 768px) { .biz-pitch-box { flex-direction: row; padding: 40px; align-items: center; } }
         .biz-pitch-text h2 { margin: 0 0 15px; color: #38bdf8; font-size: 1.4rem; }
-        .biz-pitch-text ul { list-style: none; padding: 0; margin: 0; }
-        .biz-pitch-text li { margin-bottom: 12px; display: flex; align-items: flex-start; gap: 10px; font-size: 14px; }
+        .biz-pitch-text li { margin-bottom: 12px; display: flex; align-items: flex-start; gap: 10px; font-size: 14px; list-style: none; }
         .biz-pitch-text li::before { content: "✦"; color: #fbbf24; flex-shrink: 0; }
         .btn-premium {
             background: #38bdf8; color: #0f172a; padding: 14px 25px; 
@@ -151,31 +166,24 @@
             margin-top: 20px; border: 1px solid #e2e8f0;
         }
 
-        .opp-item {
-            display: flex; justify-content: space-between; align-items: center;
-            padding: 12px 0; border-bottom: 1px solid #f1f5f9; gap: 10px;
-        }
-
-        /* 重点修改：保持手机自动换行 */
+        /* 核心修复：LLMS.txt 区域自动换行 */
         .llms-txt-area {
             background: #0f172a; color: #38bdf8; padding: 15px; border-radius: 10px;
             font-family: 'Courier New', monospace; font-size: 12px; position: relative; margin-top: 15px;
             white-space: pre-wrap; word-wrap: break-word; word-break: break-all;
             min-height: 120px; border: 1px solid #334155;
         }
-        .copy-btn { position: absolute; top: 10px; right: 10px; background: #334155; color: #fff; border: none; padding: 5px 10px; border-radius: 6px; cursor: pointer; font-size: 11px; }
+        .copy-btn { position: absolute; top: 10px; right: 10px; background: #334155; color: #fff; border: none; padding: 5px 10px; border-radius: 6px; cursor: pointer; font-size: 11px; z-index: 5; }
 
-        /* 找回：底部客服模块 */
         .advisor-section {
             text-align: center; margin: 40px 0; background: white; padding: 40px 20px; border-radius: 24px;
             box-shadow: 0 10px 25px rgba(0,0,0,0.05); border: 1px solid #f1f5f9;
         }
         .contact-buttons { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; margin-top: 20px; }
-        .btn-cta { padding: 15px 25px; border-radius: 50px; text-decoration: none; font-weight: 800; display: flex; align-items: center; gap: 10px; color: white; min-width: 180px; justify-content: center; transition: 0.3s; }
+        .btn-cta { padding: 15px 25px; border-radius: 50px; text-decoration: none; font-weight: 800; display: flex; align-items: center; gap: 10px; color: white; min-width: 180px; justify-content: center; }
         .btn-wechat-main { background: #07c160; }
         .btn-whatsapp-main { background: #25d366; }
 
-        /* 找回：侧边悬浮客服 */
         .sticky-contact { position: fixed; right: 15px; bottom: 20px; z-index: 1000; }
         .floating-btn { width: 55px; height: 55px; border-radius: 50%; background: #07c160; box-shadow: 0 8px 20px rgba(7, 193, 96, 0.3); display: flex; align-items: center; justify-content: center; text-decoration: none; }
         .floating-btn span { color: white; font-size: 10px; font-weight: bold; text-align: center; line-height: 1.1; }
@@ -201,7 +209,6 @@
         <button id="auditBtn" onclick="runComprehensiveAudit()">开始深度审计</button>
     </div>
 
-    <!-- 找回：顶部链接 -->
     <div class="quick-links">
         <a href="https://vip.ymtea.club" target="_blank" class="link-item">云茗荟 VIP</a>
         <a href="https://ymtea.club" target="_blank" class="link-item">Ymtea Shop</a>
@@ -219,12 +226,11 @@
             <div class="card"><div class="label">AI 兼容评分 (GEO)</div><span id="geoScore" class="score-val">--</span></div>
         </div>
 
-        <!-- 找回：GEO 核心文案与微信咨询 -->
         <div class="biz-pitch-box">
             <div class="biz-pitch-text">
                 <h2>不仅是 SEO，更是全新的 GEO 优化</h2>
                 <p style="font-size: 14px; margin-bottom: 15px; opacity: 0.9;">传统的搜索引擎优化已不够，未来的流量竞争正在转向 AI 搜索引擎。</p>
-                <ul>
+                <ul style="padding:0; margin:0;">
                     <li><strong>全球 SEO 审计</strong>：深入分析网站架构，消除搜索引擎抓取阻碍。</li>
                     <li><strong>AI (GEO) 注入</strong>：优化语义逻辑，让 AI 引擎优先识别并推荐您的品牌。</li>
                 </ul>
@@ -268,7 +274,6 @@
             </div>
         </div>
 
-        <!-- 找回：底部客服区域 -->
         <div class="advisor-section">
             <h2 style="font-size: 1.3rem;">联系 YMTEA 技术顾问</h2>
             <div class="contact-buttons">
@@ -279,7 +284,6 @@
     </div>
 </div>
 
-<!-- 找回：侧边悬浮客服 -->
 <div class="sticky-contact">
     <a href="https://work.weixin.qq.com/kfid/kfcab9eba83e85cde3e" class="floating-btn"><span>微信<br>客服</span></a>
 </div>
@@ -300,8 +304,25 @@
         btn.disabled = true;
         report.style.display = 'none';
         progress.style.display = 'block';
-        fill.style.width = '10%';
-        status.innerText = '连接诊断引擎...';
+        fill.style.width = '0%';
+
+        // 恢复：滚动的状态提示文字逻辑
+        const phases = [
+            { p: 15, t: '📡 正在建立全球加速链路...' },
+            { p: 35, t: '🔍 正在调取 Google Lighthouse 核心指标...' },
+            { p: 55, t: '🤖 正在检测 AI 机器人 robots.txt 准入策略...' },
+            { p: 75, t: '🧠 正在分析语义逻辑与 GEO 兼容性...' },
+            { p: 90, t: '📄 正在生成行业定制 LLMS 诊断报告...' }
+        ];
+
+        let phaseIdx = 0;
+        const interval = setInterval(() => {
+            if(phaseIdx < phases.length) {
+                fill.style.width = phases[phaseIdx].p + '%';
+                status.innerText = phases[phaseIdx].t;
+                phaseIdx++;
+            }
+        }, 1200);
 
         try {
             const response = await fetch(`https://pi.ymtea.club/?url=${encodeURIComponent(targetUrl)}`, {
@@ -310,7 +331,10 @@
 
             if(!response.ok) throw new Error('诊断服务响应异常');
             const data = await response.json();
+            
+            clearInterval(interval);
             fill.style.width = '100%';
+            status.innerText = '✅ 诊断完成，正在渲染结果...';
             
             document.getElementById('pScore').innerText = data.perfScore;
             document.getElementById('pScore').style.color = data.perfScore > 80 ? "#10b981" : "#ef4444";
@@ -328,11 +352,14 @@
 
             document.getElementById('ttfbText').innerText = `首字节响应 (TTFB): ${data.ttfb || '--'} | 建议值 < 200ms`;
 
+            // 找回：完整的 5 个 AI 机器人检测项
             const b = data.bots || {};
             document.getElementById('botList').innerHTML = `
                 <div class="bot-item">GPTBot <span>${b.gpt?'✅':'❌'}</span></div>
-                <div class="bot-item">Claude <span>${b.claude?'✅':'❌'}</span></div>
-                <div class="bot-item">Google <span>${b.google?'✅':'❌'}</span></div>
+                <div class="bot-item">ClaudeBot <span>${b.claude?'✅':'❌'}</span></div>
+                <div class="bot-item">Google-AI <span>${b.google?'✅':'❌'}</span></div>
+                <div class="bot-item">CCBot <span>${b.ccbot?'✅':'❌'}</span></div>
+                <div class="bot-item">Perplexity <span>${b.pplx?'✅':'❌'}</span></div>
             `;
             document.getElementById('llmsCode').innerText = data.llmsText;
 
@@ -348,9 +375,10 @@
             setTimeout(() => {
                 progress.style.display = 'none';
                 report.style.display = 'block';
-            }, 500);
+            }, 800);
 
         } catch (e) {
+            clearInterval(interval);
             alert('诊断中断: ' + e.message);
         } finally {
             btn.disabled = false;
