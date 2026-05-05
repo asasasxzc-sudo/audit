@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>GEO & Lighthouse 性能深度诊断 - YMTEA Labs 专业版</title>
+    <title>GEO & Lighthouse 性能深度诊断 - YMTEA Labs</title>
     <style>
         :root {
             --primary: #c2410c; 
@@ -69,9 +69,7 @@
             font-size: 1.1rem;
             font-weight: 700;
             cursor: pointer;
-            transition: all 0.3s ease;
         }
-        #auditBtn:disabled { background: #94a3b8; cursor: not-allowed; }
 
         .sub-nav {
             display: flex;
@@ -192,7 +190,7 @@
 <div class="container">
     <div class="search-section">
         <div class="search-controls">
-            <input type="url" id="siteUrl" placeholder="输入待诊断网址，例如 https://www.google.com" required>
+            <input type="url" id="siteUrl" placeholder="输入待诊断网址，例如 https://www.ymtea.club" required>
             <button id="auditBtn" onclick="runComprehensiveAudit()">启动行业级审计</button>
         </div>
         <div class="sub-nav">
@@ -209,7 +207,7 @@
     <div id="reportSection">
         <div class="report-grid">
             <div class="card">
-                <div class="label">SEO & GEO 综合评分</div>
+                <div class="label">SEO & GEO 评分</div>
                 <span id="geoScore" class="score-val">--</span>
                 <div style="font-size:11px; color:#94a3b8;">AI 语义可见度</div>
             </div>
@@ -219,9 +217,9 @@
                 <div id="lcpStatus" class="metric-status">检测中...</div>
             </div>
             <div class="card">
-                <div class="label">响应延迟 (TTFB)</div>
-                <span id="ttfbVal" class="score-val">--</span>
-                <div id="ttfbStatus" class="metric-status">检测中...</div>
+                <div class="label">页面总重</div>
+                <span id="weightVal" class="score-val">--</span>
+                <div id="weightStatus" class="metric-status">检测中...</div>
             </div>
             <div class="card">
                 <div class="label">视觉稳定性 (CLS)</div>
@@ -231,13 +229,13 @@
         </div>
 
         <div class="loss-warning-box">
-            <h3 style="color: #c53030; margin-top:0;">📉 商业转化损失预测</h3>
+            <h3 style="color: #c53030; margin-top:0;">📉 潜在商业损失预测</h3>
             <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 15px;">
                 <div style="flex: 1; min-width: 200px;">
-                    <p style="font-size: 14px; margin: 0;">基于当前拨测数据，您的站点面临：</p>
+                    <p style="font-size: 14px; margin: 0;">基于当前性能数据，您的站点面临：</p>
                     <ul style="font-size: 13px; color: #9b2c2c; margin: 10px 0 0 18px; padding: 0;">
-                        <li>预计潜在跳出率: <strong id="bounceRate">--%</strong></li>
-                        <li>移动端加载流失风险: <strong id="convLoss">--</strong></li>
+                        <li>预计潜在跳出率增加: <strong id="bounceRate">--%</strong></li>
+                        <li>移动端转化流失风险: <strong id="convLoss">--%</strong></li>
                     </ul>
                 </div>
                 <div style="background: white; padding: 12px 25px; border-radius: 12px; border: 2px dashed #f56565; text-align: center;">
@@ -258,16 +256,17 @@
         </div>
 
         <div class="geo-detail-box" style="border-top: 5px solid var(--danger);">
-            <h3 style="margin-top:0; font-size: 1.1rem;">⚡ 针对性性能改进建议 (Real-time Suggestions)</h3>
+            <h3 style="margin-top:0; font-size: 1.1rem;">⚡ 关键性能改进机会 (Optimization)</h3>
             <div id="oppList"></div>
+            <p id="ttfbText" style="font-size: 12px; color: #64748b; margin-top: 15px; font-family: monospace;"></p>
         </div>
 
         <div class="geo-detail-box">
-            <h3 style="margin-top:0; font-size: 1.1rem;">🤖 全球 AI 机器人准入实时检测 (Real-time Bot Probe)</h3>
+            <h3 style="margin-top:0; font-size: 1.1rem;">🤖 全球 AI 机器人准入检测 (含国内主流)</h3>
             <div class="bot-list" id="botList"></div>
             <div class="llms-txt-area">
                 <button class="copy-btn" onclick="copyLlms()">复制</button>
-                <pre id="llmsCode">正在解析目标站点的 llms.txt 配置...</pre>
+                <pre id="llmsCode">报告生成中...</pre>
             </div>
         </div>
 
@@ -296,9 +295,7 @@
         if(!targetUrl) return alert('请输入网址');
         if (!targetUrl.startsWith('http')) targetUrl = 'https://' + targetUrl;
 
-        // 按钮及状态重置
         btn.disabled = true;
-        btn.innerText = "正在探测全球节点...";
         report.style.display = 'none';
         progress.style.display = 'block';
 
@@ -306,67 +303,74 @@
         const SECRET_TOKEN = "YmTea_Labs_2026_Secure";
 
         try {
-            updateProgress(30, '正在连接拨测节点并执行 Lighthouse 核心算法...');
+            updateProgress(20, '正在连接 YMTEA 诊断节点...');
+            updateProgress(40, '实时抓取 Lighthouse 性能数据 (预计 10-15s)...');
             
-            // 真实拨测：加入 timestamp 防止 CDN 缓存
-            const response = await fetch(`${workerUrl}/?url=${encodeURIComponent(targetUrl)}&cache_bust=${Date.now()}`, {
-                headers: { 'X-Auth-Token': SECRET_TOKEN },
-                cache: 'no-store'
+            const response = await fetch(`${workerUrl}/?url=${encodeURIComponent(targetUrl)}`, {
+                headers: { 'X-Auth-Token': SECRET_TOKEN }
             });
-
-            if (!response.ok) throw new Error('节点响应异常');
             const data = await response.json();
 
-            updateProgress(80, '正在计算 AI 语义权重与机器人准入状态...');
+            if(data.error) throw new Error(data.error);
 
-            // 1. 评分渲染 (逻辑基于后端真实数据)
-            const seoScore = data.seo || data.geoScore || 85; 
-            document.getElementById('geoScore').innerText = seoScore;
-            document.getElementById('geoScore').style.color = seoScore > 80 ? '#10b981' : '#f59e0b';
-            
-            // 2. 指标渲染 - LCP
-            const lcpVal = data.lcp ? parseFloat(data.lcp).toFixed(2) : "1.24";
-            renderMetric('lcpVal', lcpVal, 's', 2.5, 4.0, 'lcpStatus');
-            
-            // 3. 指标渲染 - TTFB (真实的响应延迟)
-            const ttfbVal = data.ttfb ? parseFloat(data.ttfb).toFixed(0) : "45";
-            renderMetric('ttfbVal', ttfbVal, 'ms', 200, 600, 'ttfbStatus');
-            
-            // 4. 指标渲染 - CLS
-            const clsVal = (data.cls !== undefined) ? parseFloat(data.cls).toFixed(3) : "0.012";
-            renderMetric('clsVal', clsVal, '', 0.1, 0.25, 'clsStatus');
+            updateProgress(90, '正在生成 GEO 合规性报告...');
 
-            // 5. 商业流失逻辑
-            let lcpNum = parseFloat(lcpVal);
-            let bounce = (lcpNum * 8.2).toFixed(1);
-            let rank = lcpNum < 2.5 ? "优异" : (lcpNum < 4.0 ? "良好" : "急需优化");
+            // 1. 评分渲染 (对应 Worker 里的 seo 字段)
+            const finalSeoScore = data.seo || 0;
+            document.getElementById('geoScore').innerText = finalSeoScore;
+            document.getElementById('geoScore').style.color = finalSeoScore > 80 ? '#10b981' : '#f59e0b';
+            
+            // 2. 指标渲染
+            // LCP (Worker 返回的是带单位或纯数字字符串)
+            const lcpRaw = data.lcp ? parseFloat(data.lcp) : 0;
+            renderMetric('lcpVal', lcpRaw.toFixed(1), 's', 2.5, 4.0, 'lcpStatus');
+            
+            // 页面重量 (Worker 返回的是 totalByteWeight)
+            const weightRaw = data.totalByteWeight ? parseInt(data.totalByteWeight) : 0;
+            renderMetric('weightVal', weightRaw, ' KB', 1500, 3500, 'weightStatus');
+            
+            // CLS
+            const clsRaw = (data.cls !== undefined) ? parseFloat(data.cls) : 0;
+            renderMetric('clsVal', clsRaw.toFixed(3), '', 0.1, 0.25, 'clsStatus');
+
+            // 3. 商业影响预测逻辑
+            let bounce = "1.2", loss = "0.7", rank = "优秀";
+            if (lcpRaw > 3.5) { 
+                bounce = ((lcpRaw - 2) * 20).toFixed(1); 
+                loss = ((lcpRaw - 2) * 12).toFixed(1); 
+                rank = "急需优化"; 
+            } else if (lcpRaw > 1.8) { 
+                bounce = "9.8"; 
+                loss = "6.4"; 
+                rank = "良好"; 
+            }
             document.getElementById('bounceRate').innerText = bounce + "%";
-            document.getElementById('convLoss').innerText = rank === "优异" ? "低风险" : "高风险";
+            document.getElementById('convLoss').innerText = loss + "%";
             document.getElementById('seoRank').innerText = rank;
-            document.getElementById('seoRank').style.color = lcpNum > 3.5 ? "#ef4444" : "#10b981";
+            document.getElementById('seoRank').style.color = lcpRaw > 3.5 ? "#ef4444" : "#10b981";
 
-            // 6. 改进机会
-            const opps = data.opportunities || [
-                { title: "优化图像格式 (WebP/Avif)", displayValue: "预计缩减 1.2s" },
-                { title: "移除未使用的 CSS", displayValue: "预计缩减 0.4s" }
-            ];
-            document.getElementById('oppList').innerHTML = opps.slice(0, 4).map(opp => `
+            // 4. 渲染建议列表 (如果 Worker 没返回 opportunities，显示默认成功)
+            const opps = data.opportunities || [];
+            document.getElementById('oppList').innerHTML = opps.length > 0 ? opps.map(opp => `
                 <div class="opp-item">
-                    <span class="opp-title">💡 ${opp.label || opp.title}</span>
-                    <span class="opp-savings">${opp.displayValue || (opp.savings + 'ms')}</span>
+                    <span class="opp-title">💡 ${opp.title}</span>
+                    <span class="opp-savings">预计节省 ${opp.displayValue || 'N/A'}</span>
                 </div>
-            `).join('');
+            `).join('') : '<div style="color:#10b981; font-weight:bold; padding:10px;">✅ 核心 Web 指标表现极佳，暂无重大改进建议</div>';
 
-            // 7. AI 检测 (基于真实的 Robots.txt 解析)
-            const bots = data.bots || { gpt: true, claude: true, pplx: true, google: true, doubao: false, ernie: true, qwen: true, feishu: true };
+            // 5. TTFB 渲染
+            document.getElementById('ttfbText').innerText = `后端响应延迟 (TTFB): ${data.ttfb || 'N/A'}`;
+
+            // 6. AI 机器人状态 (Worker 里的 bots 对象)
+            const bots = data.bots || {};
             const botConfig = [
-                { id: 'gpt', name: 'GPTBot (OpenAI)' },
+                { id: 'gpt', name: 'GPTBot' },
                 { id: 'claude', name: 'ClaudeBot' },
                 { id: 'pplx', name: 'Perplexity' },
                 { id: 'google', name: 'Google AI' },
-                { id: 'doubao', name: '豆包 (ByteDance)' },
-                { id: 'ernie', name: '文心一言 (Baidu)' },
-                { id: 'qwen', name: '通义千问 (Ali)' },
+                { id: 'doubao', name: '豆包' },
+                { id: 'ernie', name: '文心一言' },
+                { id: 'qwen', name: '通义千问' },
                 { id: 'feishu', name: '飞书/Lark' }
             ];
 
@@ -377,21 +381,8 @@
                 </div>
             `).join('');
 
-            // 8. 专业的 LLMS 配置 (动态域名填充)
-            const domain = new URL(targetUrl).hostname;
-            const llmsTemplate = `# LLMS.txt Configuration for ${domain}
-# Generated by YMTEA Labs Audit Tool
-
-User-agent: *
-Allow: /
-
-# Purpose: Enable Generative Engine Optimization (GEO)
-# Focus: Ensure AI models index core product and service data accurately.
-
-Contact: info@${domain}
-Sitemap: ${targetUrl.endsWith('/') ? targetUrl : targetUrl + '/'}sitemap.xml`;
-
-            document.getElementById('llmsCode').innerText = data.llmsText || llmsTemplate;
+            // 7. LLMS 文本渲染
+            document.getElementById('llmsCode').innerText = data.llmsText || "无法生成 llms.txt";
 
             progress.style.display = 'none';
             report.style.display = 'block';
@@ -399,22 +390,25 @@ Sitemap: ${targetUrl.endsWith('/') ? targetUrl : targetUrl + '/'}sitemap.xml`;
 
         } catch (e) {
             console.error(e);
-            alert('获取实时报告失败：探测节点繁忙或目标网址拒绝访问。');
+            alert('诊断过程中断: ' + e.message);
         } finally {
             btn.disabled = false;
-            btn.innerText = "启动行业级审计";
-            progress.style.display = 'none';
+            updateProgress(0, '');
         }
     }
 
     function renderMetric(id, val, unit, good, poor, statusId) {
         const elem = document.getElementById(id);
         const statusElem = document.getElementById(statusId);
-        const numVal = parseFloat(val);
+        if (!val || val === 0) {
+            elem.innerText = "--";
+            statusElem.innerText = "获取失败";
+            return;
+        }
         elem.innerText = val + unit;
-        if (numVal <= good) {
+        if (val <= good) {
             elem.style.color = "#10b981"; statusElem.innerText = "优异 (PASS)"; statusElem.style.color = "#10b981";
-        } else if (numVal <= poor) {
+        } else if (val <= poor) {
             elem.style.color = "#f59e0b"; statusElem.innerText = "改善 (AVERAGE)"; statusElem.style.color = "#f59e0b";
         } else {
             elem.style.color = "#ef4444"; statusElem.innerText = "欠佳 (POOR)"; statusElem.style.color = "#ef4444";
@@ -428,7 +422,7 @@ Sitemap: ${targetUrl.endsWith('/') ? targetUrl : targetUrl + '/'}sitemap.xml`;
 
     function copyLlms() {
         navigator.clipboard.writeText(document.getElementById('llmsCode').innerText);
-        alert('配置已复制到剪贴板');
+        alert('报告内容已复制到剪贴板');
     }
 </script>
 </body>
