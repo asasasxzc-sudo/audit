@@ -3,47 +3,62 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>GEO & Lighthouse 性能深度诊断 - YMTEA Labs</title>
+    <title>YMTEA Labs - 行业级性能诊断</title>
     <style>
         :root { --primary: #c2410c; --secondary: #1e293b; --bg: #f8fafc; --card-bg: #ffffff; --success: #10b981; --warning: #f59e0b; --danger: #ef4444; }
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
         body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background-color: var(--bg); color: var(--secondary); margin: 0; padding: 0; line-height: 1.6; }
         .container { max-width: 1140px; margin: 0 auto; padding: 15px; }
-        header { text-align: center; padding: 50px 20px; background: #fff; border-bottom: 1px solid #e2e8f0; }
-        .search-section { background: white; padding: 25px; border-radius: 20px; box-shadow: 0 20px 25px -5px rgba(0,0,0,0.05); margin: -40px auto 10px; position: relative; z-index: 10; border: 1px solid rgba(226, 232, 240, 0.8); }
+        
+        /* 导航栏找回 */
+        .nav-bar { display: flex; justify-content: center; gap: 20px; padding: 15px; background: #fff; border-bottom: 1px solid #eee; font-size: 14px; }
+        .nav-bar a { color: var(--primary); text-decoration: none; font-weight: bold; }
+        .nav-bar a:hover { text-decoration: underline; }
+
+        header { text-align: center; padding: 40px 20px; background: #fff; border-bottom: 1px solid #e2e8f0; }
+        .search-section { background: white; padding: 25px; border-radius: 20px; box-shadow: 0 20px 25px -5px rgba(0,0,0,0.05); margin: -30px auto 10px; position: relative; z-index: 10; border: 1px solid #e2e8f0; }
         .search-controls { display: flex; flex-direction: column; gap: 12px; }
         @media (min-width: 768px) { .search-controls { flex-direction: row; } }
+        
         input[type="url"] { flex: 1; padding: 16px; border: 2px solid #e2e8f0; border-radius: 12px; font-size: 16px; outline: none; }
-        #auditBtn { background: var(--primary); color: white; border: none; padding: 16px 30px; border-radius: 12px; font-size: 1.1rem; font-weight: 700; cursor: pointer; }
+        #auditBtn { background: var(--primary); color: white; border: none; padding: 16px 30px; border-radius: 12px; font-size: 1.1rem; font-weight: 700; cursor: pointer; transition: 0.3s; }
+        #auditBtn:disabled { opacity: 0.6; cursor: not-allowed; }
+
         #progressContainer { display: none; margin: 20px auto; text-align: center; }
         .progress-bar-bg { background: #e2e8f0; height: 8px; border-radius: 10px; overflow: hidden; margin-bottom: 10px; }
         #progressBarFill { background: var(--primary); height: 100%; width: 0%; transition: width 0.4s ease; }
+        
         .report-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-bottom: 25px; }
-        .card { background: var(--card-bg); padding: 24px; border-radius: 16px; text-align: center; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05); border-top: 5px solid var(--primary); }
+        .card { background: var(--card-bg); padding: 24px; border-radius: 16px; text-align: center; border-top: 5px solid var(--primary); box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05); }
         .score-val { font-size: 2.2rem; font-weight: 800; display: block; margin: 8px 0; }
         .label { color: #64748b; font-size: 0.75rem; font-weight: 800; text-transform: uppercase; }
         .metric-status { font-size: 11px; font-weight: bold; }
+
         .bot-list { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 10px; margin: 20px 0; }
         .bot-item { padding: 10px; background: #f1f5f9; border-radius: 8px; display: flex; justify-content: space-between; font-size: 12px; font-weight: 600; }
         .llms-txt-area { background: #0f172a; color: #38bdf8; padding: 15px; border-radius: 10px; font-family: monospace; font-size: 12px; position: relative; margin-top: 15px; }
-        .llms-txt-area pre { margin: 0; white-space: pre-wrap; word-break: break-all; }
-        .copy-btn { position: absolute; top: 10px; right: 10px; background: #334155; color: #fff; border: none; padding: 4px 8px; border-radius: 4px; cursor: pointer; }
+        .llms-txt-area pre { margin: 0; white-space: pre-wrap; word-break: break-all; min-height: 80px; }
     </style>
 </head>
 <body>
 
+<nav class="nav-bar">
+    <a href="https://vip.ymtea.club" target="_blank">✨ 云茗荟 VIP</a>
+    <a href="https://shop.ymtea.club" target="_blank">🛒 Ymtea Shop</a>
+</nav>
+
 <header>
     <div class="container">
-        <h1>YMTEA Labs 全球诊断专家</h1>
-        <p>独立站 SEO 深度审计 & AI 搜索 (GEO) 性能基准测试</p>
+        <h1>YMTEA Labs 诊断中心</h1>
+        <p>独立站性能深度分析 & AI (GEO) 准入检测</p>
     </div>
 </header>
 
 <div class="container">
     <div class="search-section">
         <div class="search-controls">
-            <input type="url" id="siteUrl" placeholder="输入待诊断网址 (https://...)" required>
-            <button id="auditBtn" onclick="runComprehensiveAudit()">启动行业级审计</button>
+            <input type="url" id="siteUrl" placeholder="输入网址 (https://...)" required>
+            <button id="auditBtn" onclick="runComprehensiveAudit()">启动实时诊断</button>
         </div>
     </div>
 
@@ -57,31 +72,30 @@
             <div class="card">
                 <div class="label">SEO & GEO 评分</div>
                 <span id="geoScore" class="score-val">--</span>
-                <div class="metric-status">AI 语义可见度</div>
+                <div class="metric-status">搜索语义权重</div>
             </div>
             <div class="card">
                 <div class="label">首屏加载 (LCP)</div>
                 <span id="lcpVal" class="score-val">--</span>
-                <div id="lcpStatus" class="metric-status">检测中...</div>
+                <div id="lcpStatus" class="metric-status">待测</div>
             </div>
             <div class="card">
                 <div class="label">页面总重</div>
                 <span id="weightVal" class="score-val">--</span>
-                <div id="weightStatus" class="metric-status">检测中...</div>
+                <div id="weightStatus" class="metric-status">待测</div>
             </div>
             <div class="card">
                 <div class="label">视觉稳定性 (CLS)</div>
                 <span id="clsVal" class="score-val">--</span>
-                <div id="clsStatus" class="metric-status">检测中...</div>
+                <div id="clsStatus" class="metric-status">待测</div>
             </div>
         </div>
 
         <div style="background: white; padding: 25px; border-radius: 20px; border: 1px solid #e2e8f0;">
-            <h3 style="margin-top:0;">🤖 全球 AI 机器人准入检测 (实时)</h3>
+            <h3 style="margin-top:0;">🤖 实时 AI 机器人准入报告</h3>
             <div class="bot-list" id="botList"></div>
             <div class="llms-txt-area">
-                <button class="copy-btn" onclick="copyLlms()">复制</button>
-                <pre id="llmsCode">正在生成分析报告...</pre>
+                <pre id="llmsCode">正在生成诊断文本...</pre>
             </div>
         </div>
     </div>
@@ -95,126 +109,92 @@
         const progress = document.getElementById('progressContainer');
         
         let targetUrl = urlInput.value.trim();
-        if(!targetUrl) return alert('请输入网址');
+        if(!targetUrl) return alert('请输入有效网址');
         if (!targetUrl.startsWith('http')) targetUrl = 'https://' + targetUrl;
 
-        // 重置 UI 状态
         btn.disabled = true;
         report.style.display = 'none';
         progress.style.display = 'block';
-        updateProgress(10, '正在初始化 YMTEA 全球诊断链路...');
+        updateProgress(10, '连接至 pi.ymtea.club 诊断节点...');
 
-        // 核心配置
         const workerUrl = "https://pi.ymtea.club"; 
         const SECRET_TOKEN = "YmTea_Labs_2026_Secure";
 
         try {
-            updateProgress(30, '正在连接 Lighthouse 实时引擎...');
+            updateProgress(30, '通过 Lighthouse 引擎抓取实时数据...');
             
-            // 【真实性改进 1】：增加随机时间戳和 no-cache 头部，强制 Worker 穿透缓存进行实时抓取
-            const fetchUrl = `${workerUrl}/?url=${encodeURIComponent(targetUrl)}&timestamp=${Date.now()}`;
-            
-            const response = await fetch(fetchUrl, {
-                headers: { 
-                    'X-Auth-Token': SECRET_TOKEN,
-                    'Cache-Control': 'no-cache'
-                }
+            // 【真实性】增加 bust 随机参数，确保 PageSpeed 返回非缓存结果
+            const response = await fetch(`${workerUrl}/?url=${encodeURIComponent(targetUrl)}&_bust=${Date.now()}`, {
+                headers: { 'X-Auth-Token': SECRET_TOKEN }
             });
 
             if (!response.ok) {
-                const errorData = await response.json().catch(() => ({}));
-                throw new Error(errorData.error || `HTTP 错误 ${response.status}`);
+                const err = await response.json().catch(() => ({}));
+                throw new Error(err.error || `HTTP ${response.status}`);
             }
 
             const data = await response.json();
-            updateProgress(80, '正在解析数字化资产权重...');
+            updateProgress(80, '处理行业合规性指标...');
 
-            // 【真实性改进 2】：SEO 评分渲染
-            const seo = parseInt(data.seo);
-            const seoElem = document.getElementById('geoScore');
-            seoElem.innerText = isNaN(seo) ? "--" : seo;
-            seoElem.style.color = seo > 85 ? "#10b981" : (seo > 50 ? "#f59e0b" : "#ef4444");
-            
-            // 【真实性改进 3】：指标精准渲染逻辑 (避免 0 分误报为优异)
+            // 1. 评分渲染
+            const sVal = parseInt(data.seo);
+            document.getElementById('geoScore').innerText = isNaN(sVal) ? "--" : sVal;
+            document.getElementById('geoScore').style.color = sVal > 85 ? "#10b981" : "#f59e0b";
+
+            // 2. 性能渲染
             renderMetric('lcpVal', parseFloat(data.lcp), 's', 2.5, 4.0, 'lcpStatus');
             renderMetric('weightVal', parseInt(data.totalByteWeight), ' KB', 1500, 3500, 'weightStatus');
             renderMetric('clsVal', parseFloat(data.cls).toFixed(3), '', 0.1, 0.25, 'clsStatus');
 
-            // 【真实性改进 4】：Bot 准入真实状态检测
-            const botConfig = [
+            // 3. AI 机器人状态
+            const bots = [
                 { id: 'gpt', name: 'GPTBot' }, { id: 'claude', name: 'ClaudeBot' },
                 { id: 'pplx', name: 'Perplexity' }, { id: 'google', name: 'Google AI' },
                 { id: 'doubao', name: '豆包 (字节)' }, { id: 'ernie', name: '文心 (百度)' },
                 { id: 'qwen', name: '通义 (阿里)' }, { id: 'feishu', name: '飞书/Lark' }
             ];
-            
-            document.getElementById('botList').innerHTML = botConfig.map(bot => {
-                // 严格校验布尔值，确保 true 才显示勾选
-                const isAllowed = data.bots && data.bots[bot.id] === true;
-                return `
-                    <div class="bot-item">
-                        ${bot.name} <span>${isAllowed ? '✅' : '❌'}</span>
-                    </div>
-                `;
-            }).join('');
+            document.getElementById('botList').innerHTML = bots.map(b => `
+                <div class="bot-item">${b.name} <span>${data.bots && data.bots[b.id] ? '✅' : '❌'}</span></div>
+            `).join('');
 
-            document.getElementById('llmsCode').innerText = data.llmsText || "分析报告生成失败";
+            document.getElementById('llmsCode').innerText = data.llmsText || "分析完成";
 
-            updateProgress(100, '诊断完成');
+            updateProgress(100, '完成');
             setTimeout(() => {
                 progress.style.display = 'none';
                 report.style.display = 'block';
             }, 400);
 
         } catch (e) {
-            console.error('Audit Error:', e);
-            alert('诊断中断: ' + e.message + '\n请确认 API Key 是否有效。');
+            console.error(e);
+            alert(`诊断失败！请检查：\n1. Worker 中的 PSI_API_KEY 是否有效\n2. 目标网站是否允许 Lighthouse 抓取\n具体错误: ${e.message}`);
             progress.style.display = 'none';
         } finally {
             btn.disabled = false;
         }
     }
 
-    /**
-     * 指标渲染引擎 (真实性核心：严格处理无效或 0 数据)
-     */
     function renderMetric(id, val, unit, good, poor, statusId) {
         const elem = document.getElementById(id);
         const statusElem = document.getElementById(statusId);
-        
-        // 如果值不存在、为 NaN 或小于等于 0，则判定为抓取无效
         if (!val || isNaN(val) || val <= 0) {
             elem.innerText = "--";
-            elem.style.color = "#94a3b8";
-            statusElem.innerText = "抓取失败 (无实时数据)";
-            statusElem.style.color = "#94a3b8";
+            statusElem.innerText = "抓取失败";
             return;
         }
-
         elem.innerText = val + unit;
         if (val <= good) {
-            elem.style.color = "#10b981"; 
-            statusElem.innerText = "优异 (PASS)"; 
-            statusElem.style.color = "#10b981";
+            elem.style.color = "#10b981"; statusElem.innerText = "优异"; statusElem.style.color = "#10b981";
         } else if (val <= poor) {
-            elem.style.color = "#f59e0b"; 
-            statusElem.innerText = "改善 (AVERAGE)"; 
-            statusElem.style.color = "#f59e0b";
+            elem.style.color = "#f59e0b"; statusElem.innerText = "平均"; statusElem.style.color = "#f59e0b";
         } else {
-            elem.style.color = "#ef4444"; 
-            statusElem.innerText = "欠佳 (POOR)"; 
-            statusElem.style.color = "#ef4444";
+            elem.style.color = "#ef4444"; statusElem.innerText = "欠佳"; statusElem.style.color = "#ef4444";
         }
     }
 
     function updateProgress(p, t) {
         document.getElementById('progressBarFill').style.width = p + '%';
         document.getElementById('statusText').innerText = t;
-    }
-
-    function copyLlms() {
-        navigator.clipboard.writeText(document.getElementById('llmsCode').innerText);
-        alert('报告已复制到剪贴板');
     }
 </script>
 </body>
