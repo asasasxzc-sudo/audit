@@ -118,22 +118,22 @@
         
         .report-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
             gap: 15px;
             margin-bottom: 25px;
         }
 
         .card {
             background: var(--card-bg);
-            padding: 24px;
+            padding: 20px;
             border-radius: 16px;
             text-align: center;
             box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);
             border-top: 5px solid var(--primary);
         }
 
-        .score-val { font-size: 2.4rem; font-weight: 800; display: block; margin: 8px 0; }
-        .label { color: #64748b; font-size: 0.75rem; font-weight: 800; text-transform: uppercase; letter-spacing: 1.2px; }
+        .score-val { font-size: 2.2rem; font-weight: 800; display: block; margin: 8px 0; }
+        .label { color: #64748b; font-size: 0.7rem; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; }
 
         .biz-pitch-box {
             background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
@@ -144,89 +144,42 @@
             display: flex;
             flex-direction: column; 
             gap: 20px;
-            word-wrap: break-word;
-            overflow: hidden;
             box-shadow: 0 10px 30px rgba(0,0,0,0.15);
         }
 
-        @media (min-width: 768px) {
-            .biz-pitch-box { flex-direction: row; padding: 40px; align-items: center; }
-        }
+        @media (min-width: 768px) { .biz-pitch-box { flex-direction: row; padding: 40px; align-items: center; } }
 
-        .biz-pitch-text { flex: 2; min-width: 0; }
+        .biz-pitch-text { flex: 2; }
         .biz-pitch-text h2 { margin: 0 0 15px; color: #38bdf8; font-size: 1.6rem; }
         .biz-pitch-text ul { list-style: none; padding: 0; margin: 0; }
-        .biz-pitch-text li { 
-            margin-bottom: 12px; 
-            display: flex; 
-            align-items: flex-start; 
-            gap: 10px; 
-            font-size: 15px; 
-            line-height: 1.5;
-        }
+        .biz-pitch-text li { margin-bottom: 12px; display: flex; align-items: flex-start; gap: 10px; font-size: 15px; }
         .biz-pitch-text li::before { content: "✦"; color: #fbbf24; flex-shrink: 0; }
         
-        .biz-cta-box { flex: 1; min-width: 0; text-align: center; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 20px; }
+        .biz-cta-box { flex: 1; text-align: center; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 20px; }
         @media (min-width: 768px) { .biz-cta-box { border-top: none; padding-top: 0; } }
 
-        .btn-premium {
-            background: #38bdf8; color: #0f172a; padding: 14px 28px; 
-            border-radius: 10px; font-weight: bold; text-decoration: none; display: inline-block;
-            transition: 0.3s; font-size: 15px;
-        }
-        .btn-premium:hover { transform: scale(1.05); }
+        .btn-premium { background: #38bdf8; color: #0f172a; padding: 14px 28px; border-radius: 10px; font-weight: bold; text-decoration: none; display: inline-block; transition: 0.3s; font-size: 15px; }
 
-        .geo-detail-box {
-            background: white; padding: 25px; border-radius: 20px;
-            margin-top: 20px; border: 1px solid #e2e8f0; overflow: hidden;
-        }
+        .geo-detail-box { background: white; padding: 25px; border-radius: 20px; margin-top: 20px; border: 1px solid #e2e8f0; }
 
-        .opp-item {
-            display: flex; justify-content: space-between; align-items: center;
-            padding: 14px 0; border-bottom: 1px solid #f1f5f9; gap: 10px;
-        }
+        .opp-item { display: flex; justify-content: space-between; align-items: center; padding: 14px 0; border-bottom: 1px solid #f1f5f9; gap: 10px; }
         .opp-title { font-weight: 500; font-size: 14px; color: #334155; flex: 1; }
-        .opp-savings { background: #fee2e2; color: #ef4444; padding: 4px 10px; border-radius: 6px; font-size: 11px; font-weight: bold; white-space: nowrap; }
-
-        .expert-insight {
-            margin-top: 15px;
-            background: #f1f5f9;
-            padding: 15px;
-            border-radius: 12px;
-            font-size: 13px;
-            border-left: 4px solid var(--secondary);
-        }
+        .opp-savings { background: #fee2e2; color: #ef4444; padding: 4px 10px; border-radius: 6px; font-size: 12px; font-weight: bold; }
 
         .bot-list { display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 12px; margin: 20px 0; }
         .bot-item { padding: 12px; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 10px; display: flex; justify-content: space-between; font-weight: 600; font-size: 13px; }
 
-        .llms-txt-area {
-            background: #0f172a; color: #38bdf8; padding: 15px; border-radius: 10px;
-            font-family: 'Fira Code', 'Courier New', monospace; font-size: 12px; position: relative; margin-top: 15px;
-            white-space: pre-wrap; word-break: break-all; min-height: 120px; overflow-x: hidden;
-        }
+        .llms-txt-area { background: #0f172a; color: #38bdf8; padding: 15px; border-radius: 10px; font-family: monospace; font-size: 12px; position: relative; margin-top: 15px; }
         .copy-btn { position: absolute; top: 10px; right: 10px; background: #334155; color: #fff; border: none; padding: 6px 12px; border-radius: 6px; cursor: pointer; font-size: 11px; }
 
-        .advisor-section {
-            text-align: center; margin: 40px 0; background: white; padding: 45px 20px; border-radius: 24px;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.03); border: 1px solid #f1f5f9;
-        }
-        .contact-buttons { display: flex; gap: 15px; justify-content: center; flex-wrap: wrap; margin-top: 25px; }
-        .btn-cta {
-            padding: 16px 30px; border-radius: 50px; text-decoration: none; font-weight: 800; font-size: 1rem;
-            display: flex; align-items: center; gap: 10px; color: white; min-width: 200px; justify-content: center;
-            transition: 0.3s;
-        }
+        .advisor-section { text-align: center; margin: 40px 0; background: white; padding: 45px 20px; border-radius: 24px; box-shadow: 0 10px 25px rgba(0,0,0,0.03); border: 1px solid #f1f5f9; }
+        .btn-cta { padding: 16px 30px; border-radius: 50px; text-decoration: none; font-weight: 800; display: flex; align-items: center; gap: 10px; color: white; justify-content: center; transition: 0.3s; }
         .btn-wechat-main { background: #07c160; }
         .btn-whatsapp-main { background: #25d366; }
 
         .sticky-contact { position: fixed; right: 20px; bottom: 30px; z-index: 1000; }
-        .floating-btn {
-            width: 65px; height: 65px; border-radius: 50%; background: #07c160;
-            box-shadow: 0 12px 24px rgba(7, 193, 96, 0.3); display: flex; align-items: center; justify-content: center;
-            cursor: pointer; text-decoration: none;
-        }
-        .floating-btn span { color: white; font-size: 12px; font-weight: bold; text-align: center; line-height: 1.2; }
+        .floating-btn { width: 65px; height: 65px; border-radius: 50%; background: #07c160; display: flex; align-items: center; justify-content: center; cursor: pointer; text-decoration: none; }
+        .floating-btn span { color: white; font-size: 12px; font-weight: bold; text-align: center; }
 
         @keyframes slideUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
     </style>
@@ -246,23 +199,18 @@
         <button id="auditBtn" onclick="runComprehensiveAudit()">启动行业级审计</button>
     </div>
 
-    <div class="quick-links">
-        <a href="https://vip.ymtea.club" target="_blank" class="link-item">云茗荟 VIP 智库</a>
-        <a href="https://ymtea.club" target="_blank" class="link-item">Ymtea Shop 全球店</a>
-    </div>
-
     <div id="progressContainer">
         <div class="progress-bar-bg"><div id="progressBarFill"></div></div>
         <div id="statusText">初始化全网链路诊断...</div>
     </div>
 
     <div id="reportSection">
-        <!-- Lighthouse 风格评分看板 -->
+        <!-- 实时评分面板 -->
         <div class="report-grid">
-            <div class="card"><div class="label">性能 (Performance)</div><span id="pScore" class="score-val">90</span></div>
-            <div class="card"><div class="label">无障碍 (A11y)</div><span id="aScore" class="score-val">69</span></div>
-            <div class="card"><div class="label">最佳实践</div><span id="bScore" class="score-val">85</span></div>
-            <div class="card"><div class="label">SEO 指标</div><span id="sScore" class="score-val">91</span></div>
+            <div class="card"><div class="label">性能 (Performance)</div><span id="pScore" class="score-val">--</span></div>
+            <div class="card"><div class="label">无障碍 (A11y)</div><span id="aScore" class="score-val">--</span></div>
+            <div class="card"><div class="label">最佳实践</div><span id="bScore" class="score-val">--</span></div>
+            <div class="card"><div class="label">SEO 指标</div><span id="sScore" class="score-val">--</span></div>
         </div>
 
         <div class="biz-pitch-box">
@@ -270,9 +218,9 @@
                 <h2>不仅是 SEO，更是全新的 GEO 优化</h2>
                 <p style="font-size: 15px; margin-bottom: 15px; opacity: 0.95;">传统的搜索引擎优化已不够，未来的流量竞争正在转向 AI 搜索引擎。</p>
                 <ul>
-                    <li><strong>全球 SEO 审计</strong>：针对 HTML 格式及爬虫权限，消除 4 个链接文字描述缺失等抓取障碍。</li>
-                    <li><strong>AI (GEO) 注入</strong>：优化语义逻辑，解决 ARIA 角色兼容性，让 AI 引擎优先识别品牌。</li>
-                    <li><strong>跨端体验对齐</strong>：优化 DOM 大小并修正图像宽高比，确保全球用户访问的一致性。</li>
+                    <li><strong>全球 SEO 审计</strong>：深入分析网站架构，消除搜索引擎抓取阻碍。</li>
+                    <li><strong>AI (GEO) 注入</strong>：优化语义逻辑，让 AI 引擎优先识别并推荐您的品牌。</li>
+                    <li><strong>跨境增长方案</strong>：针对全球不同市场，提供行业级出海技术支持。</li>
                 </ul>
             </div>
             <div class="biz-cta-box">
@@ -281,89 +229,33 @@
             </div>
         </div>
 
-        <!-- 性能诊断详情 -->
+        <!-- 实时性能改进 -->
         <div class="geo-detail-box" style="border-top: 5px solid var(--danger);">
-            <h3 style="margin-top:0; font-size: 1.2rem;">⚡ 核心改进机会 (Critical Opportunities)</h3>
-            <p style="font-size: 13px; color: #64748b; margin-bottom: 15px;">优化以下核心项目，预计可大幅提升 <strong>LCP (最大内容绘制)</strong> 和用户感知速度。</p>
-            
-            <div id="oppList">
-                <div class="opp-item">
-                    <span class="opp-title">🚩 渲染屏蔽请求 (消除阻塞资源)</span>
-                    <span class="opp-savings">预计缩短 1,500ms</span>
-                </div>
-                <div class="opp-item">
-                    <span class="opp-title">📦 减少未使用的 JavaScript (JS Tree Shaking)</span>
-                    <span class="opp-savings">预计节省 634 KiB</span>
-                </div>
-                <div class="opp-item">
-                    <span class="opp-title">📄 优化文档请求延迟 (Server Response)</span>
-                    <span class="opp-savings">预计缩短 510ms</span>
-                </div>
-                <div class="opp-item">
-                    <span class="opp-title">🖼️ 改进图片传送 & 缓存周期</span>
-                    <span class="opp-savings">预计节省 920 KiB</span>
-                </div>
-                <div class="opp-item">
-                    <span class="opp-title">🧩 减少未使用的 CSS</span>
-                    <span class="opp-savings">预计节省 185 KiB</span>
-                </div>
-            </div>
-
-            <div class="expert-insight">
-                <strong>💡 专家诊断：</strong> 检测到 <strong>20 项长时间运行的主线程任务</strong>，导致主线程工作时间高达 <strong>4.9 秒</strong>。由于 <strong>网络负载高达 3,247 KiB</strong> 且存在 <strong>强制自动重排</strong>，建议优先通过 CDN 分发及 JS 异步加载方案降低 LCP 压力。
-            </div>
+            <h3 style="margin-top:0; font-size: 1.2rem;">⚡ 实时性能优化建议 (Real-time Insights)</h3>
+            <div id="oppList"></div>
+            <div id="techInsight" style="margin-top:15px; background:#f1f5f9; padding:15px; border-radius:12px; font-size:13px; line-height:1.6;"></div>
         </div>
 
-        <!-- 无障碍与体验详情 -->
-        <div class="geo-detail-box" style="border-top: 5px solid var(--warning);">
-            <h3 style="margin-top:0; font-size: 1.2rem;">♿ 无障碍与用户体验 (Accessibility)</h3>
-            <p style="font-size: 13px; color: #64748b;">提高无障碍得分不仅能增加用户包容性，更能显著提升 SEO 权重。</p>
-            <div class="opp-item">
-                <span class="opp-title">⚠️ 背景色和前景色对比度不足</span>
-                <span class="opp-savings">影响阅读体验</span>
-            </div>
-            <div class="opp-item">
-                <span class="opp-title">🔗 链接缺少描述性文字 (Found 4 links)</span>
-                <span class="opp-savings">SEO 负面风险</span>
-            </div>
-            <div class="opp-item">
-                <span class="opp-title">📝 表单元素不具备关联标签</span>
-                <span class="opp-savings">A11y 待优化</span>
-            </div>
-        </div>
-
-        <!-- AI 机器人准入检测 -->
+        <!-- 实时机器人检测 -->
         <div class="geo-detail-box">
-            <h3 style="margin-top:0; font-size: 1.2rem;">🤖 真实 AI 机器人准入检测</h3>
-            <p style="font-size: 13px; color: #64748b;">验证主流大模型爬虫是否被允许抓取您的站点内容。</p>
-            <div class="bot-list" id="botList">
-                <div class="bot-item">GPTBot <span>✅</span></div>
-                <div class="bot-item">ClaudeBot <span>✅</span></div>
-                <div class="bot-item">Perplexity <span>✅</span></div>
-                <div class="bot-item">Google AI <span>✅</span></div>
-            </div>
+            <h3 style="margin-top:0; font-size: 1.2rem;">🤖 实时 AI 机器人准入检测</h3>
+            <p style="font-size: 13px; color: #64748b;">验证主流大模型爬虫对当前站点的真实访问权限。</p>
+            <div class="bot-list" id="botList"></div>
             
             <div id="geoAdvice" style="padding:18px; background:#fffcf0; border-left:4px solid #f59e0b; border-radius:8px; margin:20px 0; font-size:14px; line-height:1.6;">
-                <strong>💡 GEO 诊断提醒：</strong> 虽然 SEO 得分良好，但 <strong>旧版 JavaScript (20 KiB)</strong> 和 <strong>未明确宽高值的图片元素</strong> 会造成视觉偏移（CLS）。建议立即为图片添加明确的 width 和 height，并部署严格的 CSP 策略以抵御 XSS 攻击，确保品牌在 AI 索引中的安全性。
+                <strong>💡 诊断提醒：</strong> 站点性能与 SEO 评分正相关。建议保持良好的机器人准入环境，助力 AI 引擎精准索引品牌信息。
             </div>
 
             <h4 style="margin-bottom:10px; font-size: 1rem; color: var(--secondary);">📄 行业定制 LLMS.txt 报告</h4>
             <div class="llms-txt-area">
                 <button class="copy-btn" onclick="copyLlms()">一键复制</button>
-                <pre id="llmsCode" style="margin:0;"># Performance Audit Report for YMTEA Labs
-- Total Payload: 3247 KiB
-- Main Thread Work: 4.9s
-- JS Execution Time: 2.3s
-- Unused Assets: 819 KiB (JS/CSS)
-- Vulnerabilities: No strict CSP detected</pre>
+                <pre id="llmsCode" style="margin:0;">报告生成中...</pre>
             </div>
         </div>
 
-        <!-- 底部联系区 -->
         <div class="advisor-section">
             <h2 style="font-size: 1.5rem;">联系 YMTEA 技术顾问</h2>
-            <p style="color:#64748b; font-size: 15px;">支持多语言外贸站点性能与语义优化咨询。</p>
-            <div class="contact-buttons">
+            <div class="contact-buttons" style="display: flex; gap: 15px; justify-content: center; flex-wrap: wrap; margin-top: 25px;">
                 <a href="https://work.weixin.qq.com/kfid/kfcab9eba83e85cde3e" class="btn-cta btn-wechat-main" target="_blank">微信客服</a>
                 <a href="https://wa.me/8618066947375" class="btn-cta btn-whatsapp-main" target="_blank">WhatsApp</a>
             </div>
@@ -371,46 +263,88 @@
     </div>
 </div>
 
-<div class="sticky-contact">
-    <a href="https://work.weixin.qq.com/kfid/kfcab9eba83e85cde3e" class="floating-btn"><span>微信<br>客服</span></a>
-</div>
-
 <script>
-    function updateProgress(percent, text) {
-        const fill = document.getElementById('progressBarFill');
-        if(fill) fill.style.width = percent + '%';
-        document.getElementById('statusText').innerText = text;
-    }
-
     async function runComprehensiveAudit() {
+        const urlInput = document.getElementById('siteUrl');
         const btn = document.getElementById('auditBtn');
         const report = document.getElementById('reportSection');
         const progress = document.getElementById('progressContainer');
         
+        let targetUrl = urlInput.value.trim();
+        if(!targetUrl) return alert('请输入网址');
+        if (!targetUrl.startsWith('http')) targetUrl = 'https://' + targetUrl;
+
         btn.disabled = true;
         report.style.display = 'none';
         progress.style.display = 'block';
 
-        updateProgress(20, '正在连接 Lighthouse API...');
-        
-        setTimeout(() => updateProgress(50, '分析网络负载 (3,247 KiB)...'), 1500);
-        setTimeout(() => updateProgress(80, '检测主线程长任务 (20 项)...'), 3000);
-        
-        setTimeout(() => {
+        const workerUrl = "https://pi.ymtea.club"; 
+        const SECRET_TOKEN = "YmTea_Labs_2026_Secure";
+
+        try {
+            updateProgress(20, '正在调取实时数据节点...');
+            const response = await fetch(`${workerUrl}/?url=${encodeURIComponent(targetUrl)}`, {
+                headers: { 'X-Auth-Token': SECRET_TOKEN }
+            });
+            const data = await response.json();
+
+            // 1. 实时评分
+            renderScore('pScore', data.performance || 0);
+            renderScore('aScore', data.accessibility || 0);
+            renderScore('bScore', data.bestPractices || 0);
+            renderScore('sScore', data.seo || 0);
+
+            // 2. 实时性能改进项
+            const oppList = document.getElementById('oppList');
+            oppList.innerHTML = (data.opportunities || []).map(o => `
+                <div class="opp-item">
+                    <span class="opp-title">🚩 ${o.label}</span>
+                    <span class="opp-savings">预计节省 ${o.displayValue}</span>
+                </div>
+            `).join('');
+
+            // 3. 实时技术总结
+            document.getElementById('techInsight').innerHTML = `
+                <strong>🔍 实时技术摘要：</strong> 
+                当前站点总网络负载为 <strong>${data.totalByteWeight || '--'} KiB</strong>，
+                主线程工作时长 <strong>${(data.mainThreadTime || 0).toFixed(1)}s</strong>。
+                检测到 <strong>${data.longTasks || 0}</strong> 项长任务影响交互体验。
+            `;
+
+            // 4. 真实机器人状态
+            const bots = data.bots || { gpt: false, claude: false, pplx: false, google: false };
+            document.getElementById('botList').innerHTML = `
+                <div class="bot-item">GPTBot <span>${bots.gpt ? '✅' : '❌'}</span></div>
+                <div class="bot-item">ClaudeBot <span>${bots.claude ? '✅' : '❌'}</span></div>
+                <div class="bot-item">Perplexity <span>${bots.pplx ? '✅' : '❌'}</span></div>
+                <div class="bot-item">Google AI <span>${bots.google ? '✅' : '❌'}</span></div>
+            `;
+
+            // 5. LLMS.txt 报告
+            document.getElementById('llmsCode').innerText = data.llmsText || `# Audit Report for ${targetUrl}\nStatus: Completed`;
+
             progress.style.display = 'none';
             report.style.display = 'block';
+        } catch (e) {
+            alert('实时诊断失败，请检查后端 API');
+        } finally {
             btn.disabled = false;
-            window.scrollTo({ top: report.offsetTop - 50, behavior: 'smooth' });
-        }, 4500);
+        }
+    }
+
+    function renderScore(id, score) {
+        const el = document.getElementById(id);
+        el.innerText = score;
+        el.style.color = score < 60 ? "#ef4444" : (score >= 90 ? "#10b981" : "#f59e0b");
+    }
+
+    function updateProgress(p, t) {
+        document.getElementById('progressBarFill').style.width = p + '%';
+        document.getElementById('statusText').innerText = t;
     }
 
     function copyLlms() {
-        const code = document.getElementById('llmsCode').innerText;
-        navigator.clipboard.writeText(code).then(() => {
-            const btn = document.querySelector('.copy-btn');
-            btn.innerText = '已复制';
-            setTimeout(() => btn.innerText = '一键复制', 2000);
-        });
+        navigator.clipboard.writeText(document.getElementById('llmsCode').innerText);
     }
 </script>
 </body>
