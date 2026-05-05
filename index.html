@@ -10,15 +10,15 @@
             --secondary: #1e293b;
             --bg: #f8fafc;
             --card-bg: #ffffff;
-            --success: #0cce6b; /* Lighthouse Green */
-            --warning: #ffa400; /* Lighthouse Orange */
-            --danger: #ff4e42;  /* Lighthouse Red */
+            --success: #0cce6b; 
+            --warning: #ffa400; 
+            --danger: #ff4e42;  
             --content-width: 1140px;
         }
 
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
         body {
-            font-family: 'Roboto', -apple-system, system-ui, sans-serif;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
             background-color: var(--bg);
             color: var(--secondary);
             margin: 0; padding: 0;
@@ -29,8 +29,8 @@
 
         header { text-align: center; padding: 40px 20px; background: #fff; border-bottom: 1px solid #e2e8f0; }
         header h1 { font-size: 2rem; margin: 0; color: var(--secondary); }
+        header p { color: #64748b; font-size: 0.9rem; margin-top: 8px; }
 
-        /* 搜索区域 */
         .search-section {
             background: white; padding: 25px; border-radius: 20px;
             box-shadow: 0 10px 25px rgba(0,0,0,0.05);
@@ -40,51 +40,49 @@
         @media (min-width: 768px) { .search-section { flex-direction: row; padding: 30px; margin-top: -45px; } }
 
         input[type="url"] { flex: 1; padding: 16px; border: 2px solid #e2e8f0; border-radius: 12px; font-size: 16px; outline: none; }
-        #auditBtn { background: var(--primary); color: white; border: none; padding: 16px 30px; border-radius: 12px; font-size: 1.1rem; font-weight: 700; cursor: pointer; }
+        #auditBtn { background: var(--primary); color: white; border: none; padding: 16px 30px; border-radius: 12px; font-size: 1.1rem; font-weight: 700; cursor: pointer; transition: 0.3s; }
+        #auditBtn:disabled { background: #94a3b8; cursor: not-allowed; }
 
-        /* --- Lighthouse 圆饼得分区域 --- */
-        .score-container {
-            display: flex; justify-content: space-around; flex-wrap: wrap;
-            margin: 30px 0; gap: 20px;
-        }
+        /* 找回首页 2 个链接 */
+        .quick-links { display: flex; justify-content: center; flex-wrap: wrap; gap: 10px; margin: 20px 0 30px; }
+        .link-item { padding: 8px 15px; background-color: #fff; border: 1px solid #e2e8f0; border-radius: 8px; text-decoration: none; color: #475569; font-size: 13px; transition: 0.3s; }
+        .link-item:hover { border-color: var(--primary); color: var(--primary); }
+
+        /* 圆饼得分区 */
+        .score-container { display: flex; justify-content: space-around; flex-wrap: wrap; margin: 30px 0; gap: 20px; }
         .score-circle-box { text-align: center; width: 140px; }
         .circular-chart { display: block; margin: 10px auto; max-width: 100px; max-height: 100px; }
         .circle-bg { fill: none; stroke: #eee; stroke-width: 3; }
-        .circle { fill: none; stroke-width: 3; stroke-linecap: round; transition: stroke-dasharray 1s ease; }
-        .percentage { fill: #333; font-family: sans-serif; font-size: 0.5em; text-anchor: middle; font-weight: 800; }
+        .circle { fill: none; stroke-width: 3; stroke-linecap: round; transition: stroke-dasharray 1s ease, stroke 1s ease; }
+        .percentage { fill: #333; font-size: 0.5em; text-anchor: middle; font-weight: 800; }
         .score-label { font-size: 14px; font-weight: 700; color: #5f6368; text-transform: uppercase; }
 
-        /* 指标详情网格 */
-        .metrics-grid {
-            display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 20px; margin-bottom: 30px; border-top: 1px solid #ddd; padding-top: 20px;
-        }
-        .metric-item { display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid #f1f5f9; }
-        .metric-name { display: flex; align-items: center; gap: 8px; font-size: 14px; color: #5f6368; }
-        .metric-value { font-weight: 700; font-size: 15px; }
-        .status-icon { width: 12px; height: 12px; border-radius: 50%; display: inline-block; }
+        /* 核心指标详情 */
+        .diagnostic-card { background: white; padding: 25px; border-radius: 20px; border: 1px solid #e2e8f0; margin-top: 20px; }
+        .diag-header { font-size: 1.1rem; font-weight: 700; margin-bottom: 15px; display: flex; justify-content: space-between; align-items: center; }
+        .metrics-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; border-top: 1px solid #f1f5f9; padding-top: 15px; }
+        .metric-item { display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid #f8fafc; font-size: 14px; }
+        .metric-name { color: #5f6368; }
+        .metric-value { font-weight: 700; }
 
-        /* 核心业务文案 (原封不动) */
-        .biz-pitch-box {
-            background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
-            color: white; padding: 30px; border-radius: 20px; margin: 25px 0;
-            display: flex; flex-direction: column; gap: 20px;
-        }
+        /* 业务核心文案 (保持变动禁止) */
+        .biz-pitch-box { background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%); color: white; padding: 30px; border-radius: 20px; margin: 25px 0; display: flex; flex-direction: column; gap: 20px; }
         @media (min-width: 768px) { .biz-pitch-box { flex-direction: row; align-items: center; } }
         .biz-pitch-text h2 { margin: 0 0 15px; color: #38bdf8; font-size: 1.5rem; }
-        .biz-pitch-text ul { list-style: none; padding: 0; }
+        .biz-pitch-text ul { list-style: none; padding: 0; margin: 0; }
         .biz-pitch-text li { margin-bottom: 10px; font-size: 14px; display: flex; gap: 10px; }
-        .biz-pitch-text li::before { content: "✦"; color: #fbbf24; }
+        .biz-pitch-text li::before { content: "✦"; color: #fbbf24; flex-shrink: 0; }
         .btn-premium { background: #38bdf8; color: #0f172a; padding: 12px 25px; border-radius: 10px; font-weight: bold; text-decoration: none; display: inline-block; }
 
-        /* 诊断与改进机会 */
-        .diagnostic-card { background: white; padding: 25px; border-radius: 20px; border: 1px solid #e2e8f0; margin-top: 20px; }
-        .diag-header { font-size: 1.1rem; font-weight: 700; margin-bottom: 15px; display: flex; justify-content: space-between; }
-        .diag-item { display: flex; justify-content: space-between; padding: 12px 0; border-bottom: 1px solid #f8fafc; font-size: 14px; }
-        .diag-title { color: var(--danger); font-weight: 500; }
-        .diag-save { color: #5f6368; font-family: monospace; }
+        /* 机器人检测列表 */
+        .bot-list { display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 12px; margin: 20px 0; }
+        .bot-item { padding: 12px; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 10px; display: flex; justify-content: space-between; font-weight: 600; font-size: 13px; }
 
-        /* 底部联系区 (原封不动) */
+        /* LLMS.TXT 区域 */
+        .llms-txt-area { background: #0f172a; color: #38bdf8; padding: 15px; border-radius: 10px; font-family: monospace; font-size: 12px; position: relative; margin-top: 15px; white-space: pre-wrap; word-break: break-all; min-height: 120px; }
+        .copy-btn { position: absolute; top: 10px; right: 10px; background: #334155; color: #fff; border: none; padding: 6px 12px; border-radius: 6px; cursor: pointer; font-size: 11px; }
+
+        /* 底部联系区 (保持变动禁止) */
         .advisor-section { text-align: center; margin: 40px 0; background: white; padding: 40px 20px; border-radius: 24px; border: 1px solid #f1f5f9; }
         .btn-cta { padding: 15px 25px; border-radius: 50px; text-decoration: none; font-weight: 800; display: inline-flex; align-items: center; gap: 10px; color: white; margin: 5px; }
         .btn-wechat-main { background: #07c160; }
@@ -101,28 +99,35 @@
 <header>
     <div class="container">
         <h1>YMTEA Labs 诊断专家</h1>
-        <p>基于 Lighthouse 13.0.1 核心引擎的 GEO 审计</p>
+        <p>独立站 SEO 审计 & AI 搜索 (GEO) 深度优化方案</p>
     </div>
 </header>
 
 <div class="container">
+    <!-- 顶部搜索 -->
     <div class="search-section">
         <input type="url" id="siteUrl" placeholder="输入网址，例如 https://www.ymtea.club">
-        <button id="auditBtn" onclick="runAudit()">开始深度审计</button>
+        <button id="auditBtn" onclick="runComprehensiveAudit()">开始深度审计</button>
+    </div>
+
+    <!-- 找回的首页 2 个链接 -->
+    <div class="quick-links">
+        <a href="https://vip.ymtea.club" target="_blank" class="link-item">云茗荟 VIP</a>
+        <a href="https://ymtea.club" target="_blank" class="link-item">Ymtea Shop</a>
     </div>
 
     <div id="progressContainer">
         <div class="progress-bar"><div id="progressFill"></div></div>
-        <p id="statusText" style="font-size: 13px; color: var(--primary); font-weight: bold; margin-top: 10px;">准备中...</p>
+        <p id="statusText" style="font-size: 13px; color: var(--primary); font-weight: bold; margin-top: 10px;">准备连接诊断节点...</p>
     </div>
 
     <div id="reportSection">
-        <!-- 圆饼得分区 -->
+        <!-- 实时圆饼得分区 -->
         <div class="score-container">
             <div class="score-circle-box">
                 <svg viewBox="0 0 36 36" class="circular-chart">
                     <path class="circle-bg" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
-                    <path id="perfCircle" class="circle" stroke="#ff4e42" stroke-dasharray="0, 100" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+                    <path id="perfCircle" class="circle" stroke-dasharray="0, 100" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
                     <text x="18" y="20.35" class="percentage" id="perfScoreText">0</text>
                 </svg>
                 <div class="score-label">性能得分</div>
@@ -130,26 +135,26 @@
             <div class="score-circle-box">
                 <svg viewBox="0 0 36 36" class="circular-chart">
                     <path class="circle-bg" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
-                    <path id="geoCircle" class="circle" stroke="#ffa400" stroke-dasharray="0, 100" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+                    <path id="geoCircle" class="circle" stroke-dasharray="0, 100" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
                     <text x="18" y="20.35" class="percentage" id="geoScoreText">0</text>
                 </svg>
                 <div class="score-label">AI (GEO) 评分</div>
             </div>
         </div>
 
-        <!-- 详细指标 (展开视图) -->
+        <!-- 真实核心网页指标面板 -->
         <div class="diagnostic-card">
-            <div class="diag-header">核心指标评估报告 <span style="font-size: 12px; color: #999; font-weight: normal;">模拟 Moto G Power | 低速 4G</span></div>
+            <div class="diag-header">核心网页指标 (Core Web Vitals)</div>
             <div class="metrics-grid">
                 <div>
-                    <div class="metric-item"><span class="metric-name"><span class="status-icon" style="background: var(--warning);"></span>First Contentful Paint</span><span class="metric-value" id="fcpVal">--</span></div>
-                    <div class="metric-item"><span class="metric-name"><span class="status-icon" style="background: var(--danger);"></span>Largest Contentful Paint</span><span class="metric-value" id="lcpVal">--</span></div>
-                    <div class="metric-item"><span class="metric-name"><span class="status-icon" style="background: var(--danger);"></span>Total Blocking Time</span><span class="metric-value" id="tbtVal">--</span></div>
+                    <div class="metric-item"><span class="metric-name">First Contentful Paint (FCP)</span><span class="metric-value" id="fcpVal">--</span></div>
+                    <div class="metric-item"><span class="metric-name">Largest Contentful Paint (LCP)</span><span class="metric-value" id="lcpVal">--</span></div>
+                    <div class="metric-item"><span class="metric-name">Total Blocking Time (TBT)</span><span class="metric-value" id="tbtVal">--</span></div>
                 </div>
                 <div>
-                    <div class="metric-item"><span class="metric-name"><span class="status-icon" style="background: var(--success);"></span>Cumulative Layout Shift</span><span class="metric-value" id="clsVal">--</span></div>
-                    <div class="metric-item"><span class="metric-name"><span class="status-icon" style="background: var(--danger);"></span>Speed Index</span><span class="metric-value" id="siVal">--</span></div>
-                    <div class="metric-item"><span class="metric-name"><span class="status-icon" style="background: #ccc;"></span>Captured Time</span><span class="metric-value" style="font-size: 12px;" id="capTime">--</span></div>
+                    <div class="metric-item"><span class="metric-name">Cumulative Layout Shift (CLS)</span><span class="metric-value" id="clsVal">--</span></div>
+                    <div class="metric-item"><span class="metric-name">Speed Index</span><span class="metric-value" id="siVal">--</span></div>
+                    <div class="metric-item"><span class="metric-name">Time to First Byte (TTFB)</span><span class="metric-value" id="ttfbVal">--</span></div>
                 </div>
             </div>
         </div>
@@ -165,27 +170,33 @@
                     <li><strong>跨境增长方案</strong>：针对全球不同市场，提供行业级出海技术支持。</li>
                 </ul>
             </div>
-            <div class="biz-cta-box" style="text-align: center; flex: 1;">
+            <div class="biz-cta-box" style="text-align: center;">
                 <p style="margin-bottom:15px; font-size:13px;">想要一对一优化方案？</p>
                 <a href="https://work.weixin.qq.com/kfid/kfcab9eba83e85cde3e" class="btn-premium" target="_blank">微信技术咨询</a>
             </div>
         </div>
 
-        <!-- 诊断建议 -->
+        <!-- 找回真实 AI 机器人准入检测 -->
         <div class="diagnostic-card">
-            <div class="diag-header">⚡ 性能改进与诊断 (Data Analysis)</div>
-            <div id="opportunityList">
-                <div class="diag-item"><span class="diag-title">改进图片传送</span><span class="diag-save">预计节省 229 KiB</span></div>
-                <div class="diag-item"><span class="diag-title">渲染屏蔽请求</span><span class="diag-save">预计缩短 1,200 毫秒</span></div>
-                <div class="diag-item"><span class="diag-title">最大限度地减少主线程工作</span><span class="diag-save">耗时 9.3 秒</span></div>
-                <div class="diag-item"><span class="diag-title">应避免出现长时间运行的任务</span><span class="diag-save">发现 20 项</span></div>
+            <div class="diag-header">🤖 真实 AI 机器人准入检测</div>
+            <div class="bot-list" id="botList">
+                <!-- 动态填充 -->
             </div>
             <div id="geoAdvice" style="padding:15px; background:#fffcf0; border-left:4px solid #f59e0b; border-radius:8px; margin-top:15px; font-size:13px;">
                 💡 诊断提醒： 站点性能与 SEO 评分正相关。建议保持良好的机器人准入环境，助力 AI 引擎精准索引品牌信息。
             </div>
         </div>
 
-        <!-- 底部联系区 (原封不动) -->
+        <!-- 找回行业定制 LLMS.TXT 报告 -->
+        <div class="diagnostic-card">
+            <div class="diag-header">📄 行业定制 LLMS.txt 报告</div>
+            <div class="llms-txt-area">
+                <button class="copy-btn" onclick="copyLlms()">复制报告</button>
+                <pre id="llmsCode" style="margin:0;">正在生成结构化语义报告...</pre>
+            </div>
+        </div>
+
+        <!-- 底部联系区 (保持变动禁止) -->
         <div class="advisor-section">
             <h2 style="font-size: 1.3rem;">联系 YMTEA 技术顾问</h2>
             <p style="color:#64748b; font-size: 14px;">支持多语言外贸站点性能与语义优化咨询。</p>
@@ -198,55 +209,100 @@
 </div>
 
 <script>
-    async function runAudit() {
+    async function runComprehensiveAudit() {
+        const urlInput = document.getElementById('siteUrl');
         const btn = document.getElementById('auditBtn');
         const report = document.getElementById('reportSection');
         const progress = document.getElementById('progressContainer');
         const fill = document.getElementById('progressFill');
         const status = document.getElementById('statusText');
 
+        let targetUrl = urlInput.value.trim();
+        if(!targetUrl) return alert('请输入有效网址');
+        if (!targetUrl.startsWith('http')) targetUrl = 'https://' + targetUrl;
+
         btn.disabled = true;
         report.style.display = 'none';
         progress.style.display = 'block';
 
-        // 模拟进度
+        // 模拟前序进度
         let p = 0;
-        const interval = setInterval(() => {
-            p += Math.random() * 15;
-            if (p >= 100) {
-                p = 100;
-                clearInterval(interval);
-                showReport();
-            }
+        const pInterval = setInterval(() => {
+            p += Math.random() * 10;
+            if (p >= 80) clearInterval(pInterval);
             fill.style.width = p + '%';
-            status.innerText = p < 40 ? '正在调取 Lighthouse 13.0.1 核心数据...' : '正在分析 AI 引擎准入环境...';
-        }, 400);
+        }, 300);
+
+        const workerUrl = "https://pi.ymtea.club"; 
+        const SECRET_TOKEN = "YmTea_Labs_2026_Secure";
+
+        try {
+            const response = await fetch(`${workerUrl}/?url=${encodeURIComponent(targetUrl)}`, {
+                method: 'GET',
+                headers: { 'X-Auth-Token': SECRET_TOKEN },
+                mode: 'cors'
+            });
+
+            if(!response.ok) throw new Error(`响应异常 (${response.status})`);
+            const data = await response.json();
+            
+            clearInterval(pInterval);
+            fill.style.width = '100%';
+            
+            setTimeout(() => {
+                progress.style.display = 'none';
+                report.style.display = 'block';
+                renderRealData(data);
+                window.scrollTo({ top: report.offsetTop - 50, behavior: 'smooth' });
+            }, 500);
+
+        } catch (e) {
+            clearInterval(pInterval);
+            progress.style.display = 'none';
+            btn.disabled = false;
+            alert('诊断失败: ' + e.message);
+        } finally {
+            btn.disabled = false;
+        }
     }
 
-    function showReport() {
-        document.getElementById('progressContainer').style.display = 'none';
-        document.getElementById('reportSection').style.display = 'block';
-        document.getElementById('auditBtn').disabled = false;
+    function renderRealData(data) {
+        // 1. 渲染圆饼得分
+        setCircle('perfCircle', 'perfScoreText', data.perfScore || 0);
+        setCircle('geoCircle', 'geoScoreText', data.geoScore || 0);
 
-        // 设置得分与圆饼动画
-        setCircleScore('perfCircle', 'perfScoreText', 38, '#ff4e42');
-        setCircleScore('geoCircle', 'geoScoreText', 65, '#ffa400');
+        // 2. 渲染核心指标 (真实数据)
+        document.getElementById('fcpVal').innerText = (data.fcp || '--') + ' s';
+        document.getElementById('lcpVal').innerText = (data.lcp || '--') + ' s';
+        document.getElementById('tbtVal').innerText = (data.tbt || '--') + ' ms';
+        document.getElementById('clsVal').innerText = data.cls || '--';
+        document.getElementById('siVal').innerText = (data.si || '--') + ' s';
+        document.getElementById('ttfbVal').innerText = (data.ttfb || '--');
 
-        // 设置详细指标数据
-        document.getElementById('fcpVal').innerText = '2.5 秒';
-        document.getElementById('lcpVal').innerText = '4.4 秒';
-        document.getElementById('tbtVal').innerText = '2,360 毫秒';
-        document.getElementById('clsVal').innerText = '0';
-        document.getElementById('siVal').innerText = '8.0 秒';
-        document.getElementById('capTime').innerText = new Date().toLocaleString() + ' GMT+8';
+        // 3. 渲染机器人准入检测 (真实数据)
+        const b = data.bots || {};
+        document.getElementById('botList').innerHTML = `
+            <div class="bot-item">GPTBot <span>${b.gpt?'✅':'❌'}</span></div>
+            <div class="bot-item">Claude <span>${b.claude?'✅':'❌'}</span></div>
+            <div class="bot-item">PPLX <span>${b.pplx?'✅':'❌'}</span></div>
+            <div class="bot-item">GoogleAI <span>${b.google?'✅':'❌'}</span></div>
+        `;
+
+        // 4. 渲染 LLMS.txt
+        document.getElementById('llmsCode').innerText = data.llmsText || "报告生成失败，请重试";
     }
 
-    function setCircleScore(id, textId, score, color) {
-        const circle = document.getElementById(id);
+    function setCircle(circleId, textId, score) {
+        const circle = document.getElementById(circleId);
         const text = document.getElementById(textId);
         circle.style.strokeDasharray = `${score}, 100`;
         circle.style.stroke = score >= 90 ? '#0cce6b' : (score >= 50 ? '#ffa400' : '#ff4e42');
         text.innerText = score;
+    }
+
+    function copyLlms() {
+        const code = document.getElementById('llmsCode').innerText;
+        navigator.clipboard.writeText(code).then(() => alert('LLMS.txt 报告已复制'));
     }
 </script>
 </body>
