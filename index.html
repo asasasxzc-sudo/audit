@@ -37,7 +37,6 @@
         header h1 { font-size: 1.8rem; margin: 0; color: var(--secondary); }
         header p { color: #64748b; margin-top: 10px; font-size: 0.95rem; }
 
-        /* 搜索区布局 */
         .search-section {
             background: white;
             padding: 25px;
@@ -49,12 +48,7 @@
             border: 1px solid rgba(226, 232, 240, 0.8);
         }
 
-        .search-controls {
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-        }
-
+        .search-controls { display: flex; flex-direction: column; gap: 12px; }
         @media (min-width: 768px) { .search-controls { flex-direction: row; } }
 
         input[type="url"] {
@@ -77,7 +71,6 @@
             cursor: pointer;
         }
 
-        /* 修复：搜索框下方的导航 */
         .sub-nav {
             display: flex;
             justify-content: center;
@@ -127,7 +120,6 @@
             margin-bottom: 25px;
         }
 
-        /* 推介板块恢复原本描述 */
         .biz-pitch-box {
             background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
             color: white;
@@ -140,7 +132,6 @@
         }
 
         @media (min-width: 768px) { .biz-pitch-box { flex-direction: row; align-items: center; } }
-
         .biz-pitch-text { flex: 2; }
         .biz-pitch-text h2 { margin: 0 0 10px; color: #38bdf8; }
         .biz-pitch-text p { font-size: 15px; line-height: 1.7; opacity: 0.9; margin: 0; }
@@ -154,8 +145,30 @@
         .bot-list { display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 12px; margin: 20px 0; }
         .bot-item { padding: 12px; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 10px; display: flex; justify-content: space-between; font-size: 13px; font-weight: 600; }
 
-        .llms-txt-area { background: #0f172a; color: #38bdf8; padding: 15px; border-radius: 10px; font-family: monospace; font-size: 12px; position: relative; margin-top: 15px; }
-        .copy-btn { position: absolute; top: 10px; right: 10px; background: #334155; color: #fff; border: none; padding: 6px 12px; border-radius: 6px; cursor: pointer; }
+        /* 重点修复：LLMS 自动换行 */
+        .llms-txt-area { 
+            background: #0f172a; 
+            color: #38bdf8; 
+            padding: 15px; 
+            border-radius: 10px; 
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 12px; 
+            position: relative; 
+            margin-top: 15px; 
+            overflow: hidden; /* 防止溢出容器 */
+        }
+        
+        .llms-txt-area pre {
+            margin: 0;
+            white-space: pre-wrap;       /* CSS3 版本，支持换行 */
+            white-space: -moz-pre-wrap;  /* Mozilla 支持 */
+            white-space: -pre-wrap;       /* Opera 4-6 支持 */
+            white-space: -o-pre-wrap;     /* Opera 7 支持 */
+            word-wrap: break-word;        /* 单词强制折断 */
+            word-break: break-all;
+        }
+
+        .copy-btn { position: absolute; top: 10px; right: 10px; background: #334155; color: #fff; border: none; padding: 6px 12px; border-radius: 6px; cursor: pointer; z-index: 5; }
 
         .advisor-section { text-align: center; margin: 40px 0; background: white; padding: 45px 20px; border-radius: 24px; border: 1px solid #f1f5f9; }
         .btn-cta { padding: 16px 30px; border-radius: 50px; text-decoration: none; font-weight: 800; display: flex; align-items: center; gap: 10px; color: white; justify-content: center; }
@@ -184,10 +197,9 @@
             <input type="url" id="siteUrl" placeholder="输入待诊断网址，例如 https://www.ymtea.club" required>
             <button id="auditBtn" onclick="runComprehensiveAudit()">启动行业级审计</button>
         </div>
-        <!-- 导航找回至此处 -->
         <div class="sub-nav">
-            <a href="https://vip.ymtea.club" target="_blank">云茗荟VIP智库</a>
-            <a href="https://www.ymtea.club" target="_blank">Ymtea Shop全球店</a>
+            <a href="https://www.ymtea.club/seo-services" target="_blank">云茗荟VIP智库</a>
+            <a href="https://www.ymtea.club/geo-optimization" target="_blank">Ymtea Shop全球店</a>
         </div>
     </div>
 
@@ -258,7 +270,7 @@
             <div class="bot-list" id="botList"></div>
             <div class="llms-txt-area">
                 <button class="copy-btn" onclick="copyLlms()">复制</button>
-                <pre id="llmsCode" style="margin:0;">报告生成中...</pre>
+                <pre id="llmsCode">报告生成中...</pre>
             </div>
         </div>
 
@@ -301,21 +313,22 @@
             });
             const data = await response.json();
 
-            // 数据渲染
+            // 评分渲染
             const seoScore = data.seo || data.geoScore || 0;
             document.getElementById('geoScore').innerText = seoScore;
             document.getElementById('geoScore').style.color = seoScore > 80 ? '#10b981' : '#f59e0b';
             
+            // 指标渲染
             const lcpVal = data.lcp ? parseFloat(data.lcp).toFixed(1) : "--";
             renderMetric('lcpVal', lcpVal, 's', 2.5, 4.0, 'lcpStatus');
             
-            const weightVal = data.totalByteWeight ? parseInt(data.totalByteWeight) : "--";
+            const weightVal = (data.totalByteWeight && data.totalByteWeight > 0) ? parseInt(data.totalByteWeight) : "--";
             renderMetric('weightVal', weightVal, ' KB', 1500, 3500, 'weightStatus');
             
-            const clsVal = (data.clsStatus || data.cls) !== undefined ? parseFloat(data.clsStatus || data.cls).toFixed(3) : "0";
+            const clsVal = (data.cls !== undefined) ? parseFloat(data.cls).toFixed(3) : "0.000";
             renderMetric('clsVal', clsVal, '', 0.1, 0.25, 'clsStatus');
 
-            // 商业逻辑
+            // 商业损失
             let lcpNum = parseFloat(lcpVal) || 0;
             let bounce = "1.2", loss = "0.7", rank = "优秀";
             if (lcpNum > 3.5) { bounce = ((lcpNum - 2) * 20).toFixed(1); loss = ((lcpNum - 2) * 12).toFixed(1); rank = "急需优化"; }
@@ -325,16 +338,16 @@
             document.getElementById('seoRank').innerText = rank;
             document.getElementById('seoRank').style.color = lcpNum > 3.5 ? "#ef4444" : "#10b981";
 
-            // 优化项
-            const oppContainer = document.getElementById('oppList');
-            oppContainer.innerHTML = (data.opportunities || []).map(opp => `
+            // 改进机会
+            const opps = data.opportunities || [];
+            document.getElementById('oppList').innerHTML = opps.map(opp => `
                 <div class="opp-item">
                     <span class="opp-title">💡 ${opp.label || opp.title}</span>
                     <span class="opp-savings">${opp.displayValue || (opp.savings + 'ms')}</span>
                 </div>
-            `).join('') || '<div style="color:#10b981; font-weight:bold; padding:10px;">✅ 性能表现极其出色</div>';
+            `).join('') || '<div style="color:#10b981; font-weight:bold; padding:10px;">✅ 性能表现极佳</div>';
 
-            document.getElementById('ttfbText').innerText = `响应延迟 (TTFB): ${data.ttfb || '无法获取'}`;
+            document.getElementById('ttfbText').innerText = `响应延迟 (TTFB): ${data.ttfb || '获取中'}`;
 
             // AI 检测
             const bots = data.bots || {};
@@ -344,14 +357,14 @@
                 <div class="bot-item">Perplexity <span>${bots.pplx ? '✅' : '❌'}</span></div>
                 <div class="bot-item">Google AI <span>${bots.google ? '✅' : '❌'}</span></div>
             `;
-            document.getElementById('llmsCode').innerText = data.llmsText || "llms.txt 解析异常";
+            document.getElementById('llmsCode').innerText = data.llmsText || "暂未检测到 llms.txt";
 
             progress.style.display = 'none';
             report.style.display = 'block';
             window.scrollTo({ top: report.offsetTop - 50, behavior: 'smooth' });
 
         } catch (e) {
-            alert('获取报告失败，请重试');
+            alert('获取报告失败，请检查网络或 URL');
         } finally {
             btn.disabled = false;
         }
@@ -362,7 +375,7 @@
         const statusElem = document.getElementById(statusId);
         if (val === "--") {
             elem.innerText = "--";
-            statusElem.innerText = "未抓取到数据";
+            statusElem.innerText = "数据暂缺";
             statusElem.style.color = "#94a3b8";
             return;
         }
@@ -383,7 +396,7 @@
 
     function copyLlms() {
         navigator.clipboard.writeText(document.getElementById('llmsCode').innerText);
-        alert('已复制');
+        alert('复制成功');
     }
 </script>
 </body>
